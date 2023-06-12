@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/Blackjack.iml" filepath="$PROJECT_DIR$/.idea/Blackjack.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/BlackJack.iml" filepath="$PROJECT_DIR$/.idea/BlackJack.iml" />
+>>>>>>> origin/main
     </modules>
   </component>
 </project>
