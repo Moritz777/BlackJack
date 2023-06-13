@@ -37,8 +37,8 @@ values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eig
 
 playing = True
 
-# defining classes
 
+# defining classes
 
 class Card:
     """
@@ -66,7 +66,7 @@ class Deck:
         deck_comp = ''  # start with an empty string
         for card in self.deck:
             deck_comp += '\n '+card.__str__() # add each Card object's print string
-        return 'The deck has:' + deck_comp
+        return 'Das Deck hat:' + deck_comp
 
     def shuffle(self):          # shuffle function will shuffle the whole deck
         random.shuffle(self.deck)
@@ -166,35 +166,55 @@ def hit_or_stand(deck, hand):
         break
 
 
-def calculate_score(cards):
-    if sum(cards) == 21 and len(cards) == 2:
-        return 0
-    if 11 in cards and sum(cards) > 21:
-        cards.remove(11)
-        cards.append(1)
-
-    return sum(cards)
-
-
-def print_winner(score):
+def show_some(player, dealer):
     """
-    Decide who won the game based on the scoreboard and print it out.
-
-    Args:
-         score: The final scoreboard
+    function to display some cards (keep the dealers second card hidden)
+    :param player: the player
+    :param dealer: the dealer
+    :return:
     """
-    current_winner_score = 0
-    # z.B.: [('Janine', 9), ('Gabriele', 9), ('Bot', 3)]
-    scores = score.items()
-    for score in scores:
-        if score[1] >= 16:
-            continue
-        if score[1] > current_winner_score:
-            current_winner_score = score[1]
+    print("\nHand des Dealers:")
+    print(" <Karte versteckt>")
+    print('', dealer.cards[1])
+    print("\nSpieler Hand:", *player.cards, sep='\n ')
 
-    for score in scores:
-        if score[1] == current_winner_score:
-            print(score[0], 'hat mit', score[1], 'Punkten gewonnen!')
+
+def show_all(player, dealer):
+    """
+    function to display all cards
+    :param player: the player
+    :param dealer: the dealer
+    """
+    print("\nHand des Dealers:", *dealer.cards, sep='\n ')
+    print("Hand des Dealers:", dealer.value)
+    print("\nSpieler Hand:", *player.cards, sep='\n ')
+    print("\nSpieler Hand:", player.value)
+
+
+# functions to handle end of game scenarios
+
+def player_busts(player,dealer,chips):
+    print("Spieler hat über 21!")
+    chips.lose_bet()
+
+
+def player_wins(player,dealer,chips):
+    print("Spieler gewinnt!")
+    chips.win_bet()
+
+
+def dealer_busts(player,dealer,chips):
+    print("Dealer hat über 21!")
+    chips.win_bet()
+
+
+def dealer_wins(player,dealer,chips):
+    print("Dealer gewinnt!")
+    chips.lose_bet()
+
+
+def push(player,dealer):
+    print("Dealer und Spieler haben gleich viel! Unentschieden.")
 
 
 def get_player_input():
@@ -205,24 +225,28 @@ def get_player_input():
     us a valid option.
 
     Return:
-        user_input: A string of the user input (one of '', 's', 'q' or 'r')
+        user_input: A string of the user input (one of '', 's', 'q')
     """
     print('\nWas möchtest du als nächstes tun?')
     print('1. [<Eingabe>]: Weitere Karte ziehen')
     print('2. [s]: stand - Keine weitere Karte')
     print('3. [q]: Spiel verlassen')
-    # print('4. [r]: Spiel zurücksetzen')
     user_input = input().lower()
-    while user_input not in ['', 's', 'q', 'r']:
+    while user_input not in ['', 's', 'q']:
         print('Bitte wähle ein gültige Option aus.')
         user_input = input()
     return user_input
 
 
+# Spielablauf
+
 while True:
+    # greeting the player
     print(logo)
     print('Willkommen zu Blackjack! Komm so nah wie möglich an 21 ohne darüber zu kommen! \n\
-          Der Dealer nimmt Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+          Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+
+    # Create & shuffle the deck, dealing two cards to each player (dealer & player)
     deck = Deck()
     deck.shuffle()
 
@@ -234,9 +258,54 @@ while True:
     dealer_hand.add_card(deck.deal())
     dealer_hand.add_card(deck.deal())
 
+    # Set up the Player's chips
     player_chips = Chips()
 
+    # Prompt the Player for their bet
     take_bet(player_chips)
 
+    # Show cards (but keep one dealer card hidden)
+    show_some(player_hand, dealer_hand)
+
     while playing:
+
+        # Prompt the Player to Hit or Stand
         hit_or_stand(deck, player_hand)
+
+        # Show cards (but keep one dealer card hidden)
+        show_some(player_hand, dealer_hand)
+
+        # If Player's hand exceeds 21, run player_busts() and break out of loop
+        if player_hand.value > 21:
+            player_busts(player_hand, dealer_hand, player_chips)
+            break
+
+        # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
+        if player_hand.value <= 21:
+            while dealer_hand.value < 17:
+                hit(deck, dealer_hand)
+
+            # Show all cards
+            show_all(player_hand, dealer_hand)
+
+            # Run different winning scenarios
+            if dealer_hand.value > 21:
+                dealer_busts(player_hand, dealer_hand, player_chips)
+
+            elif dealer_hand.value > player_hand.value:
+                player_wins(player_hand, dealer_hand, player_chips)
+
+            else:
+                push(player_hand, dealer_hand)
+
+    print("\nSpielergewinn ist bei", player_chips.total)
+
+    # Ask to play again
+    new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
+
+    if new_game[0].lower() == 'j':
+        playing = True
+        continue
+    else:
+        print("Danke für's spielen!")
+        break
