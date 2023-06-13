@@ -42,11 +42,10 @@ def check_login(username, hashed_password):
     if (len(db_result) == 0): return False
     return (db_result[0][0] == hashed_password)
 
-def create_new_user(username, hashed_password):
+def create_new_user(username, hashed_password, startCapital):
     """
-    Erstellt den User in der DB und setzt das Startkapital auf 5000 Cent.
+    Erstellt den User in der DB.
     """
-    startCapital = 5000
     query = "INSERT INTO user_data (username, hashpassword, capital) VALUES (?, ?, ?)"
     tupel = (username, hashed_password, startCapital)
     insert_into_db(query, tupel)
