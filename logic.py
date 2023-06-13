@@ -13,6 +13,7 @@ Functions:
 
 # importing random to get random cards later on
 
+import time
 import random
 
 logo = '''
@@ -60,12 +61,12 @@ class Deck:
         self.deck = []  # start with an empty list
         for suit in suits:
             for rank in ranks:
-                self.deck.append(Card(suit,rank))  # build Card objects and add them to the list
+                self.deck.append(Card(suit, rank))  # build Card objects and add them to the list
 
     def __str__(self):
         deck_comp = ''  # start with an empty string
         for card in self.deck:
-            deck_comp += '\n '+card.__str__() # add each Card object's print string
+            deck_comp += '\n '+card.__str__()  # add each Card object's print string
         return 'Das Deck hat:' + deck_comp
 
     def shuffle(self):          # shuffle function will shuffle the whole deck
@@ -85,13 +86,9 @@ class Hand:
         self.value = 0   # start with zero value
         self.aces = 0    # add an attribute to keep track of aces
 
-    # now let's add cards
-
     def add_card(self, card):
         self.cards.append(card)
         self.value += values[card.rank]
-
-    # adjusting the value of ace
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
@@ -146,20 +143,17 @@ def hit_or_stand(deck, hand):
     Prompt the player to hit or stand.
     """
     global playing  # for use in an upcoming while loop
-    # player_hand = []
 
     while True:
-        player_input = get_player_input()
+        player_input = input("Hit (weitere Karte) oder Stand (Halten)? '<Eingabe>' oder 's'? ")
 
         if player_input == '':
             hit(deck, hand)
-            # player_hand.append(cards)
-            # print(player_hand)
 
         elif player_input[0].lower() == 's':
             print("Du nimmst keine weitere Karte. Der Dealer spielt.")
-            # print(f"Deine finale Hand: {player_hand}, Finaler Score: {calculate_score(player_hand)}")
             playing = False
+            time.sleep(1)
 
         elif player_input[0].lower() == 'q':
             exit(0)
@@ -171,12 +165,12 @@ def show_some(player, dealer):
     function to display some cards (keep the dealers second card hidden)
     :param player: the player
     :param dealer: the dealer
-    :return:
     """
     print("\nHand des Dealers:")
     print(" <Karte versteckt>")
     print('', dealer.cards[1])
     print("\nSpieler Hand:", *player.cards, sep='\n ')
+    print(f"Dein bisheriger Score: {player.value}")
 
 
 def show_all(player, dealer):
@@ -186,56 +180,35 @@ def show_all(player, dealer):
     :param dealer: the dealer
     """
     print("\nHand des Dealers:", *dealer.cards, sep='\n ')
-    print("Hand des Dealers:", dealer.value)
+    print("Dealer finaler Score:", dealer.value)
     print("\nSpieler Hand:", *player.cards, sep='\n ')
-    print("\nSpieler Hand:", player.value)
+    print(f"Dein finaler Score: {player.value}")
 
 
 # functions to handle end of game scenarios
 
-def player_busts(player,dealer,chips):
+def player_busts(player, dealer, chips):
     print("Spieler hat über 21!")
     chips.lose_bet()
 
 
-def player_wins(player,dealer,chips):
+def player_wins(player, dealer, chips):
     print("Spieler gewinnt!")
     chips.win_bet()
 
 
-def dealer_busts(player,dealer,chips):
+def dealer_busts(player, dealer, chips):
     print("Dealer hat über 21!")
     chips.win_bet()
 
 
-def dealer_wins(player,dealer,chips):
+def dealer_wins(player, dealer, chips):
     print("Dealer gewinnt!")
     chips.lose_bet()
 
 
-def push(player,dealer):
+def push(player, dealer):
     print("Dealer und Spieler haben gleich viel! Unentschieden.")
-
-
-def get_player_input():
-    """
-    Print the user interface, accept their input and return it.
-
-    This function asks the user for their input until they give
-    us a valid option.
-
-    Return:
-        user_input: A string of the user input (one of '', 's', 'q')
-    """
-    print('\nWas möchtest du als nächstes tun?')
-    print('1. [<Eingabe>]: Weitere Karte ziehen')
-    print('2. [s]: stand - Keine weitere Karte')
-    print('3. [q]: Spiel verlassen')
-    user_input = input().lower()
-    while user_input not in ['', 's', 'q']:
-        print('Bitte wähle ein gültige Option aus.')
-        user_input = input()
-    return user_input
 
 
 # Spielablauf
@@ -266,6 +239,7 @@ while True:
 
     # Show cards (but keep one dealer card hidden)
     show_some(player_hand, dealer_hand)
+    time.sleep(1)
 
     while playing:
 
@@ -274,6 +248,8 @@ while True:
 
         # Show cards (but keep one dealer card hidden)
         show_some(player_hand, dealer_hand)
+        print("Der Dealer zieht noch eine Karte")
+        time.sleep(5)
 
         # If Player's hand exceeds 21, run player_busts() and break out of loop
         if player_hand.value > 21:
@@ -298,7 +274,7 @@ while True:
             else:
                 push(player_hand, dealer_hand)
 
-    print("\nSpielergewinn ist bei", player_chips.total)
+    print("\nSpielgewinn ist bei", player_chips.total)
 
     # Ask to play again
     new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
