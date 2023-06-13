@@ -33,12 +33,12 @@ def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
-        new_user = User(username, hashed_password)
-        if db_connection.check_login(username,hashed_password):
+        if db_connection.check_username(username):
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
             return render_template('regestrierung.html', error_message=error_message)
 
         else:
+            new_user = User(username, hashed_password)
             return render_template('startPage.html', username="Benutzer wurde angelegt")
     else:
         return render_template('regestrierung.html')

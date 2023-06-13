@@ -11,12 +11,16 @@ def insert_into_db(query, tupel):
     """
     Stellt Verbindung zur DB her und führt übergebene INSERT-Abfrage aus.
     """
-    conn = pyodbc.connect(connection_string)
-    cursor = conn.cursor()
-    cursor.execute(query, tupel)
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+        cursor.execute(query, tupel)
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except pyodbc.Error as ex:
+        print("Fehler beim Ausführen des INSERT-Statements:")
+        print(ex)
 
 def select_from_db(query, tupel):
     """
@@ -39,8 +43,18 @@ def check_login(username, hashed_password):
     query = "SELECT hashpassword FROM user_data WHERE username = ?"
     tupel = (username)
     db_result = select_from_db(query, tupel)
-    if (len(db_result) == 0): return False
-    return (db_result[0][0] == hashed_password)
+    if (len(db_result) == 0): return False # Benutzername existiert nicht
+    return (db_result[0][0] == hashed_password) # Passwort stimmt oder stimmt nicht
+
+def check_username(username):
+    """
+    Sucht nach "username" in der DB.
+    :return: True, wenn Datensatz zum Username existiert, ansonsten False
+    """
+    query = "SELECT username FROM user_data WHERE username = ?"
+    tupel = (username)
+    db_result = select_from_db(query, tupel)
+    return (len(db_result) != 0) # Benutzername existiert / existiert nicht
 
 def create_new_user(username, hashed_password, startCapital):
     """
