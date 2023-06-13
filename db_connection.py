@@ -7,26 +7,25 @@ username = 'BlackJackUser03'
 password = 'ProvadisBlackJackUser03__'
 connection_string = 'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password
 
-# def get_capital(username):
-#     query = "SELECT capital FROM user_data WHERE username = ?"
-#     tupel = (username)
-#     select_from_db(query, tupel)
-
-def write_in_db(query, tupel):
+def insert_into_db(query, tupel):
+    """
+    Stellt Verbindung zur DB her und führt übergebene INSERT-Abfrage aus.
+    """
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-
-    query = "INSERT INTO user_data (username, hashpassword, capital) VALUES (?, ?, ?)"
-    cursor.execute(query, (nutzername, hashed_password, capital))
+    cursor.execute(query, tupel)
     conn.commit()
-
     cursor.close()
     conn.close()
 
 def select_from_db(query, tupel):
+    """
+    Stellt Verbindung zur DB her und führt übergebene SELECT-Abfrage aus.
+    :return: Datensätze als Liste aus Tupels [(a,b),(x,y)]. Wenn keine Datensätze, dann []
+    """
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-    cursor.execute(query, tupel) # erst Statement, dann alle Parameter als Tupel, wodurch "?" ersetzt werden
+    cursor.execute(query, tupel)
     result = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -35,15 +34,19 @@ def select_from_db(query, tupel):
 def check_login(username, hashed_password):
     """
     Sucht zu "username" das zugehörige Passwort in der DB und vergleicht es mit "hashed_password".
-    :return: True, wenn Passwort korrekt ist, ansonsten False.
+    :return: True, wenn übergebenes Passwort == DB-Passwort des übergebenen Users, ansonsten False
     """
     query = "SELECT hashpassword FROM user_data WHERE username = ?"
     tupel = (username)
     db_result = select_from_db(query, tupel)
     if (len(db_result) == 0): return False
-    if(db_result[0][0] == hashed_password): return True
-    else: return False
+    return (db_result[0][0] == hashed_password)
 
-def create_new_user(username, password):
+def create_new_user(username, hashed_password):
+    """
+    Erstellt den User in der DB und setzt das Startkapital auf 5000 Cent.
+    """
+    startCapital = 5000
     query = "INSERT INTO user_data (username, hashpassword, capital) VALUES (?, ?, ?)"
-    tupel = ()
+    tupel = (username, hashed_password, startCapital)
+    insert_into_db(query, tupel)
