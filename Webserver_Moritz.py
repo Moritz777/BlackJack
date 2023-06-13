@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, redirect
+# from create_new_user_on_registry import new_user
+
+# import create_new_user_on_registry
 
 
 app = Flask(__name__)
@@ -32,10 +35,14 @@ def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        # new_user.create_new_user(username, password)
+
 
         return redirect('/')
     else:
         return render_template('regestrierung.html')
+
+
 
 
 if __name__ == "__main__":

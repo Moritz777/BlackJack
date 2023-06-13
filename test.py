@@ -25,10 +25,8 @@ def connect_sql(nutzername, hashed_password):
     conn.close()
 
 def hash_password(password):
-    sha256 = hashlib.sha256() # Erzeugt eine Instanz der SHA-256 Hash-Funktion
-    sha256.update(password.encode('utf-8')) # Aktualisiert den Hash mit den Bytes des Passworts
-
-    # Ruft den gehashten Wert ab und gibt ihn zurück
+    sha256 = hashlib.sha256()
+    sha256.update(password.encode('utf-8'))
     hashed_password = sha256.hexdigest()
     return hashed_password
 
@@ -52,7 +50,7 @@ def userLogin():
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
     query = "SELECT hashpassword FROM user_data WHERE username = ?"
-    cursor.execute(query, username)
+    cursor.execute(query, (username))
 
     result = cursor.fetchone()
 
