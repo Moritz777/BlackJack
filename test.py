@@ -1,8 +1,6 @@
 import hashlib
 import pyodbc
 
-from user_class import User
-
 server = 'provadis-it-ausbildung.de'
 database = 'BlackJack03'
 username = 'BlackJackUser03'
@@ -93,3 +91,8 @@ if __name__ == "__main__":
     # aabb = User(8, "Erik", "abcd", 5000)
     # a.change_username("Peter")
     # print(a.username)
+
+# Funktionstest
+# a = check_login("Sven", "5")
+# b = check_login("Sven", "6")
+# print(a, b)

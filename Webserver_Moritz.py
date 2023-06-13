@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import db_connection
+from Tools import hash_password
 
 # from create_new_user_on_registry import new_user
 
@@ -13,9 +14,9 @@ def index():
     if request.method == 'POST':
 
         username = request.form.get('username')
-        password = request.form.get('password')
+        hashed_password = hash_password(request.form.get('password'))
 
-        if db_connection.check_login(username,password):
+        if db_connection.check_login(username,hashed_password):
             return render_template('startPage.html', username=username)
         else:
             error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
@@ -30,7 +31,7 @@ def index():
 def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
-        password = request.form.get('password')
+        hashed_password = hash_password(request.form.get('password'))
         # new_user.create_new_user(username, password)
 
 
