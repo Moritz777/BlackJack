@@ -1,5 +1,4 @@
 import pyodbc
-import Tools
 
 #DATABASE INFORMATION
 server = 'provadis-it-ausbildung.de'

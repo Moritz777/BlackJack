@@ -1,8 +1,6 @@
 import hashlib
 import pyodbc
 
-from user_class import User
-
 server = 'provadis-it-ausbildung.de'
 database = 'BlackJack03'
 username = 'BlackJackUser03'
