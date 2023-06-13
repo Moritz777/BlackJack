@@ -14,7 +14,7 @@ def index():
     if request.method == 'POST':
 
         username = request.form.get('username')
-        password = request.form.get('password')
+        password = hash_password(request.form.get('password'))
 
         if db_connection.check_login(username,password):
             return render_template('startPage.html', username=username)
