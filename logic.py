@@ -33,6 +33,14 @@ ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
 values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8, 'Nine': 9, 'Ten': 10,
           'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
 
+# setting the players ability to play to true
+
+playing = True
+
+# defining classes
+
+
+# initialise a card with its given suit and rank
 
 class Card:
 
@@ -44,49 +52,113 @@ class Card:
         return self.rank + ' of ' + self.suit
 
 
+# This is the Deck Class which will create a deck from the given cards
 
-def main():
+class Deck:
+
+    def __init__(self):
+        self.deck = []  # start with an empty list
+        for suit in suits:
+            for rank in ranks:
+                self.deck.append(Card(suit,rank))  # build Card objects and add them to the list
+
+    def __str__(self):
+        deck_comp = ''  # start with an empty string
+        for card in self.deck:
+            deck_comp += '\n '+card.__str__() # add each Card object's print string
+        return 'The deck has:' + deck_comp
+
+    def shuffle(self):          # shuffle function will shuffle the whole deck
+        random.shuffle(self.deck)
+
+    def deal(self):             # deal function will take one card from the deck
+        single_card = self.deck.pop()
+        return single_card
+
+
+# Hand class adds the cards from the deck to the player's hand
+
+class Hand:
+    def __init__(self):
+        self.cards = []  # start with an empty list as we did in the Deck class
+        self.value = 0   # start with zero value
+        self.aces = 0    # add an attribute to keep track of aces
+
+    # now let's add cards
+
+    def add_card(self, card):
+        self.cards.append(card)
+        self.value += values[card.rank]
+
+    # adjusting the value of ace
+
+    def adjust_for_ace(self):
+        while self.value > 21 and self.aces:
+            self.value -= 10
+            self.aces -= 1
+
+
+# keeping track of the players chips, bets and ongoing winnings.
+
+class Chips:
+
+    def __init__(self):
+        self.total = 50  # This can be set to a default value or supplied by a user input
+        self.bet = 0
+
+    def win_bet(self):
+        self.total += self.bet
+
+    def lose_bet(self):
+        self.total -= self.bet
+
+
+# Functions start here
+
+def take_bet(chips):
+    while True:
+        try:
+            chips.bet = int(input('Wie viel Geld möchtest du setzen? '))
+        except ValueError:
+            print('Bitte eine Zahl eingeben!')
+        else:
+            if chips.bet > chips.total:
+                print(f"Sorry, du kannst nicht mehr als {chips.total}€ setzen")
+            else:
+                break
+
+
+def draw_card(deck, hand):
     """
-    Ask the user for their name. Start the game.
+    Let the player draw a card.
     """
-    print(logo)
-    name = ''
-    while name == '':
-        name = input('Wie heißt du? ')
-
-    blackjack()
+    hand.add_card(deck.deal())
+    hand.adjust_for_ace()
 
 
-def blackjack():
+def blackjack(deck, hand):
     """
     Implement the game "Blackjack".
     """
-    # Initialize starting scores for all the players to avoid
-    # KeyErrors
+    global playing  # for use in an upcoming while loop
     player_hand = []
-    can_continue = True
+
     while True:
         player_input = get_player_input()
+
         if player_input == '':
-            player_hand.append(deal_card())
+            player_hand.append(draw_card(deck, hand))
             print(player_hand)
+
         elif player_input == 's':
-            print(f"Your final hand: {player_hand}, final score: {calculate_score(player_hand)}")
+            print("Du nimmst keine weitere Karte. Der Dealer spielt.")
+            print(f"Deine finale Hand: {player_hand}, Finaler Score: {calculate_score(player_hand)}")
+            playing = False
             continue
-        # elif player_input == 'r':
-        #    blackjack()
+
         elif player_input == 'q':
             exit(0)
-
-
-def deal_card():
-    """
-    Let the player draw a card.
-    :return: value of the card which was drawn
-    """
-    cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
-    card = random.choice(cards)
-    return card
+        break
 
 
 def calculate_score(cards):
@@ -97,6 +169,7 @@ def calculate_score(cards):
         cards.append(1)
 
     return sum(cards)
+
 
 def print_winner(score):
     """
@@ -141,5 +214,24 @@ def get_player_input():
     return user_input
 
 
-if __name__ == '__main__':
-    main()
+while True:
+    print(logo)
+    print('Willkommen zu Blackjack! Komm so nah wie möglich an 21 ohne darüber zu kommen! \n\
+          Der Dealer nimmt Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+    deck = Deck()
+    deck.shuffle()
+
+    player_hand = Hand()
+    player_hand.add_card(deck.deal())
+    player_hand.add_card(deck.deal())
+
+    dealer_hand = Hand()
+    dealer_hand.add_card(deck.deal())
+    dealer_hand.add_card(deck.deal())
+
+    player_chips = Chips()
+
+    take_bet(player_chips)
+
+    while playing:
+        blackjack(deck, player_hand)
