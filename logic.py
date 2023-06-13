@@ -40,10 +40,10 @@ playing = True
 # defining classes
 
 
-# initialise a card with its given suit and rank
-
 class Card:
-
+    """
+    initialise a card with the given suit and rank
+    """
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
@@ -52,10 +52,10 @@ class Card:
         return self.rank + ' of ' + self.suit
 
 
-# This is the Deck Class which will create a deck from the given cards
-
 class Deck:
-
+    """
+    Create a deck from the given cards
+    """
     def __init__(self):
         self.deck = []  # start with an empty list
         for suit in suits:
@@ -76,9 +76,10 @@ class Deck:
         return single_card
 
 
-# Hand class adds the cards from the deck to the player's hand
-
 class Hand:
+    """
+    Add the cards from the deck class to the player's hand
+    """
     def __init__(self):
         self.cards = []  # start with an empty list as we did in the Deck class
         self.value = 0   # start with zero value
@@ -98,10 +99,10 @@ class Hand:
             self.aces -= 1
 
 
-# keeping track of the players chips, bets and ongoing winnings.
-
 class Chips:
-
+    """
+    keep track of the players chips, bets and ongoing winnings.
+    """
     def __init__(self):
         self.total = 50  # This can be set to a default value or supplied by a user input
         self.bet = 0
@@ -116,6 +117,10 @@ class Chips:
 # Functions start here
 
 def take_bet(chips):
+    """
+    take bets from the player
+    :param chips: the players chips as given below
+    """
     while True:
         try:
             chips.bet = int(input('Wie viel Geld möchtest du setzen? '))
@@ -128,7 +133,7 @@ def take_bet(chips):
                 break
 
 
-def draw_card(deck, hand):
+def hit(deck, hand):
     """
     Let the player draw a card.
     """
@@ -136,27 +141,27 @@ def draw_card(deck, hand):
     hand.adjust_for_ace()
 
 
-def blackjack(deck, hand):
+def hit_or_stand(deck, hand):
     """
-    Implement the game "Blackjack".
+    Prompt the player to hit or stand.
     """
     global playing  # for use in an upcoming while loop
-    player_hand = []
+    # player_hand = []
 
     while True:
         player_input = get_player_input()
 
         if player_input == '':
-            player_hand.append(draw_card(deck, hand))
-            print(player_hand)
+            hit(deck, hand)
+            # player_hand.append(cards)
+            # print(player_hand)
 
-        elif player_input == 's':
+        elif player_input[0].lower() == 's':
             print("Du nimmst keine weitere Karte. Der Dealer spielt.")
-            print(f"Deine finale Hand: {player_hand}, Finaler Score: {calculate_score(player_hand)}")
+            # print(f"Deine finale Hand: {player_hand}, Finaler Score: {calculate_score(player_hand)}")
             playing = False
-            continue
 
-        elif player_input == 'q':
+        elif player_input[0].lower() == 'q':
             exit(0)
         break
 
@@ -207,7 +212,7 @@ def get_player_input():
     print('2. [s]: stand - Keine weitere Karte')
     print('3. [q]: Spiel verlassen')
     # print('4. [r]: Spiel zurücksetzen')
-    user_input = input()
+    user_input = input().lower()
     while user_input not in ['', 's', 'q', 'r']:
         print('Bitte wähle ein gültige Option aus.')
         user_input = input()
@@ -234,4 +239,4 @@ while True:
     take_bet(player_chips)
 
     while playing:
-        blackjack(deck, player_hand)
+        hit_or_stand(deck, player_hand)
