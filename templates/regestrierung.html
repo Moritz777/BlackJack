@@ -3,16 +3,21 @@
 <head>
   <title>Registrierung</title>
   <style>
-    body {
-      background-image: url('R.png');
-      background-repeat: no-repeat;
-      background-size: cover;
+    .background_image {
+      height: 100vh;
+      width: 100%;
+      object-fit: cover;
     }
+    /*body {*/
+    /*  background-image: url('R.png');*/
+    /*  background-repeat: no-repeat;*/
+    /*  background-size: cover;*/
+    /*}*/
   </style>
 </head>
 <body>
 <h1>Registrierung</h1>
-
+<img class="background_image" src="/templates/R.png">
 <form method="POST" action="/registrierung">
   <label for="username">Benutzername:</label>
   <input type="text" id="username" name="username" required><br><br>
@@ -26,5 +31,7 @@
 {% if error_message %}
 <p style="color: red;">{{ error_message }}</p>
 {% endif %}
+
+<a href="/login">Zurück zum Login</a>
 </body>
 </html>
