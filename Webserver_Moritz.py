@@ -14,7 +14,7 @@ def index():
     if request.method == 'POST':
 
         username = request.form.get('username')
-        password = hash_password(request.form.get('password'))
+        hashed_password = hash_password(request.form.get('password'))
 
         if db_connection.check_login(username,password):
             return render_template('startPage.html', username=username)
@@ -31,7 +31,7 @@ def index():
 def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
-        password = hash_password(request.form.get('password'))
+        hashed_password = hash_password(request.form.get('password'))
         # new_user.create_new_user(username, password)
 
 
