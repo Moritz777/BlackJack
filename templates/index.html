@@ -19,6 +19,20 @@
 
     <input type="submit" value="Anmelden">
 </form>
+
+{% if error_message %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+<!-- Zusätzlicher Button für die Registrierung -->
+<button onclick="redirectToRegistration()">Registrieren</button>
+
+<script>
+    // JavaScript-Funktion, um zur Registrierungsseite zu leiten
+    function redirectToRegistration() {
+        window.location.href = "/registrierung";
+    }
+</script>
+
 </body>
 </html>
-
