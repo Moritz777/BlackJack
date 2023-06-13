@@ -1,7 +1,7 @@
 import hashlib
 import pyodbc
 
-from user import User
+from user_class import User
 
 server = 'provadis-it-ausbildung.de'
 database = 'BlackJack03'
@@ -51,12 +51,12 @@ def userLogin():
     user_password = input("Passwort: ")
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-    query = "SELECT hashpassword FROM user_data WHERE Username = ?"
+    query = "SELECT hashpassword FROM user_data WHERE username = ?"
     cursor.execute(query, username)
 
     result = cursor.fetchone()
 
-    if(result == hash_password(user_password)):
+    if(result[0] == hash_password(user_password)):
         print(username + " angemeldet")
     else:
         print("Ihr Nutzer und Passwort stimmen nicht überein Sie Hund")
@@ -66,7 +66,7 @@ def userLogin():
 def test():
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-    query = "SELECT * FROM user_data WHERE Username = ?"
+    query = "SELECT * FROM user_data WHERE username = ?"
     cursor.execute(query, username)
 
     result = cursor.fetchone()
