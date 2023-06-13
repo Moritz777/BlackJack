@@ -3,10 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>BlackJack</title>
+    <style>
+        .welcome_container{
+            background-color: yellow;
+            position: absolute;
+            left: 32px;
+            top: 16px;
+        }
+        .menu_container {
+            position: absolute;
+            background-color: cadetblue;
+            left: 32px;
+            top: 220px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Wilkommen</h1>
-  <p>Hallo, {{ username }}!</p>
-
+    <div class="welcome_container">
+      <h1>Wilkommen</h1>
+      <p>Hallo, {{ username }}!, Schön, dass du da bist!</p>
+    </div>
+    <div class="menu_container">
+        <h2>Wähle aus folgenden Aktivitäten:</h2>
+        <a href="/game_template.html">1. Einem zufälligen Spiel beitreten</a>
+            <br></br>
+        <a href>2. Ein Spiel hosten</a>
+        <a href>Logout</a>
+    </div>
 </body>
 </html>
