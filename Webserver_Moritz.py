@@ -33,14 +33,14 @@ def registrierung():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         # new_user.create_new_user(username, password)
+        if db_connection.check_login(username,hashed_password):
+            error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
+            return render_template('regestrierung.html', error_message=error_message)
 
-
-        return redirect('/')
+        else:
+            return render_template('startPage.html', username="Benutzer wurde angelegt")
     else:
         return render_template('regestrierung.html')
-
-
-
 
 if __name__ == "__main__":
     app.run(host='localhost', port='81', debug=True)
