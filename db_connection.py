@@ -21,6 +21,7 @@ def check_login(username, password):
     if(db_result[0][0] == Tools.hash_password(password)): return True
     else: return False
 
+# print("")
 
 
 # def get_capital(username):
