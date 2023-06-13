@@ -49,7 +49,7 @@ def select_from_db(query, tupel):
     conn.close()
     return result
 
-a = check_login("Sven", "5")
-b = check_login("Sven", "6")
-print(a, b)
-check_login()
+# a = check_login("Sven", "5")
+# b = check_login("Sven", "6")
+# print(a, b)
+# check_login()
