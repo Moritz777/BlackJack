@@ -1,4 +1,5 @@
 import pyodbc
+import Tools
 
 #DATABASE INFORMATION
 server = 'provadis-it-ausbildung.de'
@@ -8,9 +9,19 @@ password = 'ProvadisBlackJackUser03__'
 connection_string = 'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password
 
 def check_login(username, password):
+    """
+    Diese Funktion addiert zwei Zahlen.
+    :param a: Die erste Zahl.
+    :param b: Die zweite Zahl.
+    :return: Die Summe der beiden Zahlen.
+    """
     query = "SELECT hashpassword FROM user_data WHERE username = ?"
     tupel = (username)
     db_result = select_from_db(query, tupel)
+    if(db_result[0][0] == Tools.hash_password(password)): return True
+    else: return False
+
+# print("")
 
 
 # def get_capital(username):
@@ -38,4 +49,7 @@ def select_from_db(query, tupel):
     conn.close()
     return result
 
-check_login("Peter", "xxx")
+# a = check_login("Sven", "5")
+# b = check_login("Sven", "6")
+# print(a, b)
+# check_login()

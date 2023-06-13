@@ -13,6 +13,9 @@ class User:
         self.username = username
         self.hash_password = hash_password
         self.capital = capital
+        create_new_user()
 
     def change_username(self, new_username):
         self.username = new_username
+
+    def create_new_user(self, username, password):

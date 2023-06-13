@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect
+import db_connection
+
 # from create_new_user_on_registry import new_user
 
 # import create_new_user_on_registry
@@ -13,13 +15,7 @@ def index():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        # Hier kannst du die empfangenen Daten verwenden
-        print("Benutzername:", username)
-        print("Passwort:", password)
-
-        user_name = False
-
-        if user_name:
+        if db_connection.check_login(username,password):
             return render_template('startPage.html', username=username)
         else:
             error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
@@ -46,5 +42,5 @@ def registrierung():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='81', debug=True)
+    app.run(host='localhost', port='81', debug=True)
 
