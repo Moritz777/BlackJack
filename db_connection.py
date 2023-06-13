@@ -8,6 +8,9 @@ password = 'ProvadisBlackJackUser03__'
 connection_string = 'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password
 
 def insert_into_db(query, tupel):
+    """
+    Stellt Verbindung zur DB her und führt übergebene INSERT-Abfrage aus.
+    """
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
     cursor.execute(query, tupel)
@@ -16,6 +19,10 @@ def insert_into_db(query, tupel):
     conn.close()
 
 def select_from_db(query, tupel):
+    """
+    Stellt Verbindung zur DB her und führt übergebene SELECT-Abfrage aus.
+    :return: Datensätze als Liste aus Tupels [(a,b),(x,y)]. Wenn keine Datensätze, dann []
+    """
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
     cursor.execute(query, tupel)
