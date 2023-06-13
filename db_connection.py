@@ -38,7 +38,7 @@ def select_from_db(query, tupel):
 def check_login(username, hashed_password):
     """
     Sucht zu "username" das zugehörige Passwort in der DB und vergleicht es mit "hashed_password".
-    :return: True, wenn übergebenes Passwort == DB-Passwort des übergebenen Users, ansonsten False
+    :return: True, wenn Username in DB existiert UND das Passwort stimmt, ansonsten False
     """
     query = "SELECT hashpassword FROM user_data WHERE username = ?"
     tupel = (username)
