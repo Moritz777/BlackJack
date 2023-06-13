@@ -16,7 +16,7 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
 
-        if db_connection.check_login(username,password):
+        if db_connection.check_login(username,hashed_password):
             return render_template('startPage.html', username=username)
         else:
             error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
