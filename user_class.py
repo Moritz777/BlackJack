@@ -18,4 +18,4 @@ class User:
     def change_username(self, new_username):
         self.username = new_username
 
-    def create_new_user(self, username, password):
+    def create_new_user(self, username, hashed_password):
