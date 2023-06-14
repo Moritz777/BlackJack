@@ -46,7 +46,7 @@ def registrierung():
 
         else:
             new_user = User(username, hashed_password)
-            return render_template('startPage.html', username="Benutzer wurde angelegt")
+            return render_template('index.html',message="Regestrierung erfolgreich, bitte melden Sie sich an")
     return render_template('regestrierung.html')
 
 @app.route('/startPage', methods=['GET', 'POST'])
@@ -62,5 +62,5 @@ def game():
     return render_template('game_template.html')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='81', debug=True)
+    app.run(host='10.130.240.91', port='81', debug=True)
 
