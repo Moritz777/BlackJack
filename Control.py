@@ -19,5 +19,6 @@ class control:
 
     def create_new_player(self, username):
         new_player = Player(username)
+        return new_player
 
 

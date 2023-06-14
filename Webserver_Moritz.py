@@ -12,6 +12,7 @@ from Control import control
 players = []
 app = Flask(__name__)
 control = control()
+player = None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -22,6 +23,7 @@ def index():
 
         if db_connection.check_login(username,hashed_password):
            player = control.create_new_player(username)
+           print(player)
            return render_template('startPage.html', username=username)
         else:
             error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
@@ -37,7 +39,6 @@ def registrierung():
         if db_connection.check_username(username):
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
 
-
         else:
             new_user = User(username, hashed_password)
             return render_template('index.html',message="Regestrierung erfolgreich, bitte melden Sie sich an")
@@ -48,8 +49,9 @@ def registrierung():
 def random_session():
     if request.method == 'POST':
         control.choose_session(player)
+        print(player + "sss")
         print(control.session_list[-1].player_list)
-    return render_template('game_template.html')
+    return render_template('startPage.html')
 
 
 @app.route('/game_template', methods=['GET', 'POST'])
