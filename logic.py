@@ -192,7 +192,7 @@ def show_all(player, dealer):
 # functions to handle end of game scenarios
 
 def player_busts(player, dealer, chips):
-    print("Spieler hat über 21!")
+    print("Spieler hat über 21! Verloren!")
     chips.lose_bet()
 
 
@@ -202,12 +202,12 @@ def player_wins(player, dealer, chips):
 
 
 def dealer_busts(player, dealer, chips):
-    print("Der Dealer hat über 21!")
+    print("Der Dealer hat über 21! Gewonnen!")
     chips.win_bet()
 
 
 def dealer_wins(player, dealer, chips):
-    print("Dealer gewinnt!")
+    print("Dealer gewinnt! Du hast verloren!")
     chips.lose_bet()
 
 
@@ -249,6 +249,11 @@ while True:
 
     while playing:
 
+        if player_hand.value == 21:
+            print('Blackjack! Du hast gewonnen!')
+            player_wins(player_hand, dealer_hand, player_chips)
+            break
+
         # Prompt the Player to Hit or Stand
         if hit_or_stand(deck, player_hand):
             i += 1
@@ -266,10 +271,10 @@ while True:
             break
 
         # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
-    if player_hand.value <= 21:
+    if player_hand.value < 21:
 
-            # prompt the player to hit or stand again
-        if hit_or_stand(deck, player_hand):
+        # prompt the player to hit or stand again
+        if hit_or_stand(deck, player_hand) and playing is False:
             i += 1
             print('Du ziehst eine:', player_hand.cards[i])
         time.sleep(2)
