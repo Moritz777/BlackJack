@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect
 import db_connection
-import session
 from Tools import hash_password
 from player_class import Player
 from user_class import User
@@ -62,5 +61,5 @@ def game():
     return render_template('game_template.html')
 
 if __name__ == "__main__":
-    app.run(host='10.130.240.91', port='81', debug=True)
+    app.run(host='0.0.0.0', port='81', debug=True)
 
