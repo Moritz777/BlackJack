@@ -130,15 +130,15 @@ def take_bet(chips):
                 break
 
 
-def hit(deck, hand):
+def hit(decks, hand):
     """
     Let the player draw a card.
     """
-    hand.add_card(deck.deal())
+    hand.add_card(decks.deal())
     hand.adjust_for_ace()
 
 
-def hit_or_stand(deck, hand):
+def hit_or_stand(decks, hand):
     """
     Prompt the player to hit or stand.
     """
@@ -148,7 +148,7 @@ def hit_or_stand(deck, hand):
         player_input = input("Hit (weitere Karte) oder Stand (Halten)? '<Eingabe>' oder 's'? ")
 
         if player_input == '':
-            hit(deck, hand)
+            hit(decks, hand)
             return True
 
         elif player_input[0].lower() == 's':
@@ -160,21 +160,6 @@ def hit_or_stand(deck, hand):
         elif player_input[0].lower() == 'q':
             exit(0)
         break
-
-
-'''
-def show_some(player, dealer):
-    """
-    function to display some cards (keep the dealers second card hidden)
-    :param player: the player
-    :param dealer: the dealer
-    """
-    print("\nHand des Dealers:")
-    print(" <Karte versteckt>")
-    print('', dealer.cards[1])
-    print("\nSpieler Hand:", *player.cards, sep='\n ')
-    print(f"Dein bisheriger Score: {player.value}")
-'''
 
 
 def show_all(player, dealer):
@@ -190,28 +175,27 @@ def show_all(player, dealer):
 
 
 # functions to handle end of game scenarios
-
-def player_busts(player, dealer, chips):
+def player_busts(chips):
     print("Spieler hat über 21! Verloren!")
     chips.lose_bet()
 
 
-def player_wins(player, dealer, chips):
+def player_wins(chips):
     print("Spieler gewinnt!")
     chips.win_bet()
 
 
-def dealer_busts(player, dealer, chips):
+def dealer_busts(chips):
     print("Der Dealer hat über 21! Gewonnen!")
     chips.win_bet()
 
 
-def dealer_wins(player, dealer, chips):
+def dealer_wins(chips):
     print("Dealer gewinnt! Du hast verloren!")
     chips.lose_bet()
 
 
-def push(player, dealer):
+def push():
     print("Dealer und Spieler haben gleich viel! Unentschieden.")
 
 
@@ -251,7 +235,7 @@ while True:
 
         if player_hand.value == 21:
             print('Blackjack! Du hast gewonnen!')
-            player_wins(player_hand, dealer_hand, player_chips)
+            player_wins(player_chips)
             break
 
         # Prompt the Player to Hit or Stand
@@ -266,7 +250,7 @@ while True:
 
         # If Player's hand exceeds 21, run player_busts() and break out of loop
         if player_hand.value > 21:
-            player_busts(player_hand, dealer_hand, player_chips)
+            player_busts(player_chips)
             time.sleep(2)
             break
 
@@ -292,19 +276,19 @@ while True:
 
         # Run different winning scenarios
         if dealer_hand.value > 21:
-            dealer_busts(player_hand, dealer_hand, player_chips)
+            dealer_busts(player_chips)
             time.sleep(2)
 
         elif dealer_hand.value > player_hand.value:
-            dealer_wins(player_hand, dealer_hand, player_chips)
+            dealer_wins(player_chips)
             time.sleep(2)
 
         elif dealer_hand.value < player_hand.value:
-            player_wins(player_hand, dealer_hand, player_chips)
+            player_wins(player_chips)
             time.sleep(2)
 
         else:
-            push(player_hand, dealer_hand)
+            push()
             time.sleep(2)
 
     print("\nSpielgewinn ist bei", player_chips.total)
