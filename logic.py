@@ -274,10 +274,10 @@ while True:
     if player_hand.value < 21:
 
         # prompt the player to hit or stand again
-        if hit_or_stand(deck, player_hand) and playing is False:
+        if playing is True and hit_or_stand(deck, player_hand):
             i += 1
             print('Du ziehst eine:', player_hand.cards[i])
-        time.sleep(2)
+            time.sleep(2)
 
         while dealer_hand.value < 17:
             print('Der Dealer zieht eine Karte.')
