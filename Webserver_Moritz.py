@@ -24,7 +24,7 @@ def index():
            player = control.create_new_player(username)
            return render_template('startPage.html', username=username)
         else:
-            error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
+            error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
             return render_template('index.html', error_message=error_message)
     else:
         return render_template('index.html')
