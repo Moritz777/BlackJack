@@ -1,7 +1,13 @@
+import db_connection
 
 
 class Player:
-    def __init__(self, username: str, credit: int, wants_to_play: bool):
+    def __init__(self, username):
         self.username = username
-        self.credit = credit
-        self.wants_to_play = wants_to_play
+        self.credit = None
+        self.wants_to_play = False
+        self.credit = self.loadData()
+    def loadData(self):
+        return db_connection.get_credit(self.username)
+
+
