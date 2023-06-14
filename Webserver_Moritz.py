@@ -46,6 +46,11 @@ def registrierung():
             return render_template('startPage.html', username="Benutzer wurde angelegt")
     return render_template('regestrierung.html')
 
+
+@app.route('/game_template', methods=['GET', 'POST'])
+def game():
+    return render_template('game_template.html')
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
 
