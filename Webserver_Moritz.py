@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect
 import db_connection
+import session
 from Tools import hash_password
 from player_class import Player
 from user_class import User
+from Control import control
 
 # from create_new_user_on_registry import new_user
 
@@ -10,6 +12,9 @@ from user_class import User
 
 players = []
 app = Flask(__name__)
+
+control = control()
+player = Player
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -19,10 +24,8 @@ def index():
         hashed_password = hash_password(request.form.get('password'))
 
         if db_connection.check_login(username,hashed_password):
-            player = Player(username)
-            players.append(player)
-            print(players)
-            return render_template('startPage.html', username=username)
+           player = control.create_new_player(username)
+           return render_template('startPage.html', username=username)
         else:
             error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
             return render_template('index.html', error_message=error_message)
@@ -45,6 +48,13 @@ def registrierung():
             new_user = User(username, hashed_password)
             return render_template('startPage.html', username="Benutzer wurde angelegt")
     return render_template('regestrierung.html')
+
+@app.route('/startPage', methods=['GET', 'POST'])
+def random_session():
+    if request.method == 'POST':
+        control.choose_session(player)
+        print(control.session_list[-1].player_list)
+    return render_template('game_template.html')
 
 
 @app.route('/game_template', methods=['GET', 'POST'])
