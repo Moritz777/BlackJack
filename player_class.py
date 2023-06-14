@@ -2,7 +2,7 @@ import db_connection
 
 
 class Player:
-    def __init__(self, username):
+    def __init__(self, username=None):
         self.username = username
         self.wants_to_play = False
         self.credit = self.loadData()
