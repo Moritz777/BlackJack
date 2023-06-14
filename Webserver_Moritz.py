@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect
 import db_connection
-import session
 from Tools import hash_password
 from player_class import Player
 from user_class import User
@@ -46,7 +45,7 @@ def registrierung():
 
         else:
             new_user = User(username, hashed_password)
-            return render_template('startPage.html', username="Benutzer wurde angelegt")
+            return render_template('index.html',message="Regestrierung erfolgreich, bitte melden Sie sich an")
     return render_template('regestrierung.html')
 
 @app.route('/startPage', methods=['GET', 'POST'])

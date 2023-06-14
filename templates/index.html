@@ -62,7 +62,10 @@
 
 <div class="back-container">
     {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
+    <p style="color: #ff0000;">{{ error_message }}</p>
+    {% endif %}
+    {% if message %}
+    <p style="color: #08ff00;">{{ message }}</p>
     {% endif %}
 
     <!-- Zusätzlicher Button für die Registrierung -->
