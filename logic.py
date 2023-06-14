@@ -59,9 +59,10 @@ class Deck:
     """
     def __init__(self):
         self.deck = []  # start with an empty list
-        for suit in suits:
-            for rank in ranks:
-                self.deck.append(Card(suit, rank))  # build Card objects and add them to the list
+        for i in range (6):
+            for suit in suits:
+                for rank in ranks:
+                    self.deck.append(Card(suit, rank))  # build Card objects and add them to the list
 
     def __str__(self):
         deck_comp = ''  # start with an empty string
@@ -153,6 +154,7 @@ def hit_or_stand(decks, hand):
 
         elif player_input[0].lower() == 's':
             print("Du nimmst keine weitere Karte.")
+            hand.adjust_for_ace()
             playing = False
             time.sleep(1)
             return False
