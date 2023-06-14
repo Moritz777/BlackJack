@@ -11,9 +11,7 @@ from Control import control
 
 players = []
 app = Flask(__name__)
-
 control = control()
-player = Player
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -26,13 +24,10 @@ def index():
            player = control.create_new_player(username)
            return render_template('startPage.html', username=username)
         else:
-            error_message = "Benutzer nicht vorhanden"  # Fehlermeldung
+            error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
             return render_template('index.html', error_message=error_message)
-
-
     else:
         return render_template('index.html')
-
 
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
@@ -41,12 +36,13 @@ def registrierung():
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_username(username):
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
-            return render_template('regestrierung.html', error_message=error_message)
+
 
         else:
             new_user = User(username, hashed_password)
             return render_template('index.html',message="Regestrierung erfolgreich, bitte melden Sie sich an")
     return render_template('regestrierung.html')
+
 
 @app.route('/startPage', methods=['GET', 'POST'])
 def random_session():
