@@ -1,0 +1,65 @@
+import pyodbc
+
+#DATABASE INFORMATION
+server = 'provadis-it-ausbildung.de'
+database = 'BlackJack03'
+username = 'BlackJackUser03'
+password = 'ProvadisBlackJackUser03__'
+connection_string = 'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password
+
+def insert_into_db(query, tupel):
+    """
+    Stellt Verbindung zur DB her und führt übergebene INSERT-Abfrage aus.
+    """
+    try:
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+        cursor.execute(query, tupel)
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except pyodbc.Error as ex:
+        print("Fehler beim Ausführen des INSERT-Statements:")
+        print(ex)
+
+def select_from_db(query, tupel):
+    """
+    Stellt Verbindung zur DB her und führt übergebene SELECT-Abfrage aus.
+    :return: Datensätze als Liste aus Tupels [(a,b),(x,y)]. Wenn keine Datensätze, dann []
+    """
+    conn = pyodbc.connect(connection_string)
+    cursor = conn.cursor()
+    cursor.execute(query, tupel)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
+
+def check_login(username, hashed_password):
+    """
+    Sucht zu "username" das zugehörige Passwort in der DB und vergleicht es mit "hashed_password".
+    :return: True, wenn Username in DB existiert UND das Passwort stimmt, ansonsten False
+    """
+    query = "SELECT hashpassword FROM user_data WHERE username = ?"
+    tupel = (username)
+    db_result = select_from_db(query, tupel)
+    if (len(db_result) == 0): return False # Benutzername existiert nicht
+    return (db_result[0][0] == hashed_password) # Passwort stimmt oder stimmt nicht
+
+def check_username(username):
+    """
+    Sucht nach "username" in der DB.
+    :return: True, wenn Datensatz zum Username existiert, ansonsten False
+    """
+    query = "SELECT username FROM user_data WHERE username = ?"
+    tupel = (username)
+    db_result = select_from_db(query, tupel)
+    return (len(db_result) != 0) # Benutzername existiert / existiert nicht
+
+def create_new_user(username, hashed_password, startCapital):
+    """
+    Erstellt den User in der DB.
+    """
+    query = "INSERT INTO user_data (username, hashpassword, capital) VALUES (?, ?, ?)"
+    tupel = (username, hashed_password, startCapital)
+    insert_into_db(query, tupel)

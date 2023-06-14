@@ -1,12 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Anmeldeseite</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
+  <title>Anmeldeseite</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    .background_image {
+      height: 100vh;
+      width: 100%;
+      object-fit: cover;
+    }
+    .headline_container {
+      position: absolute;
+      left: 64px;
+      top: 64px;
+      font-size: 24px;
+      color: white;
+    }
+    .formular_container {
+      position: absolute;
+      left: 64px;
+      top: 200px;
+      font-size: 18px;
+      color: white;
+    }
+    .back-container {
+      position: absolute;
+      left: 64px;
+      top: 350px;
+      font-size: 14px;
+      color: deeppink;
+    }
+  </style>
 </head>
 <body>
-<h1>BlackJack</h1>
+<img class="background_image" src="/static/R.png">
 
-<form action="/" method="POST">
+<div class="headline_container">
+  <h1>BlackJack</h1>
+</div>
+
+<div class="formular_container">
+  <form action="/" method="POST">
     <label for="username">Benutzername:</label>
     <input type="text" id="username" name="username">
 
@@ -18,7 +57,25 @@
     <br>
 
     <input type="submit" value="Anmelden">
-</form>
+  </form>
+</div>
+
+<div class="back-container">
+    {% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+
+    <!-- Zusätzlicher Button für die Registrierung -->
+    <button onclick="redirectToRegistration()">Registrieren</button>
+
+    <script>
+        // JavaScript-Funktion, um zur Registrierungsseite zu leiten
+        function redirectToRegistration() {
+            window.location.href = "/registrierung";
+        }
+    </script>
+</div>
+
+
 </body>
 </html>
-
