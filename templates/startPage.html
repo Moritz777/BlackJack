@@ -35,6 +35,15 @@
       font-size: 14px;
       color: deeppink;
     }
+    button{
+        border-style: none;
+        padding: 0.5rem 1rem;
+        color:#4f2626;
+        font-family: "Poppins", sans-serif ;
+        font-size: 0.7rem;
+        font-weight: bold;
+        border-radius: 0.3rem;
+    }
   </style>
 </head>
 <body>
@@ -47,13 +56,20 @@
 
 <div class="formular_container">
   <h2>Wähle aus folgenden Aktivitäten:</h2>
-        <a href="/game_template.html">1. Einem zufälligen Spiel beitreten</a>
+       <button onclick="redirectToGameTemplate()">Einem zufälligen Spiel beitreten</button>
+
+       <script>
+        // JavaScript-Funktion, um zur Registrierungsseite zu leiten
+        function redirectToGameTemplate() {
+            window.location.href = "/game_template";
+        }
+        </script>
             <br></br>
         <a href>2. Ein Spiel hosten</a>
 </div>
 
 <div class="back-container">
-    <a href>Logout</a>
+    <button>Logout</button>>
 </div>
 
 

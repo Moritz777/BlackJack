@@ -63,3 +63,9 @@ def create_new_user(username, hashed_password, startCapital):
     query = "INSERT INTO user_data (username, hashpassword, capital) VALUES (?, ?, ?)"
     tupel = (username, hashed_password, startCapital)
     insert_into_db(query, tupel)
+
+def get_credit(username):
+    query = "SELECT capital FROM user_data WHERE username = ?"
+    tupel = (username)
+    db_result = select_from_db(query, tupel)
+    return db_result[0][0]
