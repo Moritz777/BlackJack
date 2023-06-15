@@ -104,7 +104,7 @@ class Chips:
     keep track of the players chips, bets and ongoing winnings.
     """
     def __init__(self):
-        self.total = 50  # This can be set to a default value or supplied by a user input
+        self.total = 100  # This can be set to a default value or supplied by a user input
         self.bet = 0
 
     def win_bet(self):
@@ -112,6 +112,10 @@ class Chips:
 
     def lose_bet(self):
         self.total -= self.bet
+
+    def win_blackjack(self):
+        self.total += self.bet
+        self.total += self.bet * 0.5
 
 
 # Functions start here
@@ -188,6 +192,11 @@ def player_wins(chips):
     chips.win_bet()
 
 
+def player_wins_blackjack(chips):
+    print("Blackjack! Spieler gewinnt!")
+    chips.win_blackjack()
+
+
 def dealer_busts(chips):
     print("Der Dealer hat über 21! Gewonnen!")
     chips.win_bet()
@@ -213,15 +222,15 @@ while True:
     deck = Deck()
     deck.shuffle()
 
-    player_hand = Hand()
-    player_hand.add_card(deck.deal())
-    player_hand.add_card(deck.deal())
-    i = 1
-
     # deal one card to the dealer
     dealer_hand = Hand()
     dealer_hand.add_card(deck.deal())
     i2 = 0
+
+    player_hand = Hand()
+    player_hand.add_card(deck.deal())
+    player_hand.add_card(deck.deal())
+    i = 1
 
     # Set up the Player's chips
     player_chips = Chips()
@@ -235,7 +244,7 @@ while True:
 
     if player_hand.value == 21:
         print('Blackjack! Du hast gewonnen!')
-        player_wins(player_chips)
+        player_wins_blackjack(player_chips)
         playing = False
 
     while playing:
@@ -245,6 +254,9 @@ while True:
             i += 1
             print('Du ziehst eine:', player_hand.cards[i])
             time.sleep(1)
+
+        #if player_hand.value == 21 and player_hand.cards[.rank] == 'Seven':
+            #pass
 
         # Show cards
         show_all(player_hand, dealer_hand)
@@ -257,7 +269,7 @@ while True:
             break
 
         # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
-    if player_hand.value < 21:
+    if player_hand.value <= 21:
 
         # prompt the player to hit or stand again
         if playing is True and hit_or_stand(deck, player_hand):
