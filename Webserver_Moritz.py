@@ -1,4 +1,6 @@
 from datetime import date, datetime
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_socketio import SocketIO, emit
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
@@ -12,6 +14,10 @@ players = []
 app = Flask(__name__)
 control = control()
 player = None
+app.secret_key = 'sventegetscookie'
+socketio = SocketIO(app)
+online_users = []
+
 app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
 @app.route('/', methods=['GET', 'POST'])
@@ -33,12 +39,12 @@ def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
         first_name = request.form.get('vor_name')
-        last_name = request.form.get('last_name')
+        last_username = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
-        # result = today - birthday_object
-        # print(result)
+        #result = today - birthday_object
+        #print(result)
         hashed_password = hash_password(request.form.get('password'))
 
         if db_connection.check_username(username):
@@ -53,12 +59,14 @@ def registrierung():
 
 @app.route('/startPage', methods=['GET', 'POST'])
 def random_session():
+
     if request.method == 'POST':
         control.choose_session(player)
-
-
         print(control.session_list[-1].player_list)
         return redirect('/game_template')
+    # name = request.form.get('name')  #
+    # session['name'] = name  # LOBBY TEST
+    # print(name)  #
     return render_template('startPage.html')
 
 
@@ -66,6 +74,31 @@ def random_session():
 def game():
     return render_template('game_template.html')
 
+
+# -------- LOBBY TEST ---------
+@app.route('/display', methods=['POST'])
+def display():
+    name = session.get('name')
+    return render_template('display.html', name=name)
+
+@app.route('/users')
+def users():
+    return render_template('users.html')
+
+@socketio.on('connect')
+def handle_connect():
+    name = session.get('name')
+    online_users.append(name)
+    emit('user_update', online_users, broadcast=True)
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    name = session.get('name')
+    if name in online_users:
+        online_users.remove(name)
+    emit('user_update', online_users, broadcast=True)
+
+# ------------------------
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
