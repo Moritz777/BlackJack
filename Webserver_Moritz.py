@@ -9,7 +9,6 @@ from player_class import Player
 from user_class import User
 from Control import control
 
-
 players = []
 app = Flask(__name__)
 control = control()
@@ -20,16 +19,17 @@ online_users = []
 
 app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-            username = request.form.get('username')
-            hashed_password = hash_password(request.form.get('password'))
-            if db_connection.check_login(username, hashed_password):
-                return redirect('/startPage')
-            else:
-                error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
-                return render_template('index.html', error_message=error_message)
+        username = request.form.get('username')
+        hashed_password = hash_password(request.form.get('password'))
+        if db_connection.check_login(username, hashed_password):
+            return redirect('/startPage')
+        else:
+            error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
+            return render_template('index.html', error_message=error_message)
     else:
         return render_template('index.html')
 
@@ -43,8 +43,10 @@ def registrierung():
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
-        #result = today - birthday_object
-        #print(result)
+        age = (today.day - birthday_object.day) / 365
+        if age < 18:
+            print(age)
+            return redirect("/")
         hashed_password = hash_password(request.form.get('password'))
 
         if db_connection.check_username(username):
@@ -59,7 +61,6 @@ def registrierung():
 
 @app.route('/startPage', methods=['GET', 'POST'])
 def random_session():
-
     if request.method == 'POST':
         control.choose_session(player)
         print(control.session_list[-1].player_list)
@@ -82,9 +83,11 @@ def display():
     name = session.get('name')
     return render_template('display.html', name=name)
 
+
 @app.route('/users')
 def users():
     return render_template('users.html')
+
 
 @socketio.on('connect')
 def handle_connect():
@@ -92,12 +95,14 @@ def handle_connect():
     online_users.append(name)
     emit('user_update', online_users, broadcast=True)
 
+
 @socketio.on('disconnect')
 def handle_disconnect():
     name = session.get('name')
     if name in online_users:
         online_users.remove(name)
     emit('user_update', online_users, broadcast=True)
+
 
 # ------------------------
 
