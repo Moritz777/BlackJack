@@ -12,7 +12,7 @@ players = []
 app = Flask(__name__)
 control = control()
 player = None
-
+meldung = None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -20,7 +20,7 @@ def index():
             username = request.form.get('username')
             hashed_password = hash_password(request.form.get('password'))
             if db_connection.check_login(username, hashed_password):
-                return redirect('/startPage')
+                return redirect('/startPage',)
             else:
                 error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
                 return render_template('index.html', error_message=error_message)
@@ -28,7 +28,7 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/registrierung', methods=['GET', 'POST'])
+@app.route('/registrierung', methods=['GET', 'POST'], )
 def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -40,12 +40,11 @@ def registrierung():
         #result = today - birthday_object
         #print(result)
         hashed_password = hash_password(request.form.get('password'))
-
         if db_connection.check_username(username):
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
         else:
             new_user = User(username, hashed_password)
-            return render_template('index.html', message="Regestrierung erfolgreich, bitte melden Sie sich an")
+            return redirect('index.html', message="Regestrierung erfolgreich, bitte melden Sie sich an")
     return render_template('regestrierung.html')
 
 
