@@ -62,11 +62,24 @@
 
 <div class="back-container">
     {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
+    <p style="color: #ff0000;">{{ error_message }}</p>
+    {% endif %}
+    {% if message %}
+    <p style="color: #08ff00;">{{ message }}</p>
     {% endif %}
 
     <!-- Zusätzlicher Button für die Registrierung -->
     <button onclick="redirectToRegistration()">Registrieren</button>
+
+    <script>
+        // JavaScript-Funktion, um zur Registrierungsseite zu leiten
+        function redirectToRegistration() {
+            window.location.href = "/registrierung";
+        }
+    </script>
+
+     <!-- Zusätzlicher Button für die Registrierung -->
+    <button onclick="redirectToStartPage()">Anmelden</button>
 
     <script>
         // JavaScript-Funktion, um zur Registrierungsseite zu leiten
