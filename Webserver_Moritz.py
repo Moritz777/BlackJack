@@ -62,12 +62,11 @@ def random_session():
 
     if request.method == 'POST':
         control.choose_session(player)
-        # name = request.form.get('name')  #
-        # session['name'] = name  # LOBBY TEST
-        # print(name)  #
-        #
         print(control.session_list[-1].player_list)
         return redirect('/game_template')
+    # name = request.form.get('name')  #
+    # session['name'] = name  # LOBBY TEST
+    # print(name)  #
     return render_template('startPage.html')
 
 
