@@ -5,9 +5,6 @@ from player_class import Player
 from user_class import User
 from Control import control
 
-# from create_new_user_on_registry import new_user
-
-# import create_new_user_on_registry
 
 players = []
 app = Flask(__name__)

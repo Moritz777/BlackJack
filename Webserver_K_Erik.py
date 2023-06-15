@@ -16,7 +16,6 @@ def index():
 def submit():
     name = request.form.get('name')
     session['name'] = name
-    #online_users.append(name)
     return render_template('submit.html')
 
 @app.route('/display')
