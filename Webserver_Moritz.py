@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from flask import Flask, render_template, request, redirect, url_for
 import db_connection
 from Tools import hash_password
@@ -30,7 +32,15 @@ def index():
 def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
+        first_name = request.form.get('vor_name')
+        last_username = request.form.get('last_name')
+        birthday = request.form.get('birthdaytime')
+        today = datetime.now()
+        birthday_object = datetime.fromisoformat(birthday)
+        #result = today - birthday_object
+        #print(result)
         hashed_password = hash_password(request.form.get('password'))
+
         if db_connection.check_username(username):
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
         else:

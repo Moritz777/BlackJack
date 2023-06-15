@@ -22,6 +22,15 @@
     <label for="password">Passwort:</label>
     <input type="password" id="password" name="password" required><br><br>
 
+    <label for="first_name">Vorname:</label>
+    <input type="text" id="first_name" name="first_name" required><br><br>
+
+    <label for="last_name">Nachname:</label>
+    <input type="text" id="last_name" name="last_name" required><br><br>
+
+    <label for="birthdaytime">Birthday (date and time):</label>
+    <input type="datetime-local" id="birthdaytime" name="birthdaytime">
+
     <input type="submit" value="Registrieren">
   </form>
   {% if error_message %}
