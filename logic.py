@@ -55,11 +55,11 @@ class Card:
 
 class Deck:
     """
-    Create a deck from the given cards
+    Create six decks from the given cards
     """
     def __init__(self):
         self.deck = []  # start with an empty list
-        for i in range (6):
+        for i3 in range(6):
             for suit in suits:
                 for rank in ranks:
                     self.deck.append(Card(suit, rank))  # build Card objects and add them to the list
@@ -90,6 +90,8 @@ class Hand:
     def add_card(self, card):
         self.cards.append(card)
         self.value += values[card.rank]
+        if card.rank == 'Ace':
+            self.aces += 1
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
