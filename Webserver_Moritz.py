@@ -46,7 +46,7 @@ def registrierung():
         else:
             new_user = User(username, hashed_password)
             return render_template('index.html', message="Regestrierung erfolgreich, bitte melden Sie sich an")
-    return render_template('regestrierung.html')
+    return render_template('registrierung.html')
 
 
 @app.route('/startPage', methods=['GET', 'POST'])
