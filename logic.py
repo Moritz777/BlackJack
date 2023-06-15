@@ -156,7 +156,6 @@ def hit_or_stand(decks, hand):
 
         elif player_input[0].lower() == 's':
             print("Du nimmst keine weitere Karte.")
-            hand.adjust_for_ace()
             playing = False
             time.sleep(1)
             return False
@@ -204,7 +203,6 @@ def push():
 
 
 # Spielablauf
-
 while True:
     # greeting the player
     print(logo)
@@ -235,22 +233,22 @@ while True:
     show_all(player_hand, dealer_hand)
     time.sleep(1)
 
-    while playing:
+    if player_hand.value == 21:
+        print('Blackjack! Du hast gewonnen!')
+        player_wins(player_chips)
+        playing = False
 
-        if player_hand.value == 21:
-            print('Blackjack! Du hast gewonnen!')
-            player_wins(player_chips)
-            break
+    while playing:
 
         # Prompt the Player to Hit or Stand
         if hit_or_stand(deck, player_hand):
             i += 1
             print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(2)
+            time.sleep(1)
 
         # Show cards
         show_all(player_hand, dealer_hand)
-        time.sleep(2)
+        time.sleep(1)
 
         # If Player's hand exceeds 21, run player_busts() and break out of loop
         if player_hand.value > 21:
