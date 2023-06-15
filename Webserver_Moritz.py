@@ -65,6 +65,7 @@ def random_session():
         # name = request.form.get('name')  #
         # session['name'] = name  # LOBBY TEST
         # print(name)  #
+        #
         print(control.session_list[-1].player_list)
         return redirect('/game_template')
     return render_template('startPage.html')
