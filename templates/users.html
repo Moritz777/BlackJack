@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Users</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io();
+
+        socket.on('user_update', function(onlineUsers) {
+            var userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+
+            onlineUsers.forEach(function(user) {
+                var listItem = document.createElement('li');
+                listItem.textContent = user;
+                userList.appendChild(listItem);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Online Users</h1>
+    <ul id="user-list">
+{#        {% for user in online_users %}#}
+{#            <li>{{ user }}</li>#}
+{#        {% endfor %}#}
+    </ul>
+    <a href="/display">Lobby verlassen</a>
+</body>
+</html>
