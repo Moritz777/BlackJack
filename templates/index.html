@@ -4,40 +4,21 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
   <title>Anmeldeseite</title>
-  <style>
-          body {
-      margin: 0;
-    }
-    .background_image {
-      height: 100vh;
-      width: 100%;
-      object-fit: cover;
-    }
-    .headline_container {
-      position: absolute;
-      left: 64px;
-      top: 64px;
-      font-size: 24px;
-      color: white;
-    }
-    .formular_container {
-      position: absolute;
-      left: 64px;
-      top: 200px;
-      font-size: 18px;
-      color: white;
-    }
-    .back-container {
-      position: absolute;
-      left: 64px;
-      top: 350px;
-      font-size: 14px;
-      color: deeppink;
-    }
-  </style>
 </head>
 <body>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <img class="background_image" src="/static/R.png">
 
 <div class="headline_container">
@@ -45,19 +26,22 @@
 </div>
 
 <div class="formular_container">
-  <form action="/" method="POST">
-    <label for="username">Benutzername:</label>
-    <input type="text" id="username" name="username">
 
-    <br>
+    <form action ="/" method="POST" name="login">
+        <label for="username">Benutzername: </label>
+        <input type="text" id="username" name="username">
 
-    <label for="password">Passwort:</label>
-    <input type="password" id="password" name="password">
+        <br>
 
-    <br>
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password">
 
-    <input type="submit" value="Anmelden">
-  </form>
+        <input type="submit" value="Anmelden">
+    </form>
+
+    <form action="{{ url_for('registrierung')}}" method="GET" name="registry">
+        <input type="submit" value="Registrieren">
+    </form>
 </div>
 
 <div class="back-container">
@@ -67,28 +51,7 @@
     {% if message %}
     <p style="color: #08ff00;">{{ message }}</p>
     {% endif %}
-
-    <!-- Zusätzlicher Button für die Registrierung -->
-    <button onclick="redirectToRegistration()">Registrieren</button>
-
-    <script>
-        // JavaScript-Funktion, um zur Registrierungsseite zu leiten
-        function redirectToRegistration() {
-            window.location.href = "/registrierung";
-        }
-    </script>
-
-     <!-- Zusätzlicher Button für die Registrierung -->
-    <button onclick="redirectToStartPage()">Anmelden</button>
-
-    <script>
-        // JavaScript-Funktion, um zur Registrierungsseite zu leiten
-        function redirectToRegistration() {
-            window.location.href = "/registrierung";
-        }
-    </script>
 </div>
-
 
 </body>
 </html>

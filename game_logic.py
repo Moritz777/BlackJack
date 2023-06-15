@@ -55,11 +55,11 @@ class Card:
 
 class Deck:
     """
-    Create a deck from the given cards
+    Create six decks from the given cards
     """
     def __init__(self):
         self.deck = []  # start with an empty list
-        for i in range (6):
+        for i3 in range(6):
             for suit in suits:
                 for rank in ranks:
                     self.deck.append(Card(suit, rank))  # build Card objects and add them to the list
@@ -90,6 +90,8 @@ class Hand:
     def add_card(self, card):
         self.cards.append(card)
         self.value += values[card.rank]
+        if card.rank == 'Ace':
+            self.aces += 1
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
@@ -102,7 +104,7 @@ class Chips:
     keep track of the players chips, bets and ongoing winnings.
     """
     def __init__(self):
-        self.total = 50  # This can be set to a default value or supplied by a user input
+        self.total = 100  # This can be set to a default value or supplied by a user input
         self.bet = 0
 
     def win_bet(self):
@@ -110,6 +112,10 @@ class Chips:
 
     def lose_bet(self):
         self.total -= self.bet
+
+    def win_blackjack(self):
+        self.total += self.bet
+        self.total += self.bet * 0.5
 
 
 # Functions start here
@@ -154,7 +160,6 @@ def hit_or_stand(decks, hand):
 
         elif player_input[0].lower() == 's':
             print("Du nimmst keine weitere Karte.")
-            hand.adjust_for_ace()
             playing = False
             time.sleep(1)
             return False
@@ -187,6 +192,11 @@ def player_wins(chips):
     chips.win_bet()
 
 
+def player_wins_blackjack(chips):
+    print("Blackjack! Spieler gewinnt!")
+    chips.win_blackjack()
+
+
 def dealer_busts(chips):
     print("Der Dealer hat über 21! Gewonnen!")
     chips.win_bet()
@@ -202,7 +212,6 @@ def push():
 
 
 # Spielablauf
-
 while True:
     # greeting the player
     print(logo)
@@ -213,15 +222,15 @@ while True:
     deck = Deck()
     deck.shuffle()
 
-    player_hand = Hand()
-    player_hand.add_card(deck.deal())
-    player_hand.add_card(deck.deal())
-    i = 1
-
     # deal one card to the dealer
     dealer_hand = Hand()
     dealer_hand.add_card(deck.deal())
     i2 = 0
+
+    player_hand = Hand()
+    player_hand.add_card(deck.deal())
+    player_hand.add_card(deck.deal())
+    i = 1
 
     # Set up the Player's chips
     player_chips = Chips()
@@ -233,22 +242,25 @@ while True:
     show_all(player_hand, dealer_hand)
     time.sleep(1)
 
-    while playing:
+    if player_hand.value == 21:
+        print('Blackjack! Du hast gewonnen!')
+        player_wins_blackjack(player_chips)
+        playing = False
 
-        if player_hand.value == 21:
-            print('Blackjack! Du hast gewonnen!')
-            player_wins(player_chips)
-            break
+    while playing:
 
         # Prompt the Player to Hit or Stand
         if hit_or_stand(deck, player_hand):
             i += 1
             print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(2)
+            time.sleep(1)
+
+        #if player_hand.value == 21 and player_hand.cards[.rank] == 'Seven':
+            #pass
 
         # Show cards
         show_all(player_hand, dealer_hand)
-        time.sleep(2)
+        time.sleep(1)
 
         # If Player's hand exceeds 21, run player_busts() and break out of loop
         if player_hand.value > 21:
@@ -257,7 +269,7 @@ while True:
             break
 
         # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
-    if player_hand.value < 21:
+    if player_hand.value <= 21:
 
         # prompt the player to hit or stand again
         if playing is True and hit_or_stand(deck, player_hand):
