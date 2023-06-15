@@ -26,14 +26,13 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/registrierng', methods=['GET', 'POST'])
+@app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_username(username):
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
-
         else:
             new_user = User(username, hashed_password)
             return render_template('index.html', message="Regestrierung erfolgreich, bitte melden Sie sich an")
@@ -44,8 +43,10 @@ def registrierung():
 def random_session():
     if request.method == 'POST':
         control.choose_session(player)
+
         print(player + "sss")
         print(control.session_list[-1].player_list)
+        return redirect('/game_template')
     return render_template('startPage.html')
 
 
