@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, emit
 
 from flask import Flask, render_template, request, redirect, url_for, flash
@@ -45,12 +45,12 @@ def registrierung():
         birthday_object = datetime.fromisoformat(birthday)
         age = (today.day - birthday_object.day) / 365
         if age < 18:
-            print(age)
-            return redirect("/")
+            return render_template('registrierung.html',
+                                   error_message="Regestrierung fehlgeschlagen,das Mindestalter ist 18 Jahre")
         hashed_password = hash_password(request.form.get('password'))
 
         if db_connection.check_username(username):
-            error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
+            return render_template('registrierung.html', error_message="Der Username ist bereits vergeben")
         else:
             new_user = User(username, hashed_password)
             flash("Registrierung erfolgreich, bitte melden Sie sich an")
@@ -75,6 +75,12 @@ def random_session():
 def game():
     return render_template('game_template.html')
 
+
+@app.route('/api/data')
+def get_data():
+    # Perform Python logic to calculate data
+    data = {'x': 100, 'y': 200}  # Example data to send to the client
+    return jsonify(data)
 
 
 # -------- LOBBY TEST ---------
