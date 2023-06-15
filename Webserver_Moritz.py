@@ -1,6 +1,6 @@
 from datetime import date, datetime
-
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_socketio import SocketIO, emit
 import db_connection
 from Tools import hash_password
 from player_class import Player
@@ -12,6 +12,9 @@ players = []
 app = Flask(__name__)
 control = control()
 player = None
+app.secret_key = 'sventegetscookie'
+socketio = SocketIO(app)
+online_users = []
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -51,10 +54,12 @@ def registrierung():
 
 @app.route('/startPage', methods=['GET', 'POST'])
 def random_session():
+
     if request.method == 'POST':
         control.choose_session(player)
-
-
+        # name = request.form.get('name')  #
+        # session['name'] = name  # LOBBY TEST
+        # print(name)  #
         print(control.session_list[-1].player_list)
         return redirect('/game_template')
     return render_template('startPage.html')
@@ -64,6 +69,31 @@ def random_session():
 def game():
     return render_template('game_template.html')
 
+
+# -------- LOBBY TEST ---------
+@app.route('/display', methods=['POST'])
+def display():
+    name = session.get('name')
+    return render_template('display.html', name=name)
+
+@app.route('/users')
+def users():
+    return render_template('users.html')
+
+@socketio.on('connect')
+def handle_connect():
+    name = session.get('name')
+    online_users.append(name)
+    emit('user_update', online_users, broadcast=True)
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    name = session.get('name')
+    if name in online_users:
+        online_users.remove(name)
+    emit('user_update', online_users, broadcast=True)
+
+# ------------------------
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
