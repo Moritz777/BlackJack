@@ -43,8 +43,10 @@ def registrierung():
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
-        #result = today - birthday_object
-        #print(result)
+        age = (today.day - birthday_object.day)/365
+        if age<18:
+            print(age)
+            return redirect("/")
         hashed_password = hash_password(request.form.get('password'))
 
         if db_connection.check_username(username):
