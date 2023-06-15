@@ -8,6 +8,17 @@
   <title>Anmeldeseite</title>
 </head>
 <body>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <img class="background_image" src="/static/R.png">
 
 <div class="headline_container">
@@ -41,7 +52,6 @@
     <p style="color: #08ff00;">{{ message }}</p>
     {% endif %}
 </div>
-
 
 </body>
 </html>

@@ -1,6 +1,8 @@
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO, emit
+
+from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
 from Tools import hash_password
 from player_class import Player
@@ -16,6 +18,7 @@ app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
 online_users = []
 
+app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -48,7 +51,9 @@ def registrierung():
             error_message = "Benutzernamen bereits vergeben"  # Fehlermeldung
         else:
             new_user = User(username, hashed_password)
-            return render_template('index.html', message="Regestrierung erfolgreich, bitte melden Sie sich an")
+            flash("Registrierung erfolgreich, bitte melden Sie sich an")
+            return redirect("/")
+
     return render_template('registrierung.html')
 
 
