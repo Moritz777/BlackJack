@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import db_connection
 from Tools import hash_password
 from player_class import Player
@@ -14,24 +14,22 @@ app = Flask(__name__)
 control = control()
 player = None
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-
-        username = request.form.get('username')
-        hashed_password = hash_password(request.form.get('password'))
-
-        if db_connection.check_login(username,hashed_password):
-           player = control.create_new_player(username)
-           print(player)
-           return render_template('startPage.html', username=username)
-        else:
-            error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
-            return render_template('index.html', error_message=error_message)
+            username = request.form.get('username')
+            hashed_password = hash_password(request.form.get('password'))
+            if db_connection.check_login(username, hashed_password):
+                return redirect('/startPage')
+            else:
+                error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
+                return render_template('index.html', error_message=error_message)
     else:
         return render_template('index.html')
 
-@app.route('/registrierung', methods=['GET', 'POST'])
+
+@app.route('/registrierng', methods=['GET', 'POST'])
 def registrierung():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -41,7 +39,7 @@ def registrierung():
 
         else:
             new_user = User(username, hashed_password)
-            return render_template('index.html',message="Regestrierung erfolgreich, bitte melden Sie sich an")
+            return render_template('index.html', message="Regestrierung erfolgreich, bitte melden Sie sich an")
     return render_template('regestrierung.html')
 
 
@@ -58,6 +56,6 @@ def random_session():
 def game():
     return render_template('game_template.html')
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
-
