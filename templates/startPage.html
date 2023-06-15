@@ -17,14 +17,9 @@
 
 <div class="formular_container">
   <h2>Wähle aus folgenden Aktivitäten:</h2>
-       <button onclick="redirectToGameTemplate()">Einem zufälligen Spiel beitreten</button>
-
-       <script>
-        // JavaScript-Funktion, um zur Registrierungsseite zu leiten
-        function redirectToGameTemplate() {
-            window.location.href = "/game_template";
-        }
-        </script>
+    <form action="/startPage" method="POST">
+        <input type="submit" value="Zufälligem Spiel beitreten">
+    </form>
             <br></br>
         <a href>2. Ein Spiel hosten</a>
 </div>

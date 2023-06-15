@@ -44,7 +44,7 @@ def random_session():
     if request.method == 'POST':
         control.choose_session(player)
 
-        print(player + "sss")
+
         print(control.session_list[-1].player_list)
         return redirect('/game_template')
     return render_template('startPage.html')
