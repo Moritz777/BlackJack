@@ -10,6 +10,21 @@ from player_class import Player
 from user_class import User
 from Control import control
 
+
+def hallo1():
+    data1 = 1
+    return data1
+
+
+def hallo2():
+    data2 = 2
+    return data2
+
+
+def hallo3():
+    data3 = 3
+    return data3
+
 players = []
 app = Flask(__name__)
 control = control()
@@ -27,7 +42,7 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
-            session['username']=username
+            session['username'] = username
             return redirect('/startPage')
         else:
             error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
@@ -75,7 +90,7 @@ def random_session():
             return redirect('/game_template')
 
         if request.form['btn'] == 'Spiel hosten':
-            return redirect('/display')
+            return redirect('/game_template')
 
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
@@ -84,13 +99,17 @@ def random_session():
     return render_template('startPage.html', username=username)
 
 
+
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
-
     if request.method == 'POST':
         pass
 
-    return render_template('game_template.html')
+    data1 = hallo1()
+    data2 = hallo2()
+    data3 = hallo3()
+
+    return render_template('game_template.html',data1=data1, data2=data2, data3=data3 )
 
 @app.route('/lobby_list', methods=['GET', 'POST'])
 def lobby_list():
