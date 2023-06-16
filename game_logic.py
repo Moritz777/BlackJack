@@ -101,21 +101,25 @@ class Hand:
 
 class Chips:
     """
-    keep track of the players chips, bets and ongoing winnings.
+    keep track of the players capital, bets and ongoing winnings.
     """
     def __init__(self):
-        self.total = 100  # This can be set to a default value or supplied by a user input
-        self.bet = 0
+        self.total = 100000  # Can be set to default value or supplied by database, user capital in cents (e.g. 100€)
+        self.bet = 0  # the amount the player bets for one round
+        self.win = 0  # win from one round
 
     def win_bet(self):
-        self.total += self.bet
+        self.win += self.bet
+        self.total += self.win
 
     def lose_bet(self):
-        self.total -= self.bet
+        self.win -= self.bet
+        self.total += self.win
 
     def win_blackjack(self):
-        self.total += self.bet
-        self.total += self.bet * 0.5
+        self.win += self.bet
+        self.win += self.bet * 0.5
+        self.total += self.win
 
 
 # Functions start here
@@ -127,12 +131,16 @@ def take_bet(chips):
     """
     while True:
         try:
-            chips.bet = int(input('Wie viel Geld möchtest du setzen? '))
+            chips.bet = int(input('Wie viel Geld möchtest du setzen? '))*100
         except ValueError:
             print('Bitte eine Zahl eingeben!')
         else:
             if chips.bet > chips.total:
-                print(f"Sorry, du kannst nicht mehr als {chips.total}€ setzen")
+                print(f"Sorry, du kannst nicht mehr als {chips.total/100}€ setzen")
+            elif chips.bet <= 0:
+                print('Sorry, du musst mehr als 1€ setzen.')
+            elif chips.bet > 50000:
+                print('Sorry, es dürfen maximal 500€ gesetzt werden.')
             else:
                 break
 
@@ -234,6 +242,7 @@ while True:
 
     # Set up the Player's chips
     player_chips = Chips()
+    print(f"Dein Kontostand beträgt: {player_chips.total/100}€")
 
     # Prompt the Player for their bet
     take_bet(player_chips)
@@ -243,7 +252,6 @@ while True:
     time.sleep(1)
 
     if player_hand.value == 21:
-        print('Blackjack! Du hast gewonnen!')
         player_wins_blackjack(player_chips)
         playing = False
 
@@ -257,7 +265,8 @@ while True:
 
         if player_hand.value == 21:  # and player_hand.cards[card].rank == 'Seven':
             for card in range(0, len(player_hand.cards)):
-                print("Der Spieler hat die Karten: ", player_hand.cards[card].rank)
+                if player_hand.cards[card].rank == 'Seven':
+                    print("Der Spieler hat eine Sieben auf der Hand.")
 
         # Show cards
         show_all(player_hand, dealer_hand)
@@ -306,7 +315,8 @@ while True:
             push()
             time.sleep(2)
 
-    print("\nSpielgewinn ist bei", player_chips.total)
+    print(f"\nSpielgewinn ist bei: {player_chips.win/100}€")
+    print(f"Kontostand ist bei: {player_chips.total/100}€")
 
     # Ask to play again
     new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
