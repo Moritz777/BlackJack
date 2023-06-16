@@ -317,12 +317,14 @@ while True:
             print('Der Dealer hat gezogen:', dealer_hand.cards[i_dealer])
             time.sleep(2)
 
-        if dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
-            print('Der Dealer hat Blackjack!')
-
         # Show all cards
         show_cards(player_hand, dealer_hand)
         time.sleep(2)
+
+        if dealer_hand.value == 21 and len(dealer_hand.cards) == 2 and blackjack is True:
+            print('Dealer und Spieler haben Blackjack!')
+            push()
+            time.sleep(2)
 
         # Run different winning scenarios
         if dealer_hand.value > 21:
@@ -335,11 +337,6 @@ while True:
 
         elif dealer_hand.value < player_hand.value:
             player_wins(player_chips)
-            time.sleep(2)
-
-        elif dealer_hand.value == 21:  # TODO: Separate Blackjack and just having Score 21
-            print('Dealer und Spieler haben Blackjack!')
-            push()
             time.sleep(2)
 
         else:
