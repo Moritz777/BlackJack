@@ -18,11 +18,26 @@
             });
         });
     </script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
+
+<img class="background_image" src="/static/R.png">
+
+<div class="headline_container">
     <h1>Online Users</h1>
-    <ul id="user-list">
-    </ul>
-    <a href="/display">Lobby verlassen</a>
+</div>
+
+<div class="formular_container">
+    <ul id="user-list"></ul>
+</div>
+
+<div class="back-container">
+    <form action="/users" method="POST">
+        <input type="submit" value="Zurück zur Lobby">
+    </form>
+</div>
+
+
 </body>
 </html>
