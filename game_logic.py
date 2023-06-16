@@ -315,7 +315,6 @@ while True:
         if dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
             print('Der Dealer hat Blackjack!')
 
-
         # Show all cards
         show_cards(player_hand, dealer_hand)
         time.sleep(2)
