@@ -72,6 +72,7 @@ class Deck:
 
     def shuffle(self):          # shuffle function will shuffle the whole deck
         random.shuffle(self.deck)
+        return 'shuffle'
 
     def deal(self):             # deal function will take one card from the deck
         single_card = self.deck.pop()
@@ -92,6 +93,7 @@ class Hand:
         self.value += values[card.rank]
         if card.rank == 'Ace':
             self.aces += 1
+        return 'draw'
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
@@ -173,6 +175,12 @@ def hit_or_stand(decks, hand):
             time.sleep(1)
             return False
 
+        elif player_input == 'lol':
+            print("Cheat akzeptiert, User bekommt Blackjack")
+            player_hand.value
+            if player_input[4] == 'a':
+                print("Cheat akzeptiert, Dealer bekommt Blackjack")
+
         elif player_input[0].lower() == 'q':
             exit(0)
         break
@@ -246,16 +254,16 @@ while True:
     deck = Deck()
     deck.shuffle()
 
-    # deal one card to the dealer
-    dealer_hand = Hand()
-    dealer_hand.add_card(deck.deal())
-    i_dealer = 0
-
     # deal two cards to the player
     player_hand = Hand()
     player_hand.add_card(deck.deal())
     player_hand.add_card(deck.deal())
     i_player = 1
+
+    # deal one card to the dealer
+    dealer_hand = Hand()
+    dealer_hand.add_card(deck.deal())
+    i_dealer = 0
 
     # Set up the Player's chips
     player_chips = Chips()
@@ -321,10 +329,14 @@ while True:
         show_cards(player_hand, dealer_hand)
         time.sleep(2)
 
-        if dealer_hand.value == 21 and len(dealer_hand.cards) == 2 and blackjack is True:
-            print('Dealer und Spieler haben Blackjack!')
-            push()
-            time.sleep(2)
+        if dealer_hand.value == 21:
+            print('Dealer hat Blackjack!')
+
+            if blackjack is True and len(dealer_hand.cards) == 2:
+                print('Dealer und Spieler haben Blackjack!')
+                push()
+                time.sleep(2)
+            dealer_wins_blackjack(player_chips)
 
         # Run different winning scenarios
         if dealer_hand.value > 21:
