@@ -137,10 +137,10 @@ def take_bet(chips):
         else:
             if chips.bet > chips.total:
                 print(f"Sorry, du kannst nicht mehr als {chips.total/100}€ setzen")
-            elif chips.bet <= 0:
-                print('Sorry, du musst mehr als 1€ setzen.')
-            elif chips.bet > 50000:
-                print('Sorry, es dürfen maximal 500€ gesetzt werden.')
+            elif chips.bet <= 5:
+                print('Sorry, du musst mehr als 5€ setzen.')
+            elif chips.bet > 2000:
+                print('Sorry, es dürfen maximal 20€ gesetzt werden.')
             else:
                 break
 
