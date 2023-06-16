@@ -16,8 +16,7 @@ player = None
 app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
 lobbies = {}
-user_dic = {}
-
+users_dict = {}
 
 
 app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
@@ -29,9 +28,8 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
-            session['username']=username
-            user_dic.update(session)
-            print(user_dic)
+            users_dict[username] = {}
+            print(users_dict)
             return redirect('/startPage')
         else:
             error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
@@ -83,8 +81,8 @@ def random_session():
 
         if request.form['btn'] == 'Spiel hosten':
             game_session_id = username + "_" + str(random.randint(100000,999999))
-            lobbies[game_session_id] = {'players': []}
-            session['game_session'] = game_session_id
+            print(lobbies)
+
 
             return redirect('/users')
 
@@ -142,7 +140,7 @@ def users():
 @socketio.on('connect')
 def handle_connect():
     username = session.get('username')
-    game_session = session['game_session']
+    game_session = lobbies
     lobbies[game_session]['players'].append(username)
     print(lobbies)
     emit('user_update', lobbies[game_session]['players'], broadcast=True)
