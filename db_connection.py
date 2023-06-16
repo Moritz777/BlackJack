@@ -69,3 +69,15 @@ def get_credit(username):
     tupel = (username)
     db_result = select_from_db(query, tupel)
     return db_result[0][0]
+
+# UPDATE user_data
+# SET birthdate = '2023-10-25', firstname = 'Erikkk', lastname = 'Beforeman'
+# WHERE player_id = 23;
+
+# player_id	int	NULL
+# username	varchar	16
+# hashpassword	varchar	64
+# capital	int	NULL
+# firstname	varchar	128
+# lastname	varchar	128
+# birthdate	varchar	10
