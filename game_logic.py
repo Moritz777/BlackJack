@@ -247,13 +247,13 @@ while True:
     # deal one card to the dealer
     dealer_hand = Hand()
     dealer_hand.add_card(deck.deal())
-    i2 = 0
+    i_dealer = 0
 
     # deal two cards to the player
     player_hand = Hand()
     player_hand.add_card(deck.deal())
     player_hand.add_card(deck.deal())
-    i = 1
+    i_player = 1
 
     # Set up the Player's chips
     player_chips = Chips()
@@ -273,23 +273,29 @@ while True:
 
         # Prompt the Player to Hit or Stand
         if hit_or_stand(deck, player_hand):
-            i += 1
-            print('Du ziehst eine:', player_hand.cards[i])
+            i_player += 1
+            print('Du ziehst eine:', player_hand.cards[i_player])
             time.sleep(1)
 
         # Show cards
         show_cards(player_hand, dealer_hand)
         time.sleep(1)
 
-        if player_hand.value == 21:  # and player_hand.cards[card].rank == 'Seven':
-            i7 = 0
+        # check if the player has tripple seven
+        if player_hand.value == 21:
+            i_seven = 0
             for card in range(0, len(player_hand.cards)):
                 if player_hand.cards[card].rank == 'Seven':
-                    i7 += 1
-                    print(f"Der Spieler hat {i7} Sieben(en) auf der Hand.")
-                    if i7 == 3:
+                    i_seven += 1
+                    print(f"Der Spieler hat {i_seven} Sieben(en) auf der Hand.")
+                    if i_seven == 3:
                         player_wins_tripple_seven(player_chips)
-                        playing = False
+                        break
+
+        # check if the player has reached 21 points, not prompting him to hit or stand again
+        if player_hand.value == 21:
+            print('Der Spieler hat 21 Punkte erreicht.')
+            playing = False
 
         # If Player's hand exceeds 21, run player_busts() and break out of loop
         if player_hand.value > 21:
@@ -297,24 +303,14 @@ while True:
             time.sleep(2)
             break
 
-        if player_hand.value == 21:
-            pass  # TODO: don't ask the player again if he wants to hit, let him stand automatically
-
     # If Player hasn't busted or tripple seven, play Dealer's hand until Dealer reaches 17
     if player_hand.value <= 21:
-        '''
-        # prompt the player to hit or stand again
-        if playing is True and hit_or_stand(deck, player_hand):
-            i += 1
-            print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(2)
-        '''
 
         while dealer_hand.value < 17:
             print('Der Dealer zieht eine Karte.')
             hit(deck, dealer_hand)
-            i2 += 1
-            print('Der Dealer hat gezogen:', dealer_hand.cards[i2])
+            i_dealer += 1
+            print('Der Dealer hat gezogen:', dealer_hand.cards[i_dealer])
             time.sleep(2)
 
         if dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
