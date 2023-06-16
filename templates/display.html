@@ -2,11 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
     <title>SessionSeite</title>
 </head>
 <body>
-    <h1> Name: {{ name }} </h1>
-    <a href="/users">Lobby beitreten</a>
+
+<img class="background_image" src="/static/R.png">
+
+    <div class="headline_container">
+        <h1> Name: {{ username }} </h1>
+    </div>
+
+    <div class="formular_container">
+        <form action="/display" method="POST">
+            <input type="submit" value="Lobby beitreten">
+        </form>
+    </div>
 
 </body>
 </html>
