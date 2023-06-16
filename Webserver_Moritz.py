@@ -68,7 +68,7 @@ def random_session():
             return redirect('/game_template')
 
         if request.form['btn'] == 'Spiel hosten':
-            return redirect('/display')
+            return redirect('/game_template')
 
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
@@ -79,7 +79,7 @@ def random_session():
 
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
-    return render_template('game_template.html')
+    return render_template('game_template.html', ses=sea)
 
 @app.route('/lobby_list', methods=['GET', 'POST'])
 def lobby_list():
