@@ -34,9 +34,10 @@ ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
 values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8, 'Nine': 9, 'Ten': 10,
           'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
 
-# setting the players ability to play to true
+# setting the players ability to play to true and blackjack to false
 
 playing = True
+blackjack = False
 
 
 # defining classes
@@ -222,6 +223,7 @@ def dealer_wins(chips):
 
 def dealer_wins_blackjack(chips):
     print("Dealer hat Blackjack und gewinnt! Spieler hat verloren!")
+    chips.lose_bet()
 
 
 def push():
@@ -265,8 +267,10 @@ while True:
     show_cards(player_hand, dealer_hand)
     time.sleep(1)
 
+    # check if the player has blackjack
     if player_hand.value == 21:
         player_wins_blackjack(player_chips)
+        blackjack = True
         playing = False
 
     while playing:
@@ -287,14 +291,14 @@ while True:
             for card in range(0, len(player_hand.cards)):
                 if player_hand.cards[card].rank == 'Seven':
                     i_seven += 1
-                    print(f"Der Spieler hat {i_seven} Sieben(en) auf der Hand.")
-                    if i_seven == 3:
-                        player_wins_tripple_seven(player_chips)
-                        break
+            print(f"Der Spieler hat {i_seven} Sieben(en) auf der Hand.")
+            if i_seven == 3:
+                player_wins_tripple_seven(player_chips)
+                break
 
         # check if the player has reached 21 points, not prompting him to hit or stand again
         if player_hand.value == 21:
-            print('Der Spieler hat 21 Punkte erreicht.')
+            print('Der Spieler hat 21 Punkte erreicht und zieht nicht weiter.')
             playing = False
 
         # If Player's hand exceeds 21, run player_busts() and break out of loop
@@ -303,7 +307,7 @@ while True:
             time.sleep(2)
             break
 
-    # If Player hasn't busted or tripple seven, play Dealer's hand until Dealer reaches 17
+    # If Player hasn't busted, blackjack, tripple seven or reached 21, play Dealer's hand until Dealer reaches 17
     if player_hand.value <= 21:
 
         while dealer_hand.value < 17:
@@ -333,7 +337,7 @@ while True:
             player_wins(player_chips)
             time.sleep(2)
 
-        elif dealer_hand.value == 21:  # TODO: Separate Blackjack and just having 21
+        elif dealer_hand.value == 21:  # TODO: Separate Blackjack and just having Score 21
             print('Dealer und Spieler haben Blackjack!')
             push()
             time.sleep(2)
