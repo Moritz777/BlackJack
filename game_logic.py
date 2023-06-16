@@ -40,7 +40,6 @@ playing = True
 
 
 # defining classes
-
 class Card:
     """
     initialise a card with the given suit and rank
@@ -130,6 +129,7 @@ def take_bet(chips):
     :param chips: the players chips as given below
     """
     while True:
+        print(f"Dein Kontostand beträgt: {player_chips.total / 100}€")
         try:
             chips.bet = int(input('Wie viel Geld möchtest du setzen? '))*100
         except ValueError:
@@ -228,12 +228,17 @@ def push():
     print("Dealer und Spieler haben gleich viel! Unentschieden.")
 
 
-# Spielablauf
-while True:
-    # greeting the player
+def greet_player():
     print(logo)
     print('Willkommen zu Blackjack! Komm so nah wie möglich an 21 ohne darüber zu kommen! \n\
-          Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+              Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+
+
+# Spielablauf
+while True:
+
+    # greeting the player
+    greet_player()
 
     # Create & shuffle the deck, dealing two cards to the player
     deck = Deck()
@@ -244,6 +249,7 @@ while True:
     dealer_hand.add_card(deck.deal())
     i2 = 0
 
+    # deal two cards to the player
     player_hand = Hand()
     player_hand.add_card(deck.deal())
     player_hand.add_card(deck.deal())
@@ -251,7 +257,6 @@ while True:
 
     # Set up the Player's chips
     player_chips = Chips()
-    print(f"Dein Kontostand beträgt: {player_chips.total/100}€")
 
     # Prompt the Player for their bet
     take_bet(player_chips)
