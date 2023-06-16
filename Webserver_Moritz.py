@@ -33,7 +33,7 @@ def index():
     else:
         return render_template('index.html')
 
-
+print ("branches sind cool (vielleicht)")
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
     if request.method == 'POST':
