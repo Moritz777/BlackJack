@@ -211,108 +211,108 @@ def push():
     print("Dealer und Spieler haben gleich viel! Unentschieden.")
 
 
-# Spielablauf
-while True:
-    # greeting the player
-    print(logo)
-    print('Willkommen zu Blackjack! Komm so nah wie möglich an 21 ohne darüber zu kommen! \n\
-          Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+def init():
+    while True:
+        # greeting the player
+        print(logo)
+        print('Willkommen zu Blackjack! Komm so nah wie möglich an 21 ohne darüber zu kommen! \n\
+              Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
 
-    # Create & shuffle the deck, dealing two cards to the player
-    deck = Deck()
-    deck.shuffle()
+        # Create & shuffle the deck, dealing two cards to the player
+        deck = Deck()
+        deck.shuffle()
 
-    # deal one card to the dealer
-    dealer_hand = Hand()
-    dealer_hand.add_card(deck.deal())
-    i2 = 0
+        # deal one card to the dealer
+        dealer_hand = Hand()
+        dealer_hand.add_card(deck.deal())
+        i2 = 0
 
-    player_hand = Hand()
-    player_hand.add_card(deck.deal())
-    player_hand.add_card(deck.deal())
-    i = 1
+        player_hand = Hand()
+        player_hand.add_card(deck.deal())
+        player_hand.add_card(deck.deal())
+        i = 1
 
-    # Set up the Player's chips
-    player_chips = Chips()
+        # Set up the Player's chips
+        player_chips = Chips()
 
-    # Prompt the Player for their bet
-    take_bet(player_chips)
-
-    # Show cards
-    show_all(player_hand, dealer_hand)
-    time.sleep(1)
-
-    if player_hand.value == 21:
-        print('Blackjack! Du hast gewonnen!')
-        player_wins_blackjack(player_chips)
-        playing = False
-
-    while playing:
-
-        # Prompt the Player to Hit or Stand
-        if hit_or_stand(deck, player_hand):
-            i += 1
-            print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(1)
-
-        #if player_hand.value == 21 and player_hand.cards[.rank] == 'Seven':
-            #pass
+        # Prompt the Player for their bet
+        take_bet(player_chips)
 
         # Show cards
         show_all(player_hand, dealer_hand)
         time.sleep(1)
 
-        # If Player's hand exceeds 21, run player_busts() and break out of loop
-        if player_hand.value > 21:
-            player_busts(player_chips)
+        if player_hand.value == 21:
+            print('Blackjack! Du hast gewonnen!')
+            player_wins_blackjack(player_chips)
+            playing = False
+
+        while playing:
+
+            # Prompt the Player to Hit or Stand
+            if hit_or_stand(deck, player_hand):
+                i += 1
+                print('Du ziehst eine:', player_hand.cards[i])
+                time.sleep(1)
+
+            #if player_hand.value == 21 and player_hand.cards[.rank] == 'Seven':
+                #pass
+
+            # Show cards
+            show_all(player_hand, dealer_hand)
+            time.sleep(1)
+
+            # If Player's hand exceeds 21, run player_busts() and break out of loop
+            if player_hand.value > 21:
+                player_busts(player_chips)
+                time.sleep(2)
+                break
+
+            # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
+        if player_hand.value <= 21:
+
+            # prompt the player to hit or stand again
+            if playing is True and hit_or_stand(deck, player_hand):
+                i += 1
+                print('Du ziehst eine:', player_hand.cards[i])
+                time.sleep(2)
+
+            while dealer_hand.value < 17:
+                print('Der Dealer zieht eine Karte.')
+                hit(deck, dealer_hand)
+                i2 += 1
+                print('Der Dealer hat gezogen:', dealer_hand.cards[i2])
+                time.sleep(2)
+
+            # Show all cards
+            show_all(player_hand, dealer_hand)
             time.sleep(2)
-            break
 
-        # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
-    if player_hand.value <= 21:
+            # Run different winning scenarios
+            if dealer_hand.value > 21:
+                dealer_busts(player_chips)
+                time.sleep(2)
 
-        # prompt the player to hit or stand again
-        if playing is True and hit_or_stand(deck, player_hand):
-            i += 1
-            print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(2)
+            elif dealer_hand.value > player_hand.value:
+                dealer_wins(player_chips)
+                time.sleep(2)
 
-        while dealer_hand.value < 17:
-            print('Der Dealer zieht eine Karte.')
-            hit(deck, dealer_hand)
-            i2 += 1
-            print('Der Dealer hat gezogen:', dealer_hand.cards[i2])
-            time.sleep(2)
+            elif dealer_hand.value < player_hand.value:
+                player_wins(player_chips)
+                time.sleep(2)
 
-        # Show all cards
-        show_all(player_hand, dealer_hand)
-        time.sleep(2)
+            else:
+                push()
+                time.sleep(2)
 
-        # Run different winning scenarios
-        if dealer_hand.value > 21:
-            dealer_busts(player_chips)
-            time.sleep(2)
+        print("\nSpielgewinn ist bei", player_chips.total)
 
-        elif dealer_hand.value > player_hand.value:
-            dealer_wins(player_chips)
-            time.sleep(2)
+        # Ask to play again
+        new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
 
-        elif dealer_hand.value < player_hand.value:
-            player_wins(player_chips)
-            time.sleep(2)
-
+        if new_game[0].lower() == 'j':
+            playing = True
+            continue
         else:
-            push()
-            time.sleep(2)
-
-    print("\nSpielgewinn ist bei", player_chips.total)
-
-    # Ask to play again
-    new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
-
-    if new_game[0].lower() == 'j':
-        playing = True
-        continue
-    else:
-        print("Danke für's spielen!")
-        break
+            print("Danke für's spielen!")
+            break

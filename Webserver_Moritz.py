@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, emit
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
+import game_logic
 from Tools import hash_password
 from player_class import Player
 from user_class import User
@@ -79,6 +80,10 @@ def random_session():
 
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
+
+    if request.method == 'POST':
+        pass
+
     return render_template('game_template.html')
 
 
