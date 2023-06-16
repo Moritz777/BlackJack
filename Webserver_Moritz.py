@@ -36,14 +36,18 @@ def index():
 
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
+
     if request.method == 'POST':
+
         username = request.form.get('username')
         first_name = request.form.get('vor_name')
-        last_username = request.form.get('last_name')
+        last_name = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
-        age = (today.day - birthday_object.day) / 365
+        age = (today.year - birthday_object.year)
+        if (today.month, today.day) < (birthday_object.month, birthday_object.day):
+            age -= 1
         if age < 18:
             return render_template('registrierung.html',
                                    error_message="Regestrierung fehlgeschlagen,das Mindestalter ist 18 Jahre")
@@ -52,7 +56,9 @@ def registrierung():
         if db_connection.check_username(username):
             return render_template('registrierung.html', error_message="Der Username ist bereits vergeben")
         else:
-            new_user = User(username, hashed_password)
+            birthday_formatted = birthday_object.strftime('%Y-%m-%d')
+            print(birthday_formatted)
+            new_user = User(username, hashed_password, first_name, last_name, birthday_formatted)
             flash("Registrierung erfolgreich, bitte melden Sie sich an")
             return redirect("/")
 
