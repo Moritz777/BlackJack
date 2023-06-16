@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, emit
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
+import game_logic
 from Tools import hash_password
 from player_class import Player
 from user_class import User
@@ -37,14 +38,18 @@ def index():
 
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
+
     if request.method == 'POST':
+
         username = request.form.get('username')
         first_name = request.form.get('vor_name')
-        last_username = request.form.get('last_name')
+        last_name = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
-        age = (today.day - birthday_object.day) / 365
+        age = (today.year - birthday_object.year)
+        if (today.month, today.day) < (birthday_object.month, birthday_object.day):
+            age -= 1
         if age < 18:
             return render_template('registrierung.html',
                                    error_message="Regestrierung fehlgeschlagen,das Mindestalter ist 18 Jahre")
@@ -53,7 +58,9 @@ def registrierung():
         if db_connection.check_username(username):
             return render_template('registrierung.html', error_message="Der Username ist bereits vergeben")
         else:
-            new_user = User(username, hashed_password)
+            birthday_formatted = birthday_object.strftime('%Y-%m-%d')
+            print(birthday_formatted)
+            new_user = User(username, hashed_password, first_name, last_name, birthday_formatted)
             flash("Registrierung erfolgreich, bitte melden Sie sich an")
             return redirect("/")
 
@@ -79,6 +86,10 @@ def random_session():
 
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
+
+    if request.method == 'POST':
+        pass
+
     return render_template('game_template.html')
 
 @app.route('/lobby_list', methods=['GET', 'POST'])
