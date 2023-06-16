@@ -255,8 +255,9 @@ while True:
             print('Du ziehst eine:', player_hand.cards[i])
             time.sleep(1)
 
-        #if player_hand.value == 21 and player_hand.cards[.rank] == 'Seven':
-            #pass
+        if player_hand.value == 21:  # and player_hand.cards[card].rank == 'Seven':
+            for card in range(0, len(player_hand.cards)):
+                print("Der Spieler hat die Karten: ", player_hand.cards[card].rank)
 
         # Show cards
         show_all(player_hand, dealer_hand)
@@ -269,7 +270,7 @@ while True:
             break
 
         # If Player hasn't busted, play Dealer's hand until Dealer reaches 17
-    if player_hand.value <= 21:
+    if player_hand.value < 21:
 
         # prompt the player to hit or stand again
         if playing is True and hit_or_stand(deck, player_hand):
