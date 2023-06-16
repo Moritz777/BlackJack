@@ -85,36 +85,24 @@ def registrierung():
 @app.route('/startPage', methods=['GET', 'POST'])
 def random_session():
     if request.method == 'POST':
-
-        if request.form['btn'] == 'Zufälligem Spiel beitreten':
-            return redirect('/game_template')
-
-        if request.form['btn'] == 'Spiel hosten':
-            return redirect('/game_template')
-
-        if request.form['btn'] == 'Spiel beitreten':
-            return redirect('/lobby_list')
-
-    username = session['username']
-    return render_template('startPage.html', username=username)
-
+        control.choose_session(player)
+        print(control.session_list[-1].player_list)
+        return redirect('/game_template')
+    # name = request.form.get('name')  #
+    # session['name'] = name  # LOBBY TEST
+    # print(name)  #
+    return render_template('startPage.html')
 
 
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
     if request.method == 'POST':
         pass
-
     data1 = hallo1()
     data2 = hallo2()
     data3 = hallo3()
 
-    return render_template('game_template.html',data1=data1, data2=data2, data3=data3 )
-
-@app.route('/lobby_list', methods=['GET', 'POST'])
-def lobby_list():
-    return render_template('index.html')
-
+    return render_template('game_template.html', data1=data1, data2=data2, data3=data3)
 @app.route('/api/data')
 def get_data():
     # Perform Python logic to calculate data
@@ -123,38 +111,29 @@ def get_data():
 
 
 # -------- LOBBY TEST ---------
-@app.route('/display', methods=['POST', 'GET'])
+@app.route('/display', methods=['POST'])
 def display():
-
-    if request.method == 'POST':
-        return redirect('/users')
-
-    username = session.get('username')
-    return render_template('display.html', username=username)
+    name = session.get('name')
+    return render_template('display.html', name=name)
 
 
-@app.route('/users', methods=['POST', 'GET'])
+@app.route('/users')
 def users():
-
-    if request.method == 'POST':
-        return redirect('/display')
-
-    username = session.get('username')
-    return render_template('users.html', username=username)
+    return render_template('users.html')
 
 
 @socketio.on('connect')
 def handle_connect():
-    username = session.get('username')
-    online_users.append(username)
+    name = session.get('name')
+    online_users.append(name)
     emit('user_update', online_users, broadcast=True)
 
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    username = session.get('username')
-    if username in online_users:
-        online_users.remove(username)
+    name = session.get('name')
+    if name in online_users:
+        online_users.remove(name)
     emit('user_update', online_users, broadcast=True)
 
 
