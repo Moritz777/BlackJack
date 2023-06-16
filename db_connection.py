@@ -56,12 +56,12 @@ def check_username(username):
     db_result = select_from_db(query, tupel)
     return (len(db_result) != 0) # Benutzername existiert / existiert nicht
 
-def create_new_user(username, hashed_password, startCapital):
+def create_new_user(username, hashed_password, startCapital, first_name, last_name, birthday):
     """
     Erstellt den User in der DB.
     """
-    query = "INSERT INTO user_data (username, hashpassword, capital) VALUES (?, ?, ?)"
-    tupel = (username, hashed_password, startCapital)
+    query = "INSERT INTO user_data (username, hashpassword, capital, firstname, lastname, birthdate) VALUES (?, ?, ?, ?, ?, ?)"
+    tupel = (username, hashed_password, startCapital, first_name, last_name, birthday)
     insert_into_db(query, tupel)
 
 def get_credit(username):
