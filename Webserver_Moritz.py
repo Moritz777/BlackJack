@@ -5,7 +5,7 @@ from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
 from Tools import hash_password
-from player_class import Player
+from db_connection import get_credit
 from user_class import User
 from Control import control
 
@@ -30,6 +30,7 @@ def index():
         if db_connection.check_login(username, hashed_password):
             users_dict[username] = {}
             print(users_dict)
+            session['username']=username
             return redirect('/startPage')
         else:
             error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
@@ -73,6 +74,17 @@ def registrierung():
 def random_session():
 
     username = session['username']
+
+    users_dict[username]= {'account':{}}
+    print((users_dict))
+
+    print(users_dict)
+
+    user_credit = get_credit(username)
+
+    users_dict[username]={'account':{'credit':user_credit}}
+
+    print(users_dict)
 
     if request.method == 'POST':
 
@@ -159,4 +171,4 @@ def handle_disconnect():
 # ------------------------
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='81', debug=True)
+    app.run(host='localhost', port='81', debug=True)
