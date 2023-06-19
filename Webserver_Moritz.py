@@ -54,12 +54,12 @@ def admin():
         if request.form['btn']=='Entblocken':
             db_connection.update_block_status(username, 'False')
             users_information = db_connection.get_all_players()
-            error_message = 'Der ' + username + ' wurd entblockt.'
+            error_message = username + ' wurd entblockt.'
             return render_template('admin.html', users_information=users_information, error_message=error_message)
         else:
             db_connection.update_block_status(username,'True')
             users_information = db_connection.get_all_players()
-            error_message = 'Der ' + username + ' wurd geblockt.'
+            error_message = username + ' wurd geblockt.'
             return render_template('admin.html', users_information=users_information, error_message=error_message)
     return render_template('admin.html', users_information=users_information)
 

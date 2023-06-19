@@ -32,8 +32,8 @@
     <h1>Admin Bereich</h1>
     <form action="/admin" method="POST" name="login">
         <input type="text" id="searchInput" name="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
-        <input type="submit" value="Blocken" name="btn">
-        <input type="submit" value="Entblocken" name="btn">
+        <input type="submit" value="Blocken" name="btn" class="red_button">
+        <input type="submit" value="Entblocken" name="btn" >
     </form>
     <div class="back-container">
         {% if error_message %}
