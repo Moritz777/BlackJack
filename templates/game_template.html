@@ -35,21 +35,10 @@
     <img id="background-img" src="/static/Black_Jack_Grafiken/Spielfeld/Spielfeld_3.png" alt="Spielfeld">
     <img id="provadis-card" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite.png" alt="Provadis Card">
     <script>
-        function fetchData() {
-            fetch('/game_template')
-                .then(response => response.json())
-                .then(data => {
-                    // Use the received data to trigger animations or update the DOM
-                    const { x, y } = data;
-                    // Perform animations or other operations using x and y values
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-        console.log({{data1}});
-        console.log({{data2}});
-        console.log({{data3}});
+
+        console.log({{shuffle}});
+        console.log({{draw}});
+        console.log({{deal}});
         function createProvadisCard(){
             var provadisCard = document.getElementById('provadis-card');
             var provadisCardCopy = new Image();
