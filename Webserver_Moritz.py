@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
 import game_logic
 from Tools import hash_password
+from db_connection import get_credit
 from player_class import Player
 from user_class import User
 from Control import control
@@ -18,8 +19,7 @@ player = None
 app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
 lobbies = {}
-user_dic = {}
-
+users_dict = {}
 
 
 app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
@@ -34,9 +34,9 @@ def index():
             if db_connection.check_admin(username):
                 return redirect('/admin')
             session['username'] = username
+            users_dict[username] = {}
+            print(users_dict)
             session['username']=username
-            user_dic.update(session)
-            print(user_dic)
             return redirect('/startPage')
         else:
             error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
@@ -95,6 +95,11 @@ def registrierung():
 def random_session():
 
     username = session['username']
+    users_dict[username] = Player(username)
+    print(users_dict[username])
+    print(users_dict[username].credit)
+
+
 
     if request.method == 'POST':
 
@@ -103,8 +108,8 @@ def random_session():
 
         if request.form['btn'] == 'Spiel hosten':
             game_session_id = username + "_" + str(random.randint(100000,999999))
-            lobbies[game_session_id] = {'players': []}
-            session['game_session'] = game_session_id
+            print(lobbies)
+
 
             return redirect('/users')
 
@@ -113,6 +118,7 @@ def random_session():
 
     username = session['username']
     return render_template('startPage.html', username=username)
+    return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
 @app.route('/game_template', methods=['GET', 'POST'])
@@ -163,7 +169,7 @@ def users():
 @socketio.on('connect')
 def handle_connect():
     username = session.get('username')
-    game_session = session['game_session']
+    game_session = lobbies
     lobbies[game_session]['players'].append(username)
     print(lobbies)
     emit('user_update', lobbies[game_session]['players'], broadcast=True)
