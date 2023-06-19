@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <script>
+        function searchTable() {
+            var input = document.getElementById('searchInput');
+            var filter = input.value.toLowerCase();
+            var table = document.getElementById('userTable');
+            var rows = table.getElementsByTagName('tr');
+
+            for (var i = 0; i < rows.length; i++) {
+                var usernameColumn = rows[i].getElementsByTagName('td')[0];
+                if (usernameColumn) {
+                    var username = usernameColumn.textContent || usernameColumn.innerText;
+                    if (username.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Nach Spieler suchen</h1>
+    <input type="text" id="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Kapital</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Geburtstag</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users_information %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+                <td>{{ user[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

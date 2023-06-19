@@ -69,3 +69,14 @@ def get_credit(username):
     tupel = (username)
     db_result = select_from_db(query, tupel)
     return db_result[0][0]
+def check_admin(username):
+    query = "SELECT is_admin FROM user_data WHERE username = ?"
+    tupel = (username)
+    db_result = select_from_db(query, tupel)
+    print(db_result[0][0])
+    return db_result[0][0] is True
+def allPlayers():
+    query = "SELECT username,capital,firstname,lastname,birthdate FROM user_data WHERE is_admin IN (0, ?)"
+    tupel = (1)
+    db_result = select_from_db(query, tupel)
+    return db_result

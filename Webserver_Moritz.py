@@ -42,6 +42,8 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
+            if db_connection.check_admin(username):
+                return redirect('/admin')
             session['username'] = username
             return redirect('/startPage')
         else:
@@ -49,7 +51,12 @@ def index():
             return render_template('index.html', error_message=error_message)
     else:
         return render_template('index.html')
-
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    users_information = db_connection.allPlayers()
+    for user in users_information:
+        print(user[0])
+    return render_template('admin.html',users_information=users_information)
 
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
