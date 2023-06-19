@@ -19,7 +19,6 @@ lobbies = {}
 user_dic = {}
 
 
-
 app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
 
