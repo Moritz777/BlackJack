@@ -16,17 +16,6 @@ Functions:
 import time
 import random
 
-logo = '''
-    .------.            _     _            _    _            _    
-    |A_  _ |.          | |   | |          | |  (_)          | |   
-    |( \/ ).-----.     | |__ | | __ _  ___| | ___  __ _  ___| | __
-    | \  /|K /\  |     | '_ \| |/ _` |/ __| |/ / |/ _` |/ __| |/ /
-    |  \/ | /  \ |     | |_) | | (_| | (__|   <| | (_| | (__|   < 
-    `-----| \  / |     |_.__/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\_\\
-          |  \/ K|                            _/ |                
-          `------'                           |__/           
-    '''
-
 # initialise the cards suits, ranks and values
 
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
@@ -34,13 +23,13 @@ ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
 values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8, 'Nine': 9, 'Ten': 10,
           'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
 
-# setting the players ability to play to true
+# setting the players ability to play to true and blackjack to false
 
 playing = True
+blackjack = False
 
 
 # defining classes
-
 class Card:
     """
     initialise a card with the given suit and rank
@@ -72,6 +61,7 @@ class Deck:
 
     def shuffle(self):          # shuffle function will shuffle the whole deck
         random.shuffle(self.deck)
+        return 'shuffle'
 
     def deal(self):             # deal function will take one card from the deck
         single_card = self.deck.pop()
@@ -92,6 +82,7 @@ class Hand:
         self.value += values[card.rank]
         if card.rank == 'Ace':
             self.aces += 1
+        return 'draw'
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
@@ -130,6 +121,7 @@ def take_bet(chips):
     :param chips: the players chips as given below
     """
     while True:
+        print(f"Dein Kontostand beträgt: {player_chips.total / 100}€")
         try:
             chips.bet = int(input('Wie viel Geld möchtest du setzen? '))*100
         except ValueError:
@@ -171,6 +163,15 @@ def hit_or_stand(decks, hand):
             playing = False
             time.sleep(1)
             return False
+
+        elif player_input == 'lol':
+            print("Cheat akzeptiert, User bekommt Blackjack")
+            player_hand.cards[0].rank = 'Seven'
+            player_hand.cards[0].suit = 'Spades'
+            player_hand.aces += 1
+            player_hand.cards[1].rank = 'Seven'
+            player_hand.cards[1].suit = 'Spades'
+            player_hand.value = 14
 
         elif player_input[0].lower() == 'q':
             exit(0)
@@ -222,134 +223,169 @@ def dealer_wins(chips):
 
 def dealer_wins_blackjack(chips):
     print("Dealer hat Blackjack und gewinnt! Spieler hat verloren!")
+    chips.lose_bet()
 
 
 def push():
     print("Dealer und Spieler haben gleich viel! Unentschieden.")
 
 
-# Spielablauf
-while True:
-    # greeting the player
+def greet_player():
+    logo = '''
+        .------.            _     _            _    _            _    
+        |A_  _ |.          | |   | |          | |  (_)          | |   
+        |( \/ ).-----.     | |__ | | __ _  ___| | ___  __ _  ___| | __
+        | \  /|K /\  |     | '_ \| |/ _` |/ __| |/ / |/ _` |/ __| |/ /
+        |  \/ | /  \ |     | |_) | | (_| | (__|   <| | (_| | (__|   < 
+        `-----| \  / |     |_.__/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\_\\
+              |  \/ K|                            _/ |                
+              `------'                           |__/           
+        '''
     print(logo)
     print('Willkommen zu Blackjack! Komm so nah wie möglich an 21 ohne darüber zu kommen! \n\
-          Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
+              Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
 
-    # Create & shuffle the deck, dealing two cards to the player
-    deck = Deck()
-    deck.shuffle()
 
-    # deal one card to the dealer
-    dealer_hand = Hand()
-    dealer_hand.add_card(deck.deal())
-    i2 = 0
+def main():
+    """
+    Game progression
+    """
+    global playing
+    global blackjack
+    won = False
 
-    player_hand = Hand()
-    player_hand.add_card(deck.deal())
-    player_hand.add_card(deck.deal())
-    i = 1
+    while True:
 
-    # Set up the Player's chips
-    player_chips = Chips()
-    print(f"Dein Kontostand beträgt: {player_chips.total/100}€")
+        # greeting the player
+        greet_player()
 
-    # Prompt the Player for their bet
-    take_bet(player_chips)
+        # Create & shuffle the deck
+        deck = Deck()
+        deck.shuffle()
 
-    # Show cards
-    show_cards(player_hand, dealer_hand)
-    time.sleep(1)
+        # deal two cards to the player
+        player_hand.add_card(deck.deal())
+        player_hand.add_card(deck.deal())
+        i_player = 1
 
-    if player_hand.value == 21:
-        player_wins_blackjack(player_chips)
-        playing = False
+        # deal one card to the dealer
+        dealer_hand = Hand()
+        dealer_hand.add_card(deck.deal())
+        i_dealer = 0
 
-    while playing:
-
-        # Prompt the Player to Hit or Stand
-        if hit_or_stand(deck, player_hand):
-            i += 1
-            print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(1)
+        # Prompt the Player for their bet
+        take_bet(player_chips)
 
         # Show cards
         show_cards(player_hand, dealer_hand)
-        time.sleep(1)
 
-        if player_hand.value == 21:  # and player_hand.cards[card].rank == 'Seven':
-            i7 = 0
-            for card in range(0, len(player_hand.cards)):
-                if player_hand.cards[card].rank == 'Seven':
-                    i7 += 1
-                    print(f"Der Spieler hat {i7} Sieben(en) auf der Hand.")
-                    if i7 == 3:
-                        player_wins_tripple_seven(player_chips)
-                        playing = False
+        # check if the player has blackjack
+        if player_hand.value == 21:
+            blackjack = True
+            playing = False
 
-        # If Player's hand exceeds 21, run player_busts() and break out of loop
-        if player_hand.value > 21:
-            player_busts(player_chips)
+        while playing:
+
+            # Prompt the Player to Hit or Stand
+            if hit_or_stand(deck, player_hand):
+                i_player += 1
+                print('Du ziehst eine:', player_hand.cards[i_player])
+                time.sleep(1)
+
+            # Show cards
+            show_cards(player_hand, dealer_hand)
+
+            # check if the player has reached 21 points, not prompting him to hit or stand again
+            if player_hand.value == 21:
+                print('Der Spieler hat 21 Punkte erreicht und zieht nicht weiter.')
+                break
+            '''
+            # If Player's hand exceeds 21, run player_busts() and break out of loop
+            if player_hand.value > 21:
+                player_busts(player_chips)
+                time.sleep(2)
+                break
+            '''
+        # always Play Dealer's hand until Dealer reaches 17
+        if dealer_hand.value <= 21:
+
+            while dealer_hand.value < 17:
+                print('Der Dealer zieht eine Karte.')
+                hit(deck, dealer_hand)
+                i_dealer += 1
+                print('Der Dealer hat gezogen:', dealer_hand.cards[i_dealer])
+                time.sleep(2)
+
+            # Show all cards
+            show_cards(player_hand, dealer_hand)
             time.sleep(2)
+
+            # check if the player has tripple seven
+            if player_hand.value == 21:
+                i_seven = 0
+                for card in range(0, len(player_hand.cards)):
+                    if player_hand.cards[card].rank == 'Seven':
+                        i_seven += 1
+                if i_seven == 3:
+                    player_wins_tripple_seven(player_chips)
+                    won = True
+
+            if dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
+                if blackjack is True:
+                    print('Dealer und Spieler haben Blackjack!')
+                    push()
+                    time.sleep(2)
+                    won = True
+                else:
+                    dealer_wins_blackjack(player_chips)
+                    won = True
+
+            # Run different winning scenarios
+            elif blackjack is True and won is False:
+                player_wins_blackjack(player_chips)
+                won = True
+                time.sleep(2)
+
+            elif player_hand.value > 21 and won is False:
+                player_busts(player_chips)
+                won = True
+                time.sleep(2)
+
+            elif dealer_hand.value > 21 and won is False:
+                dealer_busts(player_chips)
+                won = True
+                time.sleep(2)
+
+            elif dealer_hand.value > player_hand.value and won is False:
+                dealer_wins(player_chips)
+                won = True
+                time.sleep(2)
+
+            elif dealer_hand.value < player_hand.value and won is False:
+                player_wins(player_chips)
+                won = True
+                time.sleep(2)
+
+            elif won is False:
+                push()
+                time.sleep(2)
+
+        print(f"\nSpielgewinn ist bei: {player_chips.win/100}€")
+        print(f"Kontostand ist bei: {player_chips.total/100}€")
+
+        # Ask to play again
+        new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
+
+        if new_game[0].lower() == 'j':
+            playing = True
+            continue
+        else:
+            print("Danke für's spielen!")
             break
 
-        if player_hand.value == 21:
-            pass  # TODO: don't ask the player again if he wants to hit, let him stand automatically
 
-    # If Player hasn't busted or tripple seven, play Dealer's hand until Dealer reaches 17
-    if player_hand.value <= 21:
-        '''
-        # prompt the player to hit or stand again
-        if playing is True and hit_or_stand(deck, player_hand):
-            i += 1
-            print('Du ziehst eine:', player_hand.cards[i])
-            time.sleep(2)
-        '''
-
-        while dealer_hand.value < 17:
-            print('Der Dealer zieht eine Karte.')
-            hit(deck, dealer_hand)
-            i2 += 1
-            print('Der Dealer hat gezogen:', dealer_hand.cards[i2])
-            time.sleep(2)
-
-        if dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
-            print('Der Dealer hat Blackjack!')
-
-        # Show all cards
-        show_cards(player_hand, dealer_hand)
-        time.sleep(2)
-
-        # Run different winning scenarios
-        if dealer_hand.value > 21:
-            dealer_busts(player_chips)
-            time.sleep(2)
-
-        elif dealer_hand.value > player_hand.value:
-            dealer_wins(player_chips)
-            time.sleep(2)
-
-        elif dealer_hand.value < player_hand.value:
-            player_wins(player_chips)
-            time.sleep(2)
-
-        elif dealer_hand.value == 21:  # TODO: Separate Blackjack and just having 21
-            print('Dealer und Spieler haben Blackjack!')
-            push()
-            time.sleep(2)
-
-        else:
-            push()
-            time.sleep(2)
-
-    print(f"\nSpielgewinn ist bei: {player_chips.win/100}€")
-    print(f"Kontostand ist bei: {player_chips.total/100}€")
-
-    # Ask to play again
-    new_game = input("Möchtest du noch eine Runde spielen? Gib 'j' oder 'n' ein. ")
-
-    if new_game[0].lower() == 'j':
-        playing = True
-        continue
-    else:
-        print("Danke für's spielen!")
-        break
+if __name__ == '__main__':
+    # Set up the Player's chips
+    player_chips = Chips()
+    player_hand = Hand()
+    main()
