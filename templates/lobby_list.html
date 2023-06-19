@@ -15,7 +15,7 @@
         {% for element in lobbies %}
             <li>
                 {{ element    }}
-                <form action="/startPage" method="POST" style="display: inline;">
+                <form action="/lobby_list" method="POST" style="display: inline;">
                          <input type="submit" name="btn" value="{{ element }} beitreten">
                 </form>
             </li>

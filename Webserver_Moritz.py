@@ -1,7 +1,7 @@
 import random
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_socketio import SocketIO, emit
+# from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
 from Tools import hash_password
@@ -15,7 +15,7 @@ app = Flask(__name__)
 control = control()
 player = None
 app.secret_key = 'sventegetscookie'
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 lobbies = {}
 users_dict={}
 users_dict["open_lobbies"] = {}
@@ -87,7 +87,7 @@ def random_session():
         if request.form['btn'] == 'Spiel hosten':
             users_dict["open_lobbies"][username]={"Player_1":users_dict[username]}
             print(users_dict)
-            return redirect('/users')
+            return redirect(f'/users/{username}')
 
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
@@ -127,16 +127,25 @@ def lobbies():
     lobbies=users_dict["open_lobbies"].keys()
     lobbies=list(lobbies)
 
+    print(lobbies)
+
     if request.method == 'POST':
+
+        print("post methode")
 
         for element in lobbies:
             if request.form['btn'] == f"{element} beitreten":
-                return redirect('/users')
-
-
-
-
+                print(element)
+                return redirect(f'/users/{element}')
     return render_template('lobby_list.html', lobbies=lobbies)
+
+@app.route('/users/<irgendeine_variable>')
+def personal_lobby(irgendeine_variable):
+    return render_template('users.html', irgendeine_variable=irgendeine_variable)
+
+
+
+
 
 
 
