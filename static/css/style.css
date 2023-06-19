@@ -34,3 +34,9 @@
       font-size: 20px;
       color: deeppink;
     }
+    .red_button {
+        background-color: #de4747;
+    }
+    .green_button {
+        background-color: #79be64;
+    }
