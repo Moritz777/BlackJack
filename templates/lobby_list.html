@@ -14,7 +14,7 @@
     <h1>Offene Lobbies: </h1>
         {% for element in lobbies %}
             <li>
-                {{ element    }}
+                {{ element }}
                 <form action="/lobby_list" method="POST" style="display: inline;">
                          <input type="submit" name="btn" value="{{ element }} beitreten">
                 </form>
