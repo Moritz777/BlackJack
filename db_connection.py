@@ -61,7 +61,11 @@ def check_username(username):
     tupel = (username)
     db_result = select_from_db(query, tupel)
     return (len(db_result) != 0) # Benutzername existiert / existiert nicht
-
+def check_blocked(username):
+    query = "SELECT is_blocked FROM user_data WHERE username = ?"
+    tupel = (username)
+    db_result = select_from_db(query, tupel)
+    return db_result[0][0] is True
 def create_new_user(username, hashed_password, startCapital, first_name, last_name, birthday):
     """
     Erstellt den User in der DB.

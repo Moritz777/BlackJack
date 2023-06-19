@@ -28,6 +28,9 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
+            if db_connection.check_blocked(username):
+                error_message = "Das Konto wurde gesperrt"
+                return render_template('index.html', error_message=error_message)
             if db_connection.check_admin(username):
                 return redirect('/admin')
             session['username'] = username
@@ -38,6 +41,7 @@ def index():
         else:
             error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
             return render_template('index.html', error_message=error_message)
+
     else:
         return render_template('index.html')
 
@@ -47,15 +51,16 @@ def admin():
     users_information = db_connection.get_all_players()
     if request.method == 'POST':
         username = request.form.get('searchInput')
-        db_connection.update_block_status(username,'True')
-        users_information = db_connection.get_all_players()
-
-
-        error_message = 'Der ' + username + ' wurd geblockt.'
-
-        return render_template('admin.html', users_information=users_information, error_message=error_message)
-
-    users_information = db_connection.get_all_players()
+        if request.form['btn']=='Entblocken':
+            db_connection.update_block_status(username, 'False')
+            users_information = db_connection.get_all_players()
+            error_message = 'Der ' + username + ' wurd entblockt.'
+            return render_template('admin.html', users_information=users_information, error_message=error_message)
+        else:
+            db_connection.update_block_status(username,'True')
+            users_information = db_connection.get_all_players()
+            error_message = 'Der ' + username + ' wurd geblockt.'
+            return render_template('admin.html', users_information=users_information, error_message=error_message)
     return render_template('admin.html', users_information=users_information)
 
 
