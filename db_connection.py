@@ -84,6 +84,7 @@ def update_username(old_username, new_username):
     query = "UPDATE user_data SET username = ? WHERE username = ?"
     tupel = (new_username, old_username)
     insert_or_update_db(query, tupel)
+
 def update_hashpassword(username, new_hashpassword):
     query = "UPDATE user_data SET hashpassword = ? WHERE username = ?"
     tupel = (new_hashpassword, username)
@@ -92,11 +93,15 @@ def update_credit(username, new_credit):
     query = "UPDATE user_data SET capital = ? WHERE username = ?"
     tupel = (new_credit, username)
     insert_or_update_db(query, tupel)
+
 def update_admin_status(username, new_admin_status):
     query = "UPDATE user_data SET is_admin = ? WHERE username = ?"
     tupel = (new_admin_status, username)
     insert_or_update_db(query, tupel)
-
+def update_block_status(username,new_block_status):
+    query = "UPDATE user_data SET is_blocked = ? WHERE username = ?"
+    tupel = (new_block_status , username)
+    insert_or_update_db(query, tupel)
 
 def check_admin(username):
     query = "SELECT is_admin FROM user_data WHERE username = ?"

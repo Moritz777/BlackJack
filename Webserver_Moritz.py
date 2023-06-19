@@ -2,12 +2,9 @@ import random
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, emit
-
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
-import game_logic
 from Tools import hash_password
-from db_connection import get_credit
 from player_class import Player
 from user_class import User
 from Control import control
@@ -49,8 +46,10 @@ def index():
 def admin():
     users_information = db_connection.get_all_players()
     if request.method == 'POST':
-        users_information = db_connection.get_all_players()
         username = request.form.get('searchInput')
+        db_connection.update_block_status(username,'True')
+        users_information = db_connection.get_all_players()
+
 
         error_message = 'Der ' + username + ' wurd geblockt.'
 
