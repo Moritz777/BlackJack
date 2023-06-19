@@ -70,7 +70,7 @@ def registrierung():
     if request.method == 'POST':
 
         username = request.form.get('username')
-        first_name = request.form.get('vor_name')
+        first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
@@ -121,7 +121,6 @@ def random_session():
             return redirect('/lobby_list')
 
     username = session['username']
-    return render_template('startPage.html', username=username)
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
