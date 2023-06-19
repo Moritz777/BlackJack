@@ -25,6 +25,7 @@ def hallo3():
     data3 = 3
     return data3
 
+
 players = []
 app = Flask(__name__)
 control = control()
@@ -51,16 +52,25 @@ def index():
             return render_template('index.html', error_message=error_message)
     else:
         return render_template('index.html')
+
+
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    users_information = db_connection.allPlayers()
-    for user in users_information:
-        print(user[0])
-    return render_template('admin.html',users_information=users_information)
+    users_information = db_connection.get_all_players()
+    if request.method == 'POST':
+        users_information = db_connection.get_all_players()
+        username = request.form.get('searchInput')
+
+        error_message = 'Der ' + username + ' wurd geblockt.'
+
+        return render_template('admin.html', users_information=users_information, error_message=error_message)
+
+    users_information = db_connection.get_all_players()
+    return render_template('admin.html', users_information=users_information)
+
 
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
-
     if request.method == 'POST':
 
         username = request.form.get('username')
@@ -106,7 +116,6 @@ def random_session():
     return render_template('startPage.html', username=username)
 
 
-
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
     if request.method == 'POST':
@@ -116,11 +125,13 @@ def game():
     data2 = hallo2()
     data3 = hallo3()
 
-    return render_template('game_template.html',data1=data1, data2=data2, data3=data3 )
+    return render_template('game_template.html', data1=data1, data2=data2, data3=data3)
+
 
 @app.route('/lobby_list', methods=['GET', 'POST'])
 def lobby_list():
     return render_template('index.html')
+
 
 @app.route('/api/data')
 def get_data():
@@ -132,7 +143,6 @@ def get_data():
 # -------- LOBBY TEST ---------
 @app.route('/display', methods=['POST', 'GET'])
 def display():
-
     if request.method == 'POST':
         return redirect('/users')
 
@@ -142,7 +152,6 @@ def display():
 
 @app.route('/users', methods=['POST', 'GET'])
 def users():
-
     if request.method == 'POST':
         return redirect('/display')
 

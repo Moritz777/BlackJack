@@ -25,8 +25,18 @@
 </head>
 <body>
     <h1>Nach Spieler suchen</h1>
-    <input type="text" id="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
-
+    <form action ="/admin" method="POST" name="login">
+        <input type="text" id="searchInput" name="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
+        <input type="submit" value="Blocken">
+    </form>
+    <div class="back-container">
+    {% if error_message %}
+    <p style="color: #ff0000;">{{ error_message }}</p>
+    {% endif %}
+    {% if message %}
+    <p style="color: #08ff00;">{{ message }}</p>
+    {% endif %}
+</div>
     <table id="userTable">
         <thead>
             <tr>
@@ -35,6 +45,7 @@
                 <th>Vorname</th>
                 <th>Nachname</th>
                 <th>Geburtstag</th>
+                <th>Blocked</th>
             </tr>
         </thead>
         <tbody>
@@ -45,6 +56,8 @@
                 <td>{{ user[2] }}</td>
                 <td>{{ user[3] }}</td>
                 <td>{{ user[4] }}</td>
+                <td>{{ user[5] }}</td>
+
             </tr>
             {% endfor %}
         </tbody>
