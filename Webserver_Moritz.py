@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
 from Tools import hash_password
 from db_connection import get_credit
+from player_class import Player
 from user_class import User
 from Control import control
 
@@ -74,17 +75,11 @@ def registrierung():
 def random_session():
 
     username = session['username']
+    users_dict[username] = Player(username)
+    print(users_dict[username])
+    print(users_dict[username].credit)
 
-    users_dict[username]= {'account':{}}
-    print((users_dict))
 
-    print(users_dict)
-
-    user_credit = get_credit(username)
-
-    users_dict[username]={'account':{'credit':user_credit}}
-
-    print(users_dict)
 
     if request.method == 'POST':
 
@@ -101,7 +96,7 @@ def random_session():
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
 
-    return render_template('startPage.html', username=username)
+    return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
 @app.route('/game_template', methods=['GET', 'POST'])
