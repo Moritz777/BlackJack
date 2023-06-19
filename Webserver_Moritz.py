@@ -91,8 +91,19 @@ def random_session():
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
 
+        # --- TEST IP ---
+        if request.form['btn'] == 'Absenden':
+            meineEingabe = request.form.get('meineEingabe')
+            return redirect(f'/lobbies/{meineEingabe}')
+        # --- ENDE TEST IP ---
+
     return render_template('startPage.html', username=username)
 
+# --- TEST IP ---
+@app.route('/lobbies/<meineEingabe>')
+def lobbies(meineEingabe):
+    return render_template('lobbies.html', meineEingabe=meineEingabe)
+# --- ENDE TEST IP ---
 
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
