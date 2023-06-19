@@ -27,3 +27,10 @@
       font-size: 14px;
       color: deeppink;
     }
+    .credit_container {
+      position: absolute;
+      left: 1000px;
+      top: 200px;
+      font-size: 20px;
+      color: deeppink;
+    }
