@@ -5,10 +5,8 @@ The game rules are outlined in the guide issued by Provadis.
 
 Functions:
     main: Ask the user for their name and start the game
-    blackjack: Implement the main game logic
+    main: Implement the main game logic
     deal_card: Let the Croupier deal cards
-    get_player_input:
-    print_winner:
 """
 
 # importing random to get random cards later on
@@ -48,7 +46,7 @@ class Deck:
     """
     def __init__(self):
         self.deck = []  # start with an empty list
-        for i3 in range(6):
+        for i in range(6):
             for suit in suits:
                 for rank in ranks:
                     self.deck.append(Card(suit, rank))  # build Card objects and add them to the list
@@ -121,7 +119,7 @@ def take_bet(chips):
     :param chips: the players chips as given below
     """
     while True:
-        print(f"Dein Kontostand beträgt: {player_chips.total / 100}€")
+        print(f"Dein Kontostand beträgt: {chips.total / 100}€")
         try:
             chips.bet = int(input('Wie viel Geld möchtest du setzen? '))*100
         except ValueError:
@@ -164,14 +162,14 @@ def hit_or_stand(decks, hand):
             time.sleep(1)
             return False
 
-        elif player_input == 'lol':
-            print("Cheat akzeptiert, User bekommt Blackjack")
-            player_hand.cards[0].rank = 'Seven'
-            player_hand.cards[0].suit = 'Spades'
-            player_hand.aces += 1
-            player_hand.cards[1].rank = 'Seven'
-            player_hand.cards[1].suit = 'Spades'
-            player_hand.value = 14
+        # elif player_input == 'lol':
+        #     print("Cheat akzeptiert, User bekommt Blackjack")
+        #     player_hand.cards[0].rank = 'Seven'
+        #     player_hand.cards[0].suit = 'Spades'
+        #     player_hand.aces += 1
+        #     player_hand.cards[1].rank = 'Seven'
+        #     player_hand.cards[1].suit = 'Spades'
+        #     player_hand.value = 14
 
         elif player_input[0].lower() == 'q':
             exit(0)
@@ -230,6 +228,10 @@ def push():
     print("Dealer und Spieler haben gleich viel! Unentschieden.")
 
 
+def both_bust():
+    print("Dealer und Spieler haben über 21. Unentschieden.")
+
+
 def greet_player():
     logo = '''
         .------.            _     _            _    _            _    
@@ -264,14 +266,19 @@ def main():
         deck.shuffle()
 
         # deal two cards to the player
+        player_hand = Hand()
         player_hand.add_card(deck.deal())
         player_hand.add_card(deck.deal())
+        player_hand.adjust_for_ace()
         i_player = 1
 
         # deal one card to the dealer
         dealer_hand = Hand()
         dealer_hand.add_card(deck.deal())
         i_dealer = 0
+
+        # Set up the Player's chips
+        player_chips = Chips()
 
         # Prompt the Player for their bet
         take_bet(player_chips)
@@ -299,13 +306,13 @@ def main():
             if player_hand.value == 21:
                 print('Der Spieler hat 21 Punkte erreicht und zieht nicht weiter.')
                 break
-            '''
+
             # If Player's hand exceeds 21, run player_busts() and break out of loop
             if player_hand.value > 21:
-                player_busts(player_chips)
+                print('Der Spieler hat mehr als 21. Verloren.')
                 time.sleep(2)
                 break
-            '''
+
         # always Play Dealer's hand until Dealer reaches 17
         if dealer_hand.value <= 21:
 
@@ -343,6 +350,11 @@ def main():
             # Run different winning scenarios
             elif blackjack is True and won is False:
                 player_wins_blackjack(player_chips)
+                won = True
+                time.sleep(2)
+
+            elif player_hand.value > 21 and dealer_hand.value > 21 and won is False:
+                both_bust()
                 won = True
                 time.sleep(2)
 
@@ -385,7 +397,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # Set up the Player's chips
-    player_chips = Chips()
-    player_hand = Hand()
     main()
