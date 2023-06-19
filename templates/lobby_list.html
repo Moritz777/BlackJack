@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+    <title>Lobby-Liste</title>
+</head>
+<body>
+
+<img class="background_image" src="/static/R.png">
+<div class="headline_container">
+    <h1>Offene Lobbies: </h1>
+        {% for element in lobbies %}
+            <li>
+                {{ element    }}
+                <form action="/startPage" method="POST" style="display: inline;">
+                         <input type="submit" name="btn" value="{{ element }} beitreten">
+                </form>
+            </li>
+        {% endfor %}
+</div>
+
+
+</body>
+</html>

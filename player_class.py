@@ -11,5 +11,3 @@ class Player:
     def loadData(self):
         return db_connection.get_credit(self.username)
 
-    # def update_player(self):
-
