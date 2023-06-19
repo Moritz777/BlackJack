@@ -4,25 +4,23 @@ from flask_socketio import SocketIO, emit
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 import db_connection
-import game_logic
+import game_logic as gl
 from Tools import hash_password
 from player_class import Player
 from user_class import User
 from Control import control
 
 
-def hallo1():
-    data1 = 1
+def shuffle():
+    data1 = gl.deck.shuffle()
     return data1
 
-
-def hallo2():
-    data2 = 2
+def draw():
+    data2 = gl.Hand.add_card()
     return data2
 
-
-def hallo3():
-    data3 = 3
+def deal():
+    data3 = gl.Deck.deal()
     return data3
 
 players = []
@@ -98,17 +96,11 @@ def random_session():
 def game():
     if request.method == 'POST':
         pass
-    data1 = hallo1()
-    data2 = hallo2()
-    data3 = hallo3()
+    data1 = shuffle()
+    data2 = draw()
+    data3 = deal()
 
-    return render_template('game_template.html', data1=data1, data2=data2, data3=data3)
-@app.route('/api/data')
-def get_data():
-    # Perform Python logic to calculate data
-    data = {'x': 100, 'y': 200}  # Example data to send to the client
-    return jsonify(data)
-
+    return render_template('game_template.html', shuffle=data1, draw=data2, deal=data3)
 
 # -------- LOBBY TEST ---------
 @app.route('/display', methods=['POST'])
