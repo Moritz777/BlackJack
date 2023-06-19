@@ -32,19 +32,19 @@
 <div class="formular_container">
 
     <form action ="/" method="POST" name="login">
-        <label for="username">Benutzername: </label>
-        <input type="text" id="username" name="username">
+        <label for="username" class="lbl_usname">Benutzername: </label>
+        <input type="text" id="username" name="username" class="inp_usname">
 
         <br>
 
-        <label for="password">Passwort:</label>
-        <input type="password" id="password" name="password">
+        <label for="password" class="lbl_pass">Passwort:</label>
+        <input type="password" id="password" name="password" class="inp_pass">
 
-        <input type="submit" value="Anmelden" class="button_posis">
+        <input type="submit" value="Anmelden" class="button_anmelden">
     </form>
 
     <form action="{{ url_for('registrierung')}}" method="GET" name="registry">
-        <input type="submit" value="Registrieren" class="button_posis">
+        <input type="submit" value="Registrieren" class="button_registriren">
     </form>
 </div>
 

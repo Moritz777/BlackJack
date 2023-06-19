@@ -45,12 +45,43 @@ body {
         position: absolute;
         width: 50%;
         height: 50%;
-        background-color: rgba(0, 255, 167, 0.48);
+        background-color: rgba(0, 0, 0, 0.68);
         border: 1px solid black;
     }
 
-    .button_posis {
+    .lbl_usname {
+        position: relative;
+        padding-right: 17%;
+        height: 80%;
+    }
+    .lbl_pass {
+        padding-right: 15%;
+    }
+
+    .inp_usname {
+        position: absolute;
+        top: -120%;
+        left: 45%;
+        padding: 3px;
+    }
+    .inp_pass {
+        position: absolute;
+        top: -50%;
+        left: 45%;
+        padding: 3px;
+    }
+
+    .button_anmelden {
         position: absolute;
         top: 100%;
-
+        left: 40%;
+        padding: 12px 32px;
+        cursor: pointer;
+    }
+    .button_registriren {
+        position: absolute;
+        top: 100%;
+        left: 53%;
+        padding: 12px 32px;
+        cursor: pointer;
     }
