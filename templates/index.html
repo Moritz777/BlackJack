@@ -19,7 +19,11 @@
   {% endif %}
 {% endwith %}
 
-<img class="background_image" src="/static/R.png">
+
+
+<div class="square">
+    <div class="side"></div>
+</div>
 
 <div class="headline_container">
   <h1>BlackJack</h1>
@@ -36,11 +40,11 @@
         <label for="password">Passwort:</label>
         <input type="password" id="password" name="password">
 
-        <input type="submit" value="Anmelden">
+        <input type="submit" value="Anmelden" class="button_posis">
     </form>
 
     <form action="{{ url_for('registrierung')}}" method="GET" name="registry">
-        <input type="submit" value="Registrieren">
+        <input type="submit" value="Registrieren" class="button_posis">
     </form>
 </div>
 
@@ -52,6 +56,8 @@
     <p style="color: #08ff00;">{{ message }}</p>
     {% endif %}
 </div>
+
+<img class="background_image" src="/static/R.png">
 
 </body>
 </html>

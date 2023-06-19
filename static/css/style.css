@@ -1,24 +1,30 @@
-        body {
-      margin: 0;
-    }
+body {
+    margin: 0;
+}
     .background_image {
-      height: 100vh;
-      width: 100%;
-      object-fit: cover;
+        height: 100vh;
+        width: 100%;
+        object-fit: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .headline_container {
-      position: absolute;
-      left: 64px;
-      top: 64px;
-      font-size: 24px;
-      color: white;
+        position: absolute;
+        top: 30%;
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        color: white;
     }
     .formular_container {
-      position: absolute;
-      left: 64px;
-      top: 200px;
-      font-size: 18px;
-      color: white;
+        position: absolute;
+        top: 45%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+
     }
     .back-container {
       position: absolute;
@@ -26,4 +32,25 @@
       top: 350px;
       font-size: 14px;
       color: deeppink;
+    }
+    .square {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .side {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        background-color: rgba(0, 255, 167, 0.48);
+        border: 1px solid black;
+    }
+
+    .button_posis {
+        position: absolute;
+        top: 100%;
+
     }
