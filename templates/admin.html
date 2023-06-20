@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <script>
+        function searchTable() {
+            var input = document.getElementById('searchInput');
+            var filter = input.value.toLowerCase();
+            var table = document.getElementById('userTable');
+            var rows = table.getElementsByTagName('tr');
+
+            for (var i = 0; i < rows.length; i++) {
+                var usernameColumn = rows[i].getElementsByTagName('td')[0];
+                if (usernameColumn) {
+                    var username = usernameColumn.textContent || usernameColumn.innerText;
+                    if (username.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function setSearchInput(value) {
+            var input = document.getElementById('searchInput');
+            input.value = value;
+        }
+    </script>
+</head>
+<body>
+    <h1>Admin Bereich</h1>
+    <form action="/admin" method="POST" name="login">
+        <input type="text" id="searchInput" name="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
+        <input type="submit" value="Blocken" name="btn" class="red_button">
+        <input type="submit" value="Entblocken" name="btn" >
+    </form>
+    <div class="back-container">
+        {% if error_message %}
+            <p style="color: #ff0000;">{{ error_message }}</p>
+        {% endif %}
+        {% if message %}
+            <p style="color: #08ff00;">{{ message }}</p>
+        {% endif %}
+    </div>
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Kapital</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Geburtstag</th>
+                <th>Blocked</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users_information %}
+            <tr>
+                <td ondblclick="setSearchInput('{{ user[0] }}')">{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+                <td>{{ user[4] }}</td>
+                <td>{{ user[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
