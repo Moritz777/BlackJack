@@ -376,6 +376,24 @@ def main():
             print("Danke für's spielen!")
             break
 
+def main_eymen():
+    while True:
+        global playing
+
+        # Create & shuffle the deck
+        deck = Deck()
+        deck.shuffle()
+
+        # deal two cards to the player
+        player_hand = Hand()
+        player_hand.add_card(deck.deal())
+        input('Halt Stop')
+        return player_hand.cards[0]
+        '''
+        player_hand.add_card(deck.deal())
+        player_hand.adjust_for_ace()
+        i_player = 1
+        '''
 
 if __name__ == '__main__':
-    main()
+    main_eymen()
