@@ -188,7 +188,8 @@ def personal_lobby(irgendeine_variable):
 
     return render_template('users.html', players = players, Host = irgendeine_variable)
 
------------------------ SocketIO ----------------------------------------
+#----------------------- SocketIO ----------------------------------------
+
 # @socketio.on('connect')
 # def handle_connect()
 #     name = session.get('name')
@@ -203,7 +204,7 @@ def personal_lobby(irgendeine_variable):
 #         online_users.remove(name)
 #     emit('user_update', online_users, broadcast=True)
 
-    ----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 
 
 if __name__ == "__main__":
