@@ -161,15 +161,6 @@ def hit_or_stand(decks, hand):
             time.sleep(1)
             return False
 
-        # elif player_input == 'lol':
-        #     print("Cheat akzeptiert, User bekommt Blackjack")
-        #     player_hand.cards[0].rank = 'Seven'
-        #     player_hand.cards[0].suit = 'Spades'
-        #     player_hand.aces += 1
-        #     player_hand.cards[1].rank = 'Seven'
-        #     player_hand.cards[1].suit = 'Spades'
-        #     player_hand.value = 14
-
         elif player_input[0].lower() == 'q':
             exit(0)
         break
@@ -308,7 +299,6 @@ def main():
             # If Player's hand exceeds 21 break out of loop
             if player_hand.value > 21:
                 print('Der Spieler hat mehr als 21. Verloren.')
-                time.sleep(2)
                 break
 
         # always Play Dealer's hand until Dealer reaches 17
@@ -319,14 +309,49 @@ def main():
                 hit(deck, dealer_hand)
                 i_dealer += 1
                 print('Der Dealer hat gezogen:', dealer_hand.cards[i_dealer])
-                time.sleep(2)
 
             # Show all cards
             show_cards(player_hand, dealer_hand)
-            time.sleep(2)
+
+            # Run different winning scenarios
+
+            # check if the player has blackjack
+            if blackjack is True and won is False:
+                player_wins_blackjack(player_chips)
+                won = True
+
+            # check if the dealer (and player) has blackjack
+            elif dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
+                if blackjack is True:
+                    print('Dealer und Spieler haben Blackjack!')
+                    push()
+                    won = True
+                else:
+                    dealer_wins_blackjack(player_chips)
+                    won = True
+
+            elif player_hand.value > 21 and dealer_hand.value > 21 and won is False:
+                both_bust()
+                won = True
+
+            elif player_hand.value > 21 and won is False:
+                player_busts(player_chips)
+                won = True
+
+            elif dealer_hand.value > 21 and won is False:
+                dealer_busts(player_chips)
+                won = True
+
+            elif dealer_hand.value > player_hand.value and won is False:
+                dealer_wins(player_chips)
+                won = True
+
+            elif dealer_hand.value < player_hand.value and won is False:
+                player_wins(player_chips)
+                won = True
 
             # check if the player has tripple seven
-            if player_hand.value == 21:
+            elif player_hand.value == 21 and won is False:
                 i_seven = 0
                 for card in range(0, len(player_hand.cards)):
                     if player_hand.cards[card].rank == 'Seven':
@@ -335,51 +360,8 @@ def main():
                     player_wins_tripple_seven(player_chips)
                     won = True
 
-            # check if the dealer (and player) has blackjack
-            elif dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
-                if blackjack is True:
-                    print('Dealer und Spieler haben Blackjack!')
-                    push()
-                    time.sleep(2)
-                    won = True
-                else:
-                    dealer_wins_blackjack(player_chips)
-                    won = True
-
-            # Run different winning scenarios
-            elif blackjack is True and won is False:
-                player_wins_blackjack(player_chips)
-                won = True
-                time.sleep(2)
-
-            elif player_hand.value > 21 and dealer_hand.value > 21 and won is False:
-                both_bust()
-                won = True
-                time.sleep(2)
-
-            elif player_hand.value > 21 and won is False:
-                player_busts(player_chips)
-                won = True
-                time.sleep(2)
-
-            elif dealer_hand.value > 21 and won is False:
-                dealer_busts(player_chips)
-                won = True
-                time.sleep(2)
-
-            elif dealer_hand.value > player_hand.value and won is False:
-                dealer_wins(player_chips)
-                won = True
-                time.sleep(2)
-
-            elif dealer_hand.value < player_hand.value and won is False:
-                player_wins(player_chips)
-                won = True
-                time.sleep(2)
-
             elif won is False:
                 push()
-                time.sleep(2)
 
         print(f"\nSpielgewinn ist bei: {player_chips.win/100}€")
         print(f"Kontostand ist bei: {player_chips.total/100}€")
