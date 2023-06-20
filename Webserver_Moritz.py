@@ -56,18 +56,20 @@ def index():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     users_information = db_connection.get_all_players()
+
     if request.method == 'POST':
-        username = request.form.get('searchInput')
-        if request.form['btn']=='Entblocken':
-            db_connection.update_block_status(username, 'False')
-            users_information = db_connection.get_all_players()
-            error_message = username + ' wurde entblockt.'
-            return render_template('admin.html', users_information=users_information, error_message=error_message)
-        else:
-            db_connection.update_block_status(username,'True')
-            users_information = db_connection.get_all_players()
-            error_message = username + ' wurde geblockt.'
-            return render_template('admin.html', users_information=users_information, error_message=error_message)
+        for user in users_information:
+            username = user[0]
+            if request.form['btn']==f'{username} entblocken':
+                db_connection.update_block_status(username, 'False')
+                users_information = db_connection.get_all_players()
+                error_message = username + ' wurde entblockt.'
+                return render_template('admin.html', users_information=users_information, error_message=error_message)
+            elif request.form['btn']==f'{username} blocken':
+                db_connection.update_block_status(username,'True')
+                users_information = db_connection.get_all_players()
+                error_message = username + ' wurde geblockt.'
+                return render_template('admin.html', users_information=users_information, error_message=error_message)
     return render_template('admin.html', users_information=users_information)
 
 

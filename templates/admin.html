@@ -30,11 +30,8 @@
 </head>
 <body>
     <h1>Admin Bereich</h1>
-    <form action="/admin" method="POST" name="login">
         <input type="text" id="searchInput" name="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
-        <input type="submit" value="Blocken" name="btn" class="red_button">
-        <input type="submit" value="Entblocken" name="btn" >
-    </form>
+
     <div class="back-container">
         {% if error_message %}
             <p style="color: #ff0000;">{{ error_message }}</p>
@@ -63,6 +60,14 @@
                 <td>{{ user[3] }}</td>
                 <td>{{ user[4] }}</td>
                 <td>{{ user[5] }}</td>
+                <form method="POST">
+                    <td>
+                        <input type="submit" value="{{ user[0] }} blocken" name="btn" class="red_button">
+                    </td>
+                    <td>
+                        <input type="submit" value="{{ user[0] }} entblocken" name="btn" >
+                    </td>
+                </form>
             </tr>
             {% endfor %}
         </tbody>
