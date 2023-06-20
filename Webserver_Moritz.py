@@ -1,8 +1,12 @@
 import random
 from datetime import date, datetime
+
+import socketio
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_socketio import emit
+
 import db_connection
 from Tools import hash_password
 from db_connection import get_credit
@@ -17,18 +21,27 @@ player = None
 app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
 lobbies = {}
-users_dict = {}
+users_dict={}
+users_dict["open_lobbies"] = {}
 
 
-app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
+# app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+
+
     if request.method == 'POST':
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
+            if db_connection.check_blocked(username):
+                error_message = "Das Konto wurde gesperrt"
+                return render_template('index.html', error_message=error_message)
+            if db_connection.check_admin(username):
+                return redirect('/admin')
+            session['username'] = username
             users_dict[username] = {}
             print(users_dict)
             session['username']=username
@@ -40,13 +53,31 @@ def index():
         return render_template('index.html')
 
 
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    users_information = db_connection.get_all_players()
+    if request.method == 'POST':
+        username = request.form.get('searchInput')
+        if request.form['btn']=='Entblocken':
+            db_connection.update_block_status(username, 'False')
+            users_information = db_connection.get_all_players()
+            error_message = username + ' wurde entblockt.'
+            return render_template('admin.html', users_information=users_information, error_message=error_message)
+        else:
+            db_connection.update_block_status(username,'True')
+            users_information = db_connection.get_all_players()
+            error_message = username + ' wurde geblockt.'
+            return render_template('admin.html', users_information=users_information, error_message=error_message)
+    return render_template('admin.html', users_information=users_information)
+
+
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
 
     if request.method == 'POST':
 
         username = request.form.get('username')
-        first_name = request.form.get('vor_name')
+        first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
@@ -76,10 +107,6 @@ def random_session():
 
     username = session['username']
     users_dict[username] = Player(username)
-    print(users_dict[username])
-    print(users_dict[username].credit)
-
-
 
     if request.method == 'POST':
 
@@ -87,11 +114,8 @@ def random_session():
             return redirect('/game_template')
 
         if request.form['btn'] == 'Spiel hosten':
-            game_session_id = username + "_" + str(random.randint(100000,999999))
-            print(lobbies)
-
-
-            return redirect('/users')
+            users_dict["open_lobbies"][username]=[Player(username)]
+            return redirect(f'/users/{username}')
 
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
@@ -107,63 +131,54 @@ def game():
 
     return render_template('game_template.html')
 
-@app.route('/lobby_list', methods=['GET', 'POST'])
-def lobby_list():
-    return render_template('index.html')
-
-@app.route('/api/data')
-def get_data():
-    # Perform Python logic to calculate data
-    data = {'x': 100, 'y': 200}  # Example data to send to the client
-    return jsonify(data)
-
-
-# -------- LOBBY TEST ---------
-@app.route('/display', methods=['POST', 'GET'])
-def display():
-
-    game_session_id = session['game_session']
-
-    if request.method == 'POST':
-        return redirect('/users')
-
-    username = session.get('username')
-    return render_template('display.html', username=username, game_session_id=game_session_id)
-
 
 @app.route('/users', methods=['POST', 'GET'])
 def users():
     username = session.get('username')
-    game_session = session['game_session']
 
     if request.method == 'POST':
-        lobbies.pop(game_session)
-        print(lobbies)
         return redirect('/startPage')
 
-    return render_template('users.html', username=username, game_session=game_session)
+    return render_template('users.html', username=username)
 
 
-@socketio.on('connect')
-def handle_connect():
+@app.route('/lobby_list', methods=['POST', 'GET'])
+def lobbies():
+
     username = session.get('username')
-    game_session = lobbies
-    lobbies[game_session]['players'].append(username)
-    print(lobbies)
-    emit('user_update', lobbies[game_session]['players'], broadcast=True)
+    lobbies=users_dict["open_lobbies"].keys()
+    lobbies=list(lobbies)
+
+    if request.method == 'POST':
+
+        for element in lobbies:
+            if request.form['btn'] == f"{element} beitreten":
+                users_dict["open_lobbies"][element].append(users_dict[username])
+                return redirect(f'/users/{element}')
+    return render_template('lobby_list.html', lobbies=lobbies)
 
 
-@socketio.on('disconnect')
-def handle_disconnect():
+@app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
+def personal_lobby(irgendeine_variable):
+
+    if request.method == 'POST':
+
+        if request.form['btn'] == 'Spiel starten':
+            print("Ich verstehe deinen Code")
+            return render_template('game_template.html')
+
+        if request.form['btn'] == 'Zurück zur Startseite':
+            return redirect('/startPage')
+
     username = session.get('username')
-    game_session = session['game_session']
-    if username in lobbies[game_session]['players']:
-        lobbies[game_session]['players'].remove(username)
-    print(lobbies)
-    emit('user_update', lobbies[game_session]['players'], broadcast=True)
+    onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
 
+    players = []
 
-# ------------------------
+    for element in users_dict["open_lobbies"][irgendeine_variable]:
+        players.append(element.username)
+
+    return render_template('users.html', players = players, Host = irgendeine_variable)
 
 if __name__ == "__main__":
-    app.run(host='localhost', port='81', debug=True)
+    app.run(host='0.0.0.0', port='81', debug=True)
