@@ -387,6 +387,13 @@ def main_eymen():
         # deal two cards to the player
         player_hand = Hand()
         player_hand.add_card(deck.deal())
+
+        dealer_hand = Hand()
+        dealer_hand.add_card(deck.deal())
+
+        print(player_hand.cards[0])
+        show_cards(player_hand, dealer_hand)
+
         input('Halt Stop')
         return player_hand.cards[0]
         '''
