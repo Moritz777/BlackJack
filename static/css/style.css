@@ -10,7 +10,7 @@ body {
         align-items: center;
     }
     .headline_container {
-        position: absolute;
+        position: fixed;
         top: 30%;
         width: 100%;
         text-align: center;
@@ -27,11 +27,15 @@ body {
 
     }
     .back-container {
-      position: absolute;
-      left: 64px;
-      top: 350px;
-      font-size: 14px;
-      color: deeppink;
+      position: fixed;
+        padding: 3px;
+        top: 70%;
+        left: 41.5%;
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .square {
         position: absolute;
@@ -44,40 +48,42 @@ body {
     }
     .side {
         position: absolute;
-        width: 50%;
+        width: 40%;
         height: 50%;
+        border-radius: 5%;
         background-color: rgba(0, 0, 0, 0.68);
         border: 1px solid black;
     }
 
     .lbl_usname {
-        position: relative;
-        top: 10%;
-        left: -10%;
+        position: fixed;
+        top: 38%;
+        left: 35%;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        text-align: center;
     }
     .lbl_pass {
-        padding-right: 15%;
+        position: fixed;
+        top: 45%;
+        left: 35%;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        text-align: center;
     }
 
     .inp_usname {
-        position: relative;
+        position: fixed;
+        padding: 3px;
+        top: 38%;
+        left: 45%;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 3px;
-        left: 45%;
     }
     .inp_pass {
-        position: relative;
+        position: fixed;
         padding: 3px;
+        top: 45%;
         left: 45%;
 
         display: flex;
@@ -86,9 +92,9 @@ body {
     }
 
     .button_anmelden {
-        position: absolute;
-        top: 100%;
-        left: 40%;
+        position: fixed;
+        top: 51%;
+        left: 46.8%;
         padding: 12px 32px;
         cursor: pointer;
 
@@ -97,10 +103,10 @@ body {
         align-items: center;
     }
     .button_registriren {
-        position: absolute;
-        top: 100%;
-        left: 53%;
-        padding: 12px 32px;
+        position: fixed;
+        top: 58%;
+        left: 46.8%;
+        padding: 12px 25.5px;
         cursor: pointer;
 
         display: flex;
