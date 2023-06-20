@@ -156,5 +156,6 @@ def personal_lobby(irgendeine_variable):
 
     return render_template('users.html', players = players, Host = irgendeine_variable)
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
