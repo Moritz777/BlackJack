@@ -61,12 +61,12 @@ def admin():
         if request.form['btn']=='Entblocken':
             db_connection.update_block_status(username, 'False')
             users_information = db_connection.get_all_players()
-            error_message = username + ' wurd entblockt.'
+            error_message = username + ' wurde entblockt.'
             return render_template('admin.html', users_information=users_information, error_message=error_message)
         else:
             db_connection.update_block_status(username,'True')
             users_information = db_connection.get_all_players()
-            error_message = username + ' wurd geblockt.'
+            error_message = username + ' wurde geblockt.'
             return render_template('admin.html', users_information=users_information, error_message=error_message)
     return render_template('admin.html', users_information=users_information)
 
@@ -158,9 +158,10 @@ def lobbies():
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
-@app.route('/users/<irgendeine_variable>')
+@app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
 def personal_lobby(irgendeine_variable):
-
+    if request.method == 'POST':
+        return redirect('/startPage')
     username = session.get('username')
     onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
 

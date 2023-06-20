@@ -21,9 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
-
 <img class="background_image" src="/static/R.png">
-
 <div class="headline_container">
     <h1>Herzlich willkommen in der Lobby von {{ Host }}</h1>
 </div>
@@ -34,6 +32,11 @@
             {{ element }}
         </li>
     {% endfor %}
+    <br>
+    <form action="/startPage" method="POST" name="user">
+        <input type="submit" value="Zurück" name="btn" >
+    </form>
+
 </div>
 </body>
 </html>
