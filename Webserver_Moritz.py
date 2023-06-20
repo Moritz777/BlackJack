@@ -124,7 +124,7 @@ def random_session():
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
-@app.route('/game_template', methods=['GET', 'POST'])
+@app.route('/game_template/<host_name>', methods=['GET', 'POST'])
 def game():
 
     if request.method == 'POST':
@@ -159,34 +159,28 @@ def lobbies():
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
-@app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
-def personal_lobby(irgendeine_variable):
+@app.route('/users/<host_name>',methods=['POST', 'GET'])
+def personal_lobby(host_name):
 
-    print(users_dict)
-
-    # def user_input():
-    #     userinput = input("Gib etwas ein")
 
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            # user_input()
-            return render_template('game_template.html')
+            return redirect(f'/game_template/{host_name}')
 
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
     username = session.get('username')
-    onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
+    onlineUsersList = users_dict["open_lobbies"][host_name]
 
     players = []
 
 
-
-    for element in users_dict["open_lobbies"][irgendeine_variable]:
+    for element in users_dict["open_lobbies"][host_name]:
         players.append(element.username)
 
-    return render_template('users.html', players = players, Host = irgendeine_variable)
+    return render_template('users.html', players = players, Host = host_name)
 
 #----------------------- SocketIO ----------------------------------------
 
