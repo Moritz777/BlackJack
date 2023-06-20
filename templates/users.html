@@ -27,6 +27,7 @@
 </div>
 
 <div class="formular_container">
+    <h2>In dieser Lobby befinden sich folgende Spieler:</h2>
     {% for element in players %}
         <li>
             {{ element }}
@@ -34,9 +35,13 @@
     {% endfor %}
     <br>
     <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Zurück" name="btn" >
+        <input type="submit" value="Spiel starten" name="btn" >
     </form>
-
+</div>
+<div class="back-container">
+    <form action="/users/{{Host}}" method="POST" name="user">
+        <input type="submit" value="Zurück zur Startseite" name="btn" >
+    </form>
 </div>
 </body>
 </html>
