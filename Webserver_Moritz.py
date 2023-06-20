@@ -163,10 +163,13 @@ def personal_lobby(irgendeine_variable):
 
     print(users_dict)
 
+    def user_input():
+        userinput = input("Gib etwas ein")
+
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-
+            user_input()
             return render_template('game_template.html')
 
         if request.form['btn'] == 'Zurück zur Startseite':
@@ -176,6 +179,8 @@ def personal_lobby(irgendeine_variable):
     onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
 
     players = []
+
+
 
     for element in users_dict["open_lobbies"][irgendeine_variable]:
         players.append(element.username)
