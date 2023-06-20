@@ -376,6 +376,7 @@ def main():
             print("Danke für's spielen!")
             break
 
+
 def main_eymen():
     while True:
         global playing
