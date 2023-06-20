@@ -36,6 +36,14 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
+            if db_connection.check_blocked(username):
+                error_message = "Das Konto wurde gesperrt"
+                return render_template('index.html', error_message=error_message)
+            if db_connection.check_admin(username):
+                return redirect('/admin')
+            session['username'] = username
+            users_dict[username] = {}
+            print(users_dict)
             session['username']=username
             return redirect('/startPage')
         else:
@@ -45,13 +53,31 @@ def index():
         return render_template('index.html')
 
 
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    users_information = db_connection.get_all_players()
+    if request.method == 'POST':
+        username = request.form.get('searchInput')
+        if request.form['btn']=='Entblocken':
+            db_connection.update_block_status(username, 'False')
+            users_information = db_connection.get_all_players()
+            error_message = username + ' wurde entblockt.'
+            return render_template('admin.html', users_information=users_information, error_message=error_message)
+        else:
+            db_connection.update_block_status(username,'True')
+            users_information = db_connection.get_all_players()
+            error_message = username + ' wurde geblockt.'
+            return render_template('admin.html', users_information=users_information, error_message=error_message)
+    return render_template('admin.html', users_information=users_information)
+
+
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
 
     if request.method == 'POST':
 
         username = request.form.get('username')
-        first_name = request.form.get('vor_name')
+        first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
@@ -132,9 +158,10 @@ def lobbies():
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
-@app.route('/users/<irgendeine_variable>')
+@app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
 def personal_lobby(irgendeine_variable):
-
+    if request.method == 'POST':
+        return redirect('/startPage')
     username = session.get('username')
     onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
 
