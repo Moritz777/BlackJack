@@ -120,6 +120,7 @@ def random_session():
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
 
+    print(users_dict[username].credit)
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
@@ -163,13 +164,13 @@ def personal_lobby(irgendeine_variable):
 
     print(users_dict)
 
-    def user_input():
-        userinput = input("Gib etwas ein")
+    # def user_input():
+    #     userinput = input("Gib etwas ein")
 
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            user_input()
+            # user_input()
             return render_template('game_template.html')
 
         if request.form['btn'] == 'Zurück zur Startseite':
