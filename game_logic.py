@@ -377,6 +377,19 @@ def main():
             break
 
 
+def main_test(player_list):
+    player_count = len(player_list)
+    while True:
+        global playing
+
+        deck = Deck()
+        deck.shuffle()
+
+        for player in range(0, player_count):
+            player_hand = Hand()
+            player_hand.add_card(deck.deal())
+
+
 def main_eymen():
     while True:
         global playing
@@ -402,6 +415,7 @@ def main_eymen():
         player_hand.adjust_for_ace()
         i_player = 1
         '''
+
 
 if __name__ == '__main__':
     main_eymen()
