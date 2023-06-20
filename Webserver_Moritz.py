@@ -19,7 +19,7 @@ lobbies = {}
 users_dict = {}
 
 
-app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
+# app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
 
 @app.route('/', methods=['GET', 'POST'])
