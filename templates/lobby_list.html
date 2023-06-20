@@ -6,20 +6,61 @@
   <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
       <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
     <title>Lobby-Liste</title>
+    <script>
+        function searchTable() {
+            var input = document.getElementById('searchInput');
+            var filter = input.value.toLowerCase();
+            var table = document.getElementById('userTable');
+            var rows = table.getElementsByTagName('tr');
+
+            for(var i = 0; i < rows.length; i++) {
+                var usernameColumn = rows[i].getElementsByTagName('td')[0];
+                if (usernameColumn) {
+                    var username = usernameColumn.textContent ||usernameColumn.innerText;
+                    if (username.toLocaleLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function setSearchInput(value) {
+            var input = document.getElementById('searchInput');
+            input.value = value;
+        }
+    </script>
 </head>
 <body>
 
 <img class="background_image" src="/static/R.png">
 <div class="headline_container">
     <h1>Offene Lobbies: </h1>
-        {% for element in lobbies %}
-            <li>
-                {{ element }}
-                <form action="/lobby_list" method="POST" style="display: inline;">
+</div>
+
+<div class="formular_container">
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th><input type="text" id="searchInput" placeholder="Lobby suchen" onkeyup="searchTable()"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for element in lobbies %}
+            <tr>
+                <td ondblclick="setSearchInput('{{ element }}')">{{ element }}</td>
+                <td>
+                     <form action="/lobby_list" method="POST" style="display: inline;">
                          <input type="submit" name="btn" value="{{ element }} beitreten">
-                </form>
-            </li>
-        {% endfor %}
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 
