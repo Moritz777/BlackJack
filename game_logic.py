@@ -392,16 +392,15 @@ def main_test(player_list):
 
 def main_eymen():
     while True:
-        global playing
-
         # Create & shuffle the deck
         deck = Deck()
         deck.shuffle()
 
-        # deal two cards to the player
+        # deal one card to the player
         player_hand = Hand()
         player_hand.add_card(deck.deal())
 
+        # needed for show_cards to work
         dealer_hand = Hand()
         dealer_hand.add_card(deck.deal())
 
