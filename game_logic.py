@@ -24,7 +24,6 @@ values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eig
 # setting the players ability to play to true and blackjack to false
 
 playing = True
-blackjack = False
 
 
 # defining classes
@@ -252,11 +251,11 @@ def main():
     """
     Game progression
     """
-    global playing
-    global blackjack
-    won = False
-
     while True:
+
+        global playing
+        blackjack = False
+        won = False
 
         # greeting the player
         greet_player()
@@ -297,7 +296,6 @@ def main():
             if hit_or_stand(deck, player_hand):
                 i_player += 1
                 print('Du ziehst eine:', player_hand.cards[i_player])
-                time.sleep(1)
 
             # Show cards
             show_cards(player_hand, dealer_hand)
@@ -307,7 +305,7 @@ def main():
                 print('Der Spieler hat 21 Punkte erreicht und zieht nicht weiter.')
                 break
 
-            # If Player's hand exceeds 21, run player_busts() and break out of loop
+            # If Player's hand exceeds 21 break out of loop
             if player_hand.value > 21:
                 print('Der Spieler hat mehr als 21. Verloren.')
                 time.sleep(2)
@@ -337,7 +335,8 @@ def main():
                     player_wins_tripple_seven(player_chips)
                     won = True
 
-            if dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
+            # check if the dealer (and player) has blackjack
+            elif dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
                 if blackjack is True:
                     print('Dealer und Spieler haben Blackjack!')
                     push()
