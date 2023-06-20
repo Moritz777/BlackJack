@@ -160,28 +160,23 @@ def lobbies():
 
 @app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
 def personal_lobby(irgendeine_variable):
+
     if request.method == 'POST':
-        return redirect('/startPage')
+
+        if request.form['btn'] == 'Spiel starten':
+            print("Ich verstehe deinen Code")
+            return render_template('game_template.html')
+
+        if request.form['btn'] == 'Zurück zur Startseite':
+            return redirect('/startPage')
+
     username = session.get('username')
     onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
 
-    # @socketio.on('connect')
-    # def handle_connect():
-    #     onlineUsersList.append(users_dict["open_lobbies"][irgendeine_variable])
-
-
-    # emit('user_update', broadcast=True)
-
-    print(irgendeine_variable)
-
     players = []
-
-    print(users_dict)
 
     for element in users_dict["open_lobbies"][irgendeine_variable]:
         players.append(element.username)
-
-    print(players)
 
     return render_template('users.html', players = players, Host = irgendeine_variable)
 
