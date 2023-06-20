@@ -161,10 +161,12 @@ def lobbies():
 @app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
 def personal_lobby(irgendeine_variable):
 
+    print(users_dict)
+
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            print("Ich verstehe deinen Code")
+
             return render_template('game_template.html')
 
         if request.form['btn'] == 'Zurück zur Startseite':
