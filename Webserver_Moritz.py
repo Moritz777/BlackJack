@@ -1,3 +1,4 @@
+import asyncio
 import random
 from datetime import date, datetime
 
@@ -169,10 +170,10 @@ def personal_lobby(irgendeine_variable):
         userinput = input("Gib etwas ein")
 
     if request.method == 'POST':
-
         if request.form['btn'] == 'Spiel starten':
-            user_input()
-            return render_template('game_template.html')
+            return render_template('game_template.html',user_input())
+
+
 
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
