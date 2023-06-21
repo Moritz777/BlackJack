@@ -4,17 +4,29 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
-      <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   <title>BlackJack</title>
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
+<img class="background_image" src="/static/R.png">
 
-<div class="square">
-    <div class="side"></div>
-</div>
+{#SOCKET-TEST#}
+{#<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>#}
+{#<script>#}
+{#// Verbindung zum WebSocket-Server herstellen#}
+{#var socket = io();#}
+{##}
+{#// Verbindungsereignis behandeln#}
+{#socket.on('connect', function() {#}
+{#    console.log('Connected');#}
+{#});#}
+{##}
+{#// Trennungsereignis behandeln#}
+{#socket.on('disconnect', function() {#}
+{#    console.log('Disconnected');#}
+{#});#}
+{#</script>#}
+{#SOCKET-TEST#}
 
 <div class="headline_container">
   <h1>Wilkommen</h1>
@@ -24,21 +36,30 @@
 <div class="formular_container">
   <h2>Wähle aus folgenden Aktivitäten:</h2>
     <form action="/startPage" method="POST">
-        <input type="submit" name="btn" value="Zufälligem Spiel beitreten" class="btnran_game">
+        <input type="submit" name="btn" value="Zufälligem Spiel beitreten">
         <br>
-        <input type="submit" name="btn" value="Spiel hosten" class="btnhost_game">
+        <input type="submit" name="btn" value="Spiel hosten">
         <br>
-        <input type="submit" name="btn" value="Spiel beitreten" class="btnjoin_game">
+        <input type="submit" name="btn" value="Spiel beitreten">
+        <br>
+        <br>
+        <br>
+        <br>
+        <input type="text" name="meineEingabe" placeholder="Gib deine Eingabe ein">
+        <input type="submit" name="btn" value="Absenden">
     </form>
+
 </div>
 
-<div class="back-container_startP">
+<div class="back-container">
         <form action="/" method="Get">
         <input type="submit" value="Logout">
     </form>
 </div>
 
-<img class="background_image" src="/static/R.png">
+<div class="credit_container">
+    <p>Credit: {{ credit }}</p>
+</div>
 </body>
 </html>
 

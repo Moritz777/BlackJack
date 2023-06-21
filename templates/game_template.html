@@ -34,6 +34,23 @@
 
     <h1>HI WAS GEHT</h1>
 
+    {#SOCKET-TEST#}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script>
+    // Verbindung zum WebSocket-Server herstellen
+    var socket = io();
+
+    // Verbindungsereignis behandeln
+    socket.on('connect', function() {
+        console.log('Connected');
+    });
+
+    // Trennungsereignis behandeln
+    socket.on('disconnect', function() {
+        console.log('Disconnected');
+    });
+    </script>
+    {#SOCKET-TEST#}
     <script>
         function fetchData() {
             fetch('/game_template')
