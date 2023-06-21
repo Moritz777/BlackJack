@@ -129,8 +129,8 @@ def random_session():
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
     if request.method == 'POST':
-        game_logic.main_test()
-        return render_template('game_template.html')
+
+        return render_template('game_template.html',check=True)
 
     return render_template('game_template.html')
 
