@@ -170,7 +170,9 @@ def personal_lobby(irgendeine_variable):
         userinput = input("Gib etwas ein")
 
     if request.method == 'POST':
+
         if request.form['btn'] == 'Spiel starten':
+            userinput = input("Gib etwas ein")
             return render_template('game_template.html',user_input())
 
 
