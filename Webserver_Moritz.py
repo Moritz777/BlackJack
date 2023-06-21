@@ -1,34 +1,20 @@
-import random
 from datetime import date, datetime
-
-import socketio
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_socketio import emit
 import db_connection
 from Tools import hash_password
-from db_connection import get_credit
 from player_class import Player
 from user_class import User
-from Control import control
+
 
 app = Flask(__name__)
 app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
 
-players = []
-control = control()
-player = None
-lobbies = {}
-users_dict={}
-users_dict["open_lobbies"] = {}
 
-
-
-
-# app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
-
+users_dict={"open_lobbies":{}}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,7 +23,7 @@ def index():
             return redirect('/login')
 
 
-    return redirect('/registrierung')
+    return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -221,4 +207,4 @@ def handle_connect():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='81', debug=True)
+    socketio.run(app, allow_unsafe_werkzeug="True", host="0.0.0.0", port="81", debug="True")
