@@ -1,3 +1,5 @@
+/*  Background and Box Format*/
+
 /* CSS link und Bootstrap
 
       <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_box.css')}}">
@@ -26,6 +28,36 @@ body{
         justify-content: center;
         align-items: center;
     }
+
+   .headline_container {
+        position: fixed;
+        top: 30%;
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        color: white;
+    }
+    .formular_container {
+        position: absolute;
+        top: 45%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+
+    }
+    .back-container {
+      position: fixed;
+        padding: 3px;
+        top: 70%;
+        left: 41.5%;
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
         /*Rechteckigerschwarzer Hintergrund*/
     .square {
         position: absolute;
