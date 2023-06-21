@@ -10,6 +10,24 @@
 <body>
 <img class="background_image" src="/static/R.png">
 
+{#SOCKET-TEST#}
+{#<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>#}
+{#<script>#}
+{#// Verbindung zum WebSocket-Server herstellen#}
+{#var socket = io();#}
+{##}
+{#// Verbindungsereignis behandeln#}
+{#socket.on('connect', function() {#}
+{#    console.log('Connected');#}
+{#});#}
+{##}
+{#// Trennungsereignis behandeln#}
+{#socket.on('disconnect', function() {#}
+{#    console.log('Disconnected');#}
+{#});#}
+{#</script>#}
+{#SOCKET-TEST#}
+
 <div class="headline_container">
   <h1>Wilkommen</h1>
   <p>Hallo, {{ username }}!, Schön, dass du da bist!</p>

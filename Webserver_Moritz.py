@@ -14,7 +14,6 @@ from player_class import Player
 from user_class import User
 from Control import control
 
-players = []
 app = Flask(__name__)
 control = control()
 player = None
@@ -25,7 +24,7 @@ users_dict={}
 users_dict["open_lobbies"] = {}
 
 
-# app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
+app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -36,14 +35,6 @@ def index():
         username = request.form.get('username')
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
-            if db_connection.check_blocked(username):
-                error_message = "Das Konto wurde gesperrt"
-                return render_template('index.html', error_message=error_message)
-            if db_connection.check_admin(username):
-                return redirect('/admin')
-            session['username'] = username
-            users_dict[username] = {}
-            print(users_dict)
             session['username']=username
             return redirect('/startPage')
         else:
@@ -53,31 +44,13 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/admin', methods=['GET', 'POST'])
-def admin():
-    users_information = db_connection.get_all_players()
-    if request.method == 'POST':
-        username = request.form.get('searchInput')
-        if request.form['btn']=='Entblocken':
-            db_connection.update_block_status(username, 'False')
-            users_information = db_connection.get_all_players()
-            error_message = username + ' wurde entblockt.'
-            return render_template('admin.html', users_information=users_information, error_message=error_message)
-        else:
-            db_connection.update_block_status(username,'True')
-            users_information = db_connection.get_all_players()
-            error_message = username + ' wurde geblockt.'
-            return render_template('admin.html', users_information=users_information, error_message=error_message)
-    return render_template('admin.html', users_information=users_information)
-
-
 @app.route('/registrierung', methods=['GET', 'POST'])
 def registrierung():
 
     if request.method == 'POST':
 
         username = request.form.get('username')
-        first_name = request.form.get('first_name')
+        first_name = request.form.get('vor_name')
         last_name = request.form.get('last_name')
         birthday = request.form.get('birthdaytime')
         today = datetime.now()
@@ -102,6 +75,27 @@ def registrierung():
     return render_template('registrierung.html')
 
 
+
+@app.route('/game_template', methods=['GET', 'POST'])
+def game():
+
+    if request.method == 'POST':
+        pass
+
+    return render_template('game_template.html')
+
+
+@app.route('/users', methods=['POST', 'GET'])
+def users():
+    username = session.get('username')
+
+    if request.method == 'POST':
+        return redirect('/startPage')
+
+    return render_template('users.html', username=username)
+
+
+
 @app.route('/startPage', methods=['GET', 'POST'])
 def random_session():
 
@@ -123,25 +117,6 @@ def random_session():
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
-@app.route('/game_template', methods=['GET', 'POST'])
-def game():
-
-    if request.method == 'POST':
-        pass
-
-    return render_template('game_template.html')
-
-
-@app.route('/users', methods=['POST', 'GET'])
-def users():
-    username = session.get('username')
-
-    if request.method == 'POST':
-        return redirect('/startPage')
-
-    return render_template('users.html', username=username)
-
-
 @app.route('/lobby_list', methods=['POST', 'GET'])
 def lobbies():
 
@@ -158,27 +133,38 @@ def lobbies():
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
-@app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
+@app.route('/users/<irgendeine_variable>')
 def personal_lobby(irgendeine_variable):
-
-    if request.method == 'POST':
-
-        if request.form['btn'] == 'Spiel starten':
-            print("Ich verstehe deinen Code")
-            return render_template('game_template.html')
-
-        if request.form['btn'] == 'Zurück zur Startseite':
-            return redirect('/startPage')
 
     username = session.get('username')
     onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
 
+    print(irgendeine_variable)
+
     players = []
+
+    print(users_dict)
 
     for element in users_dict["open_lobbies"][irgendeine_variable]:
         players.append(element.username)
 
+    print(players)
+
     return render_template('users.html', players = players, Host = irgendeine_variable)
+
+# @socketio.on('connect')
+# def handle_connect():
+#     name = session.get('name')
+#     online_users.append(name)
+#     emit('user_update', online_users, broadcast=True)
+#
+# @socketio.on('disconnect')
+# def handle_disconnect():
+#     name = session.get('name')
+#     if name in online_users:
+#         online_users.remove(name)
+#     emit('user_update', online_users, broadcast=True)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
