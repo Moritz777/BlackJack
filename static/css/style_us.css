@@ -5,14 +5,12 @@
         font-size: 220%;
         text-align: center;
         color: white;
+        border-radius: 5%;
+        border: rgba(0, 0, 0, 0.50);
+        background: rgba(0, 0, 0, 0.50);
 }
-
     .headline_container {
-        position: fixed;
-        top: 30%;
-        width: 100%;
-        text-align: center;
-        color: white;
+
     }
 
 .there_player_lobby {
@@ -45,4 +43,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .btn_startgame {
+        cursor: pointer;
+    }
+    .btn_backtostart {
+        cursor: pointer;
     }
