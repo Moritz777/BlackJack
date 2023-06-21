@@ -128,7 +128,7 @@ def random_session():
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
     if request.method == 'POST':
-
+        return render_template('game_template.html', check="h")
 
     return render_template('game_template.html')
 
@@ -138,6 +138,7 @@ def users():
     username = session.get('username')
 
     if request.method == 'POST':
+
         return redirect('/startPage')
 
     return render_template('users.html', username=username)
