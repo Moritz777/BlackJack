@@ -10,18 +10,26 @@ from player_class import Player
 from user_class import User
 from Control import control
 
+class Card:
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
+def get_card():
+    # Retrieve card data from your data source
+    card = gl.main_eymen()
+    print(card)
+    # Create a dictionary representation of the card
+    card_dict = {
+        'rank': card.rank,
+        'suit': card.suit
+    }
+    print(card_dict)
+    # Return the card dictionary as a JSON response
+    return jsonify(card_dict)
 
-def shuffle():
-    data1 = gl.deck.shuffle()
-    return data1
+def play_game():
+    gl.main()
 
-def draw():
-    data2 = gl.Hand.add_card()
-    return data2
-
-def deal():
-    data3 = gl.Deck.deal()
-    return data3
 
 players = []
 app = Flask(__name__)
@@ -95,12 +103,28 @@ def random_session():
 @app.route('/game_template', methods=['GET', 'POST'])
 def game():
     if request.method == 'POST':
-        pass
-    data1 = shuffle()
-    data2 = draw()
-    data3 = deal()
+        #Janine Main aufrufen#Spielbeginn:Button Press start
+        #Shuffle_deck()#Deckmischen
+        #Bets
+        #Karten verteilen (Wie viele Spieler?)
+        #Erster Spieler Spielzug
+        #...
+        #letzter Spieler Spielzug
+        #Dealer letzte Karte
+        #Win and loose
+        #Restart per Button
 
-    return render_template('game_template.html', shuffle=data1, draw=data2, deal=data3)
+        print("h")
+        check = 
+        #current_card = get_card()
+
+        #data2 = draw()
+        #data3 = deal()
+        return render_template('game_template.html',check=True)
+
+    # Render the game template initially
+    return render_template('game_template.html')
+
 
 # -------- LOBBY TEST ---------
 @app.route('/display', methods=['POST'])

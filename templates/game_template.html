@@ -26,52 +26,235 @@
             top: 12.5%;
             left: 41.75%;
         }
+        .card{
+            position: absolute;
+            top: 12.5%;
+            left: 41.75%;
+        }
+        #card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .deck {
+            position: relative;
+            width: 100px;
+            height: 140px;
+        }
+
+        .card {
+            position: absolute;
+            top: 12.5%;
+            left: 41.75%;
+        }
     </style>
 </head>
 <body>
-    <div class="background-container">
-
+    <button id="hit_button" onclick="CardThrowPlayer2()">
+        Hit
+    </button>
+    <button id="stand_button">
+        Stand
+    </button>
+    <form action ="/game_template" method="POST" name="login">
+        <input type="submit" value="Anmelden">
+    </form>
+    <div class="deck">
+        <div class="card" style="top: 83%; left: 800.75%;">
+            <img src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Card 1">
+        </div>
+        <div class="card" style="top: 83%; left: 800.75%;">
+            <img src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Card 2">
+        </div>
+        <div class="card" style="top: 83%; left: 800.75%;">
+            <img src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Card 3">
+        </div>
     </div>
     <img id="background-img" src="/static/Black_Jack_Grafiken/Spielfeld/Spielfeld_3.png" alt="Spielfeld">
-    <img id="provadis-card" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite.png" alt="Provadis Card">
-    <script>
+    <img id="provadis-card" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Provadis Card">
 
-        console.log({{shuffle}});
-        console.log({{draw}});
-        console.log({{deal}});
+    <div id="card" class="card">
+        <img id="card-image" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Card">
+    </div>
+    <script>
+        const suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs'];
+        const ranks = ['Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace'];
+
+        const deck = [];
+
+        for (const suit of suits) {
+            for (const rank of ranks) {
+                const card = { rank: rank, suit: suit };
+                deck.push(card);
+            }
+        }
+        console.log(deck);
+
+        const cardImages = {
+            "AceHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_Ass.png",
+            "TwoHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_2.png",
+            "ThreeHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_3.png",
+            "FourHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_4.png",
+            "FiveHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_5.png",
+            "SixHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_6.png",
+            "SevenHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_7.png",
+            "EightHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_8.png",
+            "NineHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_9.png",
+            "TenHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_10.png",
+            "JackHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_Bube.png",
+            "QueenHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_Dame.png",
+            "KingHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_Koenig.png",
+
+            "AceClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_Ass.png",
+            "TwoClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_2.png",
+            "ThreeClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_3.png",
+            "FourClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_4.png",
+            "FiveClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_5.png",
+            "SixClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_6.png",
+            "SevenClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_7.png",
+            "EightClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_8.png",
+            "NineClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_9.png",
+            "TenClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_10.png",
+            "JackClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_Bube.png",
+            "QueenClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_Dame.png",
+            "KingClubs": "/static/Black_Jack_Grafiken/Karten/Karo/Karo_Koenig.png",
+
+            "AceDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_Ass.png",
+            "TwoDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_2.png",
+            "ThreeDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_3.png",
+            "FourDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_4.png",
+            "FiveDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_5.png",
+            "SixDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_6.png",
+            "SevenDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_7.png",
+            "EightDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_8.png",
+            "NineDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_9.png",
+            "TenDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_10.png",
+            "JackDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_Bube.png",
+            "QueenDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_Dame.png",
+            "KingDiamonds": "/static/Black_Jack_Grafiken/Karten/Kreuz/Kreuz_Koenig.png",
+
+            "AceSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_Ass.png",
+            "TwoSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_2.png",
+            "ThreeSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_3.png",
+            "FourSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_4.png",
+            "FiveSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_5.png",
+            "SixSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_6.png",
+            "SevenSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_7.png",
+            "EightSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_8.png",
+            "NineSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_9.png",
+            "TenSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_10.png",
+            "JackSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_Bube.png",
+            "QueenSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_Dame.png",
+            "KingSpades": "/static/Black_Jack_Grafiken/Karten/Pik/Pik_Koenig.png",
+
+        };
+        function shuffleDeck() {
+            const deckElement = document.querySelector('.deck');
+            const cards = deckElement.querySelectorAll('.card');
+
+            // Randomly shuffle the cards
+            const shuffledCards = Array.from(cards).sort(() => Math.random() - 0.5);
+
+            // Apply animation to shuffle the cards
+            shuffledCards.forEach((card, index) => {
+                const delay = index * 100; // Delay each card's animation
+
+                setTimeout(() => {
+                    card.style.transition = 'transform 1s ease';
+                    card.style.transform = 'rotate(360deg)';
+                }, delay);
+            });
+        }
+        fetch('/game_template')
+            .then(response => response.json())
+            .then(card => {
+                // Process the retrieved card object
+                console.log(card.rank);
+                console.log(card.suit);
+                console.log(card.image);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        class Card {
+            constructor(suit, rank) {
+                this.suit = suit;
+                this.rank = rank;
+            }
+        }
+        const cardHeart = new Card('Hearts', 'Queen');
+        const cardClub = new Card('Clubs', 'King');
+        const cardDiamond = new Card('Diamonds', 'Jack');
+        const cardSpade = new Card('Spades', 'Ace');
+
+        function setCard(card) {
+            // Display card image
+            const cardImage = document.getElementById("card-image");
+            const imageKey = `${card.rank}${card.suit}`;
+            cardImage.src = cardImages[imageKey];
+            cardImage.alt = `${card.rank} of ${card.suit}`;
+        }
+        function resetCard() {
+            // Display card image
+            const cardImage = document.getElementById("card-image");
+            const provadisCardImage = document.getElementById("provadis-card");
+            cardImage.src = provadisCardImage.src;
+            cardImage.alt = provadisCardImage.alt;
+        }
+
+        x = 312
+        var cardOffset = 0;
         function createProvadisCard(){
+            var provadisCard = document.getElementById('card-image');
+            var provadisCardCopy = new Image();
+            provadisCardCopy.src = provadisCard.src;
+            provadisCardCopy.alt = provadisCard.alt;
+
+            provadisCardCopy.style.position = 'absolute';
+            provadisCardCopy.style.top = '12.5%'; /* Adjust top and left values to position the duplicate image */
+            provadisCardCopy.style.left = '41.75%';
+            provadisCardCopy.style.zIndex = x; /* Set a higher z-index to place it on top of the fullscreen image */
+            x -= 1;
+            document.body.appendChild(provadisCardCopy);
+            return  provadisCardCopy
+        }
+        function createDeckCard(){
             var provadisCard = document.getElementById('provadis-card');
             var provadisCardCopy = new Image();
             provadisCardCopy.src = provadisCard.src;
             provadisCardCopy.alt = provadisCard.alt;
 
             provadisCardCopy.style.position = 'absolute';
-            provadisCardCopy.style.top = '10.5%'; /* Adjust top and left values to position the duplicate image */
-            provadisCardCopy.style.left = '42.75%';
-            provadisCardCopy.style.zIndex = '1'; /* Set a higher z-index to place it on top of the fullscreen image */
-
+            provadisCardCopy.style.top = '12.5%'; /* Adjust top and left values to position the duplicate image */
+            provadisCardCopy.style.left = '41.75%';
+            provadisCardCopy.style.zIndex = x; /* Set a higher z-index to place it on top of the fullscreen image */
+            x -= 1;
             document.body.appendChild(provadisCardCopy);
             return  provadisCardCopy
         }
 
-        function CardThrowCroupier(){
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
+        function CardThrowCroupier() {
+            setCard(cardClub);
+            var provadisCardCopy = createProvadisCard();
+            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease';
+            provadisCardCopy.style.top = '12.5%';
+            provadisCardCopy.style.left = '41.75%';
             setTimeout(function() {
                 provadisCardCopy.style.top = '12.5%';
-                provadisCardCopy.style.left = '53.25%';
-            }, 1000); // Delay before translation in milliseconds
+                provadisCardCopy.style.left = parseFloat('50.25%') + cardOffset + '%';
+
+            }, 1000);
         }
         function CardThrowPlayer1() {
+            setCard(cardHeart);
             var provadisCardCopy = createProvadisCard()
             provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
             provadisCardCopy.style.top = '12.5%'; // New position for top
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
-                provadisCardCopy.style.top = '10.75%';
+                provadisCardCopy.style.top = parseFloat('8.75%') + cardOffset + '%';
                 provadisCardCopy.style.left = '85.75%';
+                cardOffset+=1.5;
                 setTimeout(function() {
                     provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                 }, 10); // Delay before applying rotation in milliseconds
@@ -79,13 +262,15 @@
         }
 
         function CardThrowPlayer2() {
+            setCard(cardDiamond);
             var provadisCardCopy = createProvadisCard()
             provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
             provadisCardCopy.style.top = '12.5%'; // New position for top
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
-                provadisCardCopy.style.top = '48%';
+                provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
                 provadisCardCopy.style.left = '85.75%';
+                cardOffset+=1.5;
                 setTimeout(function() {
                     provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                 }, 10); // Delay before applying rotation in milliseconds
@@ -99,7 +284,7 @@
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
                 provadisCardCopy.style.top = '82.75%';
-                provadisCardCopy.style.left = '73%';
+                provadisCardCopy.style.left = parseFloat('70%') + cardOffset + '%';
             }, 1000); // Delay before translation in milliseconds
         }
 
@@ -110,7 +295,7 @@
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
                 provadisCardCopy.style.top = '82.75%';
-                provadisCardCopy.style.left = '48%';
+                provadisCardCopy.style.left = parseFloat('45%') + cardOffset + '%';
             }, 1000); // Delay before translation in milliseconds
         }
 
@@ -121,7 +306,7 @@
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
                 provadisCardCopy.style.top = '82.75%';
-                provadisCardCopy.style.left = '21%';
+                provadisCardCopy.style.left = parseFloat('18%') + cardOffset + '%';
             }, 1000); // Delay before translation in milliseconds
         }
 
@@ -131,7 +316,7 @@
             provadisCardCopy.style.top = '12.5%'; // New position for top
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
-                provadisCardCopy.style.top = '48%';
+                provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
                 provadisCardCopy.style.left = '9.25%';
                 setTimeout(function() {
                     provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
@@ -145,7 +330,7 @@
             provadisCardCopy.style.top = '12.5%'; // New position for top
             provadisCardCopy.style.left = '41.75%'; // New position for left
             setTimeout(function() {
-                provadisCardCopy.style.top = '10.75%';
+                provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset + '%';
                 provadisCardCopy.style.left = '9.25%';
                 setTimeout(function() {
                     provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
@@ -153,28 +338,47 @@
             }, 1000); // Delay before translation in milliseconds
         }
 
-        CardThrowCroupier();
-        setTimeout(function() {
-            CardThrowPlayer1();
-        }, 500);
-        setTimeout(function() {
-            CardThrowPlayer2();
-        }, 1000);
-        setTimeout(function() {
-            CardThrowPlayer3();
-        }, 1500);
-        setTimeout(function() {
-            CardThrowPlayer4();
-        }, 2000);
-        setTimeout(function() {
-            CardThrowPlayer5();
-        }, 2500);
-        setTimeout(function() {
-            CardThrowPlayer6();
-        }, 3000);
-        setTimeout(function() {
-            CardThrowPlayer7();
-        }, 3500);
+
+        const delay = 500; // Delay between each action
+        function dealCardsfirstRound(playerCount) {
+            const players = Array.from({ length: playerCount }, (_, i) => `Player${i + 1}`);
+
+            players.forEach((player, index) => {
+                setTimeout(function () {
+                    const currentPlayer = window[`CardThrow${player}`];
+                    currentPlayer();
+
+                    if (player === `Player${players.length}`) {
+                        setTimeout(function () {
+                            CardThrowCroupier();
+
+                            setTimeout(function () {
+                                players.forEach((player, index) => {
+                                    setTimeout(function () {
+                                        const currentPlayer = window[`CardThrow${player}`];
+                                        currentPlayer();
+                                    }, index * delay);
+                                });
+                            }, delay);
+                        }, delay);
+                    }
+                }, index * delay);
+            });
+        }
+
+
+            if({{ check }}){
+                shuffleDeck()
+                createDeckCard()
+                resetCard()
+                dealCardsfirstRound(3);
+            }
+
+
+
+
+
+
 
     </script>
 </body>
