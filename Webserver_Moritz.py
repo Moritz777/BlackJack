@@ -76,7 +76,7 @@ def admin():
 def registrierung():
 
     if request.method == 'POST':
-        if request.form["btn"]=="Back":
+        if request.form["btn"] == "Back":
             return redirect('/')
         username = request.form.get('username')
         first_name = request.form.get('first_name')
