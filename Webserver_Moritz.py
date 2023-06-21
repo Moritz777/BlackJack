@@ -34,6 +34,7 @@ def index():
 
     if request.method == 'POST':
         username = request.form.get('username')
+        print(session.get('username'))
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
             if db_connection.check_blocked(username):
@@ -166,7 +167,8 @@ def personal_lobby(host_name):
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            return redirect(f'/game_template/{host_name}')
+            abc = input("gebe etwas ein")
+            return render_template(f'/game_template/{host_name}')
 
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
@@ -182,13 +184,13 @@ def personal_lobby(host_name):
 
     return render_template('users.html', players = players, Host = host_name)
 
+
 #----------------------- SocketIO ----------------------------------------
 
-# @socketio.on('connect')
-# def handle_connect()
-#     name = session.get('name')
-#     online_users.append(name)
-#     emit('user_update', online_users, broadcast=True)
+@socketio.on('connect')
+def handle_connect():
+    username = session.get('username')
+    emit('connect', username=username, broadcast="True")
 #
 #
 # @socketio.on('disconnect')
