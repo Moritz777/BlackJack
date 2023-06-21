@@ -186,8 +186,9 @@ def handle_connect():
     # else:
     #     lobbies_test[hostname].append(username)
     lobbies_test[hostname].append(username)
-
     print(lobbies_test)
+    users_list = lobbies_test[hostname]
+    emit('user_update', users_list, broadcast=True)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -197,7 +198,10 @@ def handle_disconnect():
     print(username, ' disconnected from Lobby: ', hostname)
 
     lobbies_test[hostname].remove(username)
+
     print(lobbies_test)
+    users_list = lobbies_test[hostname]
+    emit('user_update', users_list, broadcast=True)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
