@@ -9,7 +9,37 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <title>Online Users</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.min.js"></script>
-    <script src="/static/socket.io.js"></script>
+   <script>
+    // Verbindung zum WebSocket-Server herstellen
+    var socket = io();
+
+    // Ereignis 'user_update' empfangen und die Liste aktualisieren
+    socket.on('user_update', function(users_list) {
+    console.log('Aktualisierte Lobbies:', users_list);
+
+    // Ungeordnete Liste leeren
+    const lobbiesList = document.getElementById('lobbies-list');
+    lobbiesList.innerHTML = '';
+
+    // Spieler in die Liste einfügen
+    users_list.forEach(function(player) {
+      const listItem = document.createElement('li');
+      listItem.textContent = player;
+      lobbiesList.appendChild(listItem);
+    });
+    });
+    // Verbindungsereignis behandeln
+    socket.on('connect', function() {
+        console.log('Connected');
+    });
+
+    // Trennungsereignis behandeln
+    socket.on('disconnect', function() {
+        console.log('Disconnected');
+    });
+    </script>
+
+
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
@@ -24,11 +54,12 @@
 
 <div class="formular_container">
     <h2>In dieser Lobby befinden sich folgende Spieler:</h2>
-    {% for element in players %}
-        <li>
-            {{ element }}
-        </li>
-    {% endfor %}
+    <ul id="lobbies-list"></ul>
+<!--    {% for element in players %}-->
+<!--        <li>-->
+<!--            {{ element }}-->
+<!--        </li>-->
+<!--    {% endfor %}-->
     <br>
     <form action="/users/{{Host}}" method="POST" name="user">
         <input type="submit" value="Spiel starten" name="btn" >

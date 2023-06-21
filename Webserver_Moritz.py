@@ -175,21 +175,36 @@ def personal_lobby(host_name):
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
-    players = []
-
-    for element in users_dict["open_lobbies"][host_name]:
-        players.append(element.username)
-
-    return render_template('users.html', players = players, Host = host_name)
+    return render_template('users.html', Host = host_name)
 
 
 #----------------------- SocketIO ----------------------------------------
 
 @socketio.on('connect')
-def handle_connect(connect):
+def handle_connect():
+    # Verbindungsereignis behandeln
     username = session.get('username')
-    print("socket läuft")
-    emit('connect', connect, broadcast=True)
+    host_name = request.referrer.split('//')[-1].split('/')[-1]
+    print(username, ' connected to Lobby: ', host_name)
+    print(players)
+
+    players.append(username)
+
+    users_list = players
+    print(users_list)
+
+    emit('user_update', users_list, broadcast=True)
+
+# @socketio.on('disconnect')
+# def handle_disconnect():
+#     # Trennungsereignis behandeln
+#     username = session.get('username')
+#     hostname = request.referrer.split('//')[-1].split('/')[-1]
+#
+#     lobbies_test[hostname].remove(username)
+#     users_list = lobbies_test[hostname]
+#
+#     emit('user_update', users_list, broadcast=True)
 
 
 if __name__ == "__main__":
