@@ -43,6 +43,7 @@ body{
         text-align: center;
         font-size: 18px;
         color: white;
+        column-rule-width: 200px;
     }
     .back-container {
         position: fixed;
@@ -55,4 +56,5 @@ body{
         justify-content: center;
         align-items: center;
     }
+
 
