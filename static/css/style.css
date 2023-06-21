@@ -1,6 +1,7 @@
 body {
     margin: 0;
 }
+/*index.html*/
     .background_image {
         height: 100vh;
         width: 100%;
@@ -10,7 +11,7 @@ body {
         align-items: center;
     }
     .headline_container {
-        position: absolute;
+        position: fixed;
         top: 30%;
         width: 100%;
         text-align: center;
@@ -27,30 +28,136 @@ body {
 
     }
     .back-container {
-      position: absolute;
-      left: 64px;
-      top: 350px;
-      font-size: 14px;
-      color: deeppink;
+      position: fixed;
+        padding: 3px;
+        top: 70%;
+        left: 41.5%;
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+
+    /*Rechteckigerschwarzer Hintergrund*/
     .square {
         position: absolute;
         width: 100%;
         height: 100vh;
+
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .side {
         position: absolute;
-        width: 50%;
+        width: 40%;
         height: 50%;
-        background-color: rgba(0, 255, 167, 0.48);
+        border-radius: 5%;
+        background-color: rgba(0, 0, 0, 0.68);
         border: 1px solid black;
     }
+/*index.html*/
+    .lbl_usname {
+        position: fixed;
+        top: 38%;
+        left: 35%;
 
-    .button_posis {
-        position: absolute;
-        top: 100%;
-        left: 45%;
+        text-align: center;
     }
+    .lbl_pass {
+        position: fixed;
+        top: 45%;
+        left: 35%;
+
+        text-align: center;
+    }
+
+    .inp_usname {
+        position: fixed;
+        padding: 3px;
+        top: 38%;
+        left: 45%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .inp_pass {
+        position: fixed;
+        padding: 3px;
+        top: 45%;
+        left: 45%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button_anmelden {
+        position: fixed;
+        top: 51%;
+        left: 46.8%;
+        padding: 12px 32px;
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .button_registriren {
+        position: fixed;
+        top: 58%;
+        left: 46.8%;
+        padding: 12px 25.5px;
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    /*startPage.html*/
+    .formular_container {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+    }
+    .btnran_game {
+        position: fixed;
+        cursor: pointer;
+        padding-inline: 0.5%;
+        top: 47%;
+        left: 43.9%;
+        display: flex;
+        justify-content: center;
+    }
+    .btnhost_game {
+        position: fixed;
+        padding-inline: 3.35%;
+        top: 52%;
+        left: 43.9%;
+        display: flex;
+        justify-content: center;
+    }
+    .btnjoin_game {
+        position: fixed;
+        padding-inline: 2.9%;
+        cursor: pointer;
+        top: 57%;
+        left: 43.9%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .back-container_startP{
+        position: fixed;
+        cursor: pointer;
+        top: 70%;
+        left: 48.2%;
+        display: flex;
+        justify-content: center;
+    }
+

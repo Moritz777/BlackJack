@@ -31,6 +31,9 @@
 <body>
     <img id="background-img" src="/static/Black_Jack_Grafiken/Spielfeld/Spielfeld_3.png" alt="Spielfeld">
     <img id="provadis-card" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite.png" alt="Provadis Card">
+
+    <h1>HI WAS GEHT</h1>
+
     <script>
         function fetchData() {
             fetch('/game_template')
@@ -44,8 +47,9 @@
                     console.error('Error:', error);
                 });
         }
-
-        fetchData();
+        console.log({{data1}});
+        console.log({{data2}});
+        console.log({{data3}});
         function createProvadisCard(){
             var provadisCard = document.getElementById('provadis-card');
             var provadisCardCopy = new Image();
