@@ -115,12 +115,11 @@ def game():
         #Restart per Button
 
         print("h")
-        check = 
         #current_card = get_card()
 
         #data2 = draw()
         #data3 = deal()
-        return render_template('game_template.html',check=True)
+        return render_template('game_template.html',check="True")
 
     # Render the game template initially
     return render_template('game_template.html')
