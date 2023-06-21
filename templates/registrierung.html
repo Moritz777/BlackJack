@@ -33,14 +33,14 @@
 
     <input type="submit" value="Registrieren">
   </form>
+  <form method="POST" action="/registrierung">
+    <input type="submit" value="Zum Login" name="btn">
+  </form>
   {% if error_message %}
   <p style="color: red;">{{ error_message }}</p>
   {% endif %}
 </div>
 
-<div class="back-container">
-  <a href="/">Zurück zum Login</a>
-</div>
 
 </body>
 </html>

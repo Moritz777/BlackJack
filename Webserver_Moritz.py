@@ -76,11 +76,12 @@ def admin():
 def registrierung():
 
     if request.method == 'POST':
-
+        if request.form["btn"]=="Back":
+            return redirect('/')
         username = request.form.get('username')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
-        birthday = request.form.get('birthdaytime')
+        birthday = request.form.get('birthday')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
         age = (today.year - birthday_object.year)
