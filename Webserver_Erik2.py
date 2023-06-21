@@ -109,7 +109,7 @@ def random_session():
 
         if request.form['btn'] == 'Spiel hosten':
             #users_dict["open_lobbies"][username]=[Player(username)]
-            lobbies_test[username] = [username]
+            lobbies_test[username] = []
             print(lobbies_test)
             return redirect(f'/users/{username}')
 
@@ -132,7 +132,6 @@ def lobbies():
         for element in lobbies:
             if request.form['btn'] == f"{element} beitreten":
                 #users_dict["open_lobbies"][element].append(users_dict[username])
-                lobbies_test[element].append(username)
                 return redirect(f'/users/{element}')
     return render_template('lobby_list.html', lobbies=lobbies)
 
@@ -179,16 +178,26 @@ def personal_lobby(hostname):
 def handle_connect():
     # Verbindungsereignis behandeln
     username = session.get('username')
-    print(username + 'connected')
+    hostname = request.referrer.split('//')[-1].split('/')[-1]
+    print(username, ' connected to Lobby: ', hostname)
+
+    # if hostname not in lobbies_test.keys():
+    #     lobbies_test[username] = [username]
+    # else:
+    #     lobbies_test[hostname].append(username)
+    lobbies_test[hostname].append(username)
+
+    print(lobbies_test)
 
 @socketio.on('disconnect')
 def handle_disconnect():
     # Trennungsereignis behandeln
     username = session.get('username')
     hostname = request.referrer.split('//')[-1].split('/')[-1]
-    print('Disconnected from: ', hostname)
-    print(username + 'disconnected')
+    print(username, ' disconnected from Lobby: ', hostname)
 
+    lobbies_test[hostname].remove(username)
+    print(lobbies_test)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
