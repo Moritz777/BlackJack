@@ -390,6 +390,12 @@ def main_test(player_list):
             player_hand.add_card(deck.deal())
 
 
+'''
+def return_card(i):
+    return player_hand.cards[i]
+'''
+
+
 def main_eymen():
     while True:
         # Create & shuffle the deck
@@ -399,21 +405,23 @@ def main_eymen():
         # deal one card to the player
         player_hand = Hand()
         player_hand.add_card(deck.deal())
-
+        print(player_hand.cards[0])
+        player_hand.add_card(deck.deal())
+        print(player_hand.cards[1])
+        player_hand.adjust_for_ace()
+        i_player = 1
+        '''
+        for i in range(0, i_player):
+            return_card(i)
+        '''
         # needed for show_cards to work
         dealer_hand = Hand()
         dealer_hand.add_card(deck.deal())
 
-        print(player_hand.cards[0])
         show_cards(player_hand, dealer_hand)
 
         input('Halt Stop')
         return player_hand.cards[0]
-        '''
-        player_hand.add_card(deck.deal())
-        player_hand.adjust_for_ace()
-        i_player = 1
-        '''
 
 
 if __name__ == '__main__':
