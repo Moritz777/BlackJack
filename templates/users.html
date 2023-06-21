@@ -30,14 +30,13 @@
 </div>
 
 <div class="headline_container">
-    <p>Herzlich willkommen in der Lobby von {{ Host }}</p>
-    <h1>Herzlich willkommen in der Lobby von {{ Host }}</h1>
+    <h1 class="hello_in_lobby">Herzlich willkommen in der Lobby von {{ Host }}</h1>
 </div>
 
 <div class="formular_container">
-    <h2>In dieser Lobby befinden sich folgende Spieler:</h2>
+    <h2 class="there_player_lobby">In dieser Lobby befinden sich folgende Spieler:</h2>
     {% for element in players %}
-        <li>
+        <li class="player_list">
             {{ element }}
         </li>
     {% endfor %}
