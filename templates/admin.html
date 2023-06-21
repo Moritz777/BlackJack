@@ -32,10 +32,6 @@
     </script>
 </head>
 <body>
-
-    <div class="square">
-        <div class="side"></div>
-    </div>
     <h1>Admin Bereich</h1>
     <form action="/admin" method="POST" name="login">
         <input type="text" id="searchInput" name="searchInput" placeholder="Spielername eingeben" onkeyup="searchTable()">
@@ -50,7 +46,7 @@
             <p style="color: #08ff00;">{{ message }}</p>
         {% endif %}
     </div>
-    <div class="administration_tab">
+    <div>
         <table id="userTable">
             <thead>
                 <tr>
@@ -76,6 +72,5 @@
             </tbody>
         </table>
     </div>
-
 </body>
 </html>
