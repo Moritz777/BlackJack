@@ -396,6 +396,9 @@ def main():
         # greeting the player
         greet_player()
 
+        # Set up the Player's chips and prompt the Player for their bet
+        player_chips = take_player_bet()
+
         # Create & shuffle the deck
         deck = shuffle_deck()
 
@@ -404,9 +407,6 @@ def main():
 
         # deal one card to the dealer
         dealer_hand, i_dealer = deal_dealer_card(deck)
-
-        # Set up the Player's chips and prompt the Player for their bet
-        player_chips = take_player_bet()
 
         # Show cards
         show_cards(player_hand, dealer_hand)
@@ -438,40 +438,27 @@ def main():
 
 def main_test(player_list):
     player_count = len(player_list)
-    while True:
-        global playing
+    deck = shuffle_deck()
 
-        deck = Deck()
-        deck.shuffle()
-
-        for player in range(0, player_count):
-            player_hand = Hand()
-            player_hand.add_card(deck.deal())
+    for player in range(0, player_count):
+        deal_player_cards(deck)
 
 
 def main_eymen():
     while True:
         # Create & shuffle the deck
-        deck = Deck()
-        deck.shuffle()
+        deck = shuffle_deck()
 
-        # deal one card to the player
+        # deal two cards to the player and adjust for ace
         player_hand = Hand()
         player_hand.add_card(deck.deal())
         print(player_hand.cards[0])
         player_hand.add_card(deck.deal())
         print(player_hand.cards[1])
         player_hand.adjust_for_ace()
-        i_player = 1
-
-        # needed for show_cards to work
-        dealer_hand = Hand()
-        dealer_hand.add_card(deck.deal())
-
-        show_cards(player_hand, dealer_hand)
 
         input('Halt Stop')
-        return player_hand.cards[0]
+        return player_hand.cards
 
 
 if __name__ == '__main__':
