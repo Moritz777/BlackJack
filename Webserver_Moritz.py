@@ -29,7 +29,6 @@ def index():
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
-        print(session.get('username'))
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
             if username not in list(users_dict.keys()):
@@ -40,12 +39,8 @@ def login():
                     return redirect('/admin')
                 session['username'] = username
                 users_dict[username] = {}
-                print(users_dict)
                 session['username'] = username
-                print(list(users_dict.keys()))
                 return redirect('/startPage')
-
-            print("schon eingeloggt")
             return redirect('/registrierung')
 
 
@@ -97,7 +92,6 @@ def registrierung():
             return render_template('registrierung.html', error_message="Der Username ist bereits vergeben")
         else:
             birthday_formatted = birthday_object.strftime('%Y-%m-%d')
-            print(birthday_formatted)
             new_user = User(username, hashed_password, first_name, last_name, birthday_formatted)
             flash("Registrierung erfolgreich, bitte melden Sie sich an")
             return redirect("/")
@@ -117,13 +111,12 @@ def random_session():
             return redirect('/game_template')
 
         if request.form['btn'] == 'Spiel hosten':
-            users_dict["open_lobbies"][username]=[Player(username)]
+            users_dict["open_lobbies"][username]=[]
             return redirect(f'/users/{username}')
 
         if request.form['btn'] == 'Spiel beitreten':
             return redirect('/lobby_list')
 
-    print(users_dict[username].credit)
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
@@ -157,21 +150,17 @@ def lobbies():
 
         for element in lobbies:
             if request.form['btn'] == f"{element} beitreten":
-                users_dict["open_lobbies"][element].append(users_dict[username])
                 return redirect(f'/users/{element}')
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
 @app.route('/users/<host_name>',methods=['POST', 'GET'])
 def personal_lobby(host_name):
-    print(users_dict)
 
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            abc = input("gebe etwas ein")
             return render_template(f'/game_template/{host_name}')
-
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
@@ -185,26 +174,24 @@ def handle_connect():
     # Verbindungsereignis behandeln
     username = session.get('username')
     host_name = request.referrer.split('//')[-1].split('/')[-1]
-    print(username, ' connected to Lobby: ', host_name)
-    print(players)
-
-    players.append(username)
-
-    users_list = players
-    print(users_list)
+    users_dict["open_lobbies"][host_name].append(users_dict[username].username)
+    player_list = users_dict['open_lobbies'][host_name]
+    users_list = []
+    for element in player_list:
+        users_list.append(element)
 
     emit('user_update', users_list, broadcast=True)
 
-# @socketio.on('disconnect')
-# def handle_disconnect():
-#     # Trennungsereignis behandeln
-#     username = session.get('username')
-#     hostname = request.referrer.split('//')[-1].split('/')[-1]
-#
-#     lobbies_test[hostname].remove(username)
-#     users_list = lobbies_test[hostname]
-#
-#     emit('user_update', users_list, broadcast=True)
+@socketio.on('disconnect')
+def handle_disconnect():
+    # Trennungsereignis behandeln
+    username = session.get('username')
+    hostname = request.referrer.split('//')[-1].split('/')[-1]
+
+    lobbies_test[hostname].remove(username)
+    users_list = lobbies_test[hostname]
+
+    emit('user_update', users_list, broadcast=True)
 
 
 if __name__ == "__main__":
