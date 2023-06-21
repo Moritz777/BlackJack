@@ -140,45 +140,14 @@ def lobbies():
 @app.route('/users/<hostname>')
 def personal_lobby(hostname):
 
-    username = session.get('username')
-    print(hostname)
-    #if hostname not in lobbies_test:    # Der Host erstellt und fügt sich hinzu
-        #lobbies_test[hostname] = [hostname]
-        #print(lobbies_test)
-    #else:
-       # lobbies_test[hostname].append(username)
-        #print(lobbies_test)
-    # onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
-
-    # @socketio.on('connect')
-    # def handle_connect():
-    #     onlineUsersList.append(users_dict["open_lobbies"][irgendeine_variable])
-
-    # emit('user_update', broadcast=True)
-
-    # print(irgendeine_variable)
-    #
-    # players = []
-    #
-    # print(users_dict)
-    #
-    # for element in users_dict["open_lobbies"][irgendeine_variable]:
-    #     players.append(element.username)
-    #
-    # print(players)
-
-    current_players = []
-    for curr_player in lobbies_test[hostname]:
-        current_players.append(curr_player)
-
-    return render_template('users.html', current_players=current_players, hostname=hostname)
+    return render_template('users.html', current_players=lobbies_test[hostname], hostname=hostname)
 
 
 @socketio.on('connect')
 def handle_connect():
     # Verbindungsereignis behandeln
     username = session.get('username')
-    hostname = request.referrer.split('//')[-1].split('/')[-1]
+    hostname = request.referrer.split('/')[-1]
     print(username, ' connected to Lobby: ', hostname)
 
     # if hostname not in lobbies_test.keys():
@@ -194,12 +163,15 @@ def handle_connect():
 def handle_disconnect():
     # Trennungsereignis behandeln
     username = session.get('username')
-    hostname = request.referrer.split('//')[-1].split('/')[-1]
+    hostname = request.referrer.split('/')[-1]
     print(username, ' disconnected from Lobby: ', hostname)
 
     lobbies_test[hostname].remove(username)
-
     print(lobbies_test)
+    if username == hostname:
+        del lobbies_test[hostname]
+        print(lobbies_test)
+        return
     users_list = lobbies_test[hostname]
     emit('user_update', users_list, broadcast=True)
 
