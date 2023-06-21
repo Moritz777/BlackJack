@@ -12,7 +12,6 @@ body{
 
         /*Rechteckigerschwarzer Hintergrund*/
     .square {
-        z-index: -1;
         position: absolute;
         width: 100%;
         height: 100vh;
@@ -29,15 +28,17 @@ body{
         border-radius: 5%;
         background-color: rgba(0, 0, 0, 0.68);
         border: 1px solid black;
+
     }
 
 .administration_tab {
     position: fixed;
-    background: rgb(255, 255, 255);
-    background-size: auto;
+    height: 100%;
     width: 100%;
+
     display: flex;
     justify-content: center;
     align-items: center;
-
+    border-collapse: collapse;
+    outline: 1px solid #f00
 }
