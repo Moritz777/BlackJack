@@ -22,7 +22,6 @@ def index():
     if 'username' not in session:
             return redirect('/login')
 
-
     return render_template('index.html')
 
 
@@ -176,11 +175,7 @@ def personal_lobby(host_name):
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
-    username = session.get('username')
-    onlineUsersList = users_dict["open_lobbies"][host_name]
-
     players = []
-
 
     for element in users_dict["open_lobbies"][host_name]:
         players.append(element.username)
@@ -191,19 +186,10 @@ def personal_lobby(host_name):
 #----------------------- SocketIO ----------------------------------------
 
 @socketio.on('connect')
-def handle_connect():
+def handle_connect(connect):
     username = session.get('username')
-    emit('connect', username=username, broadcast="True")
-#
-#
-# @socketio.on('disconnect')
-# def handle_disconnect()
-#     name = session.get('name')
-#     if name in online_users
-#         online_users.remove(name)
-#     emit('user_update', online_users, broadcast=True)
-
-#----------------------------------------------------------------------------
+    print("socket läuft")
+    emit('connect', connect, broadcast=True)
 
 
 if __name__ == "__main__":
