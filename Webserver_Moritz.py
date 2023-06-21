@@ -1,4 +1,3 @@
-import asyncio
 import random
 from datetime import date, datetime
 
@@ -57,7 +56,6 @@ def index():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     users_information = db_connection.get_all_players()
-
     if request.method == 'POST':
         for user in users_information:
             username = user[0]
@@ -126,7 +124,7 @@ def random_session():
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
-@app.route('/game_template', methods=['GET', 'POST'])
+@app.route('/game_template/<host_name>', methods=['GET', 'POST'])
 def game():
 
     if request.method == 'POST':
@@ -161,36 +159,47 @@ def lobbies():
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
-@app.route('/users/<irgendeine_variable>',methods=['POST', 'GET'])
-def personal_lobby(irgendeine_variable):
+@app.route('/users/<host_name>',methods=['POST', 'GET'])
+def personal_lobby(host_name):
 
-    print(users_dict)
-
-    def user_input():
-        userinput = input("Gib etwas ein")
 
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            userinput = input("Gib etwas ein")
-            return render_template('game_template.html',user_input())
-
-
+            return redirect(f'/game_template/{host_name}')
 
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
     username = session.get('username')
-    onlineUsersList = users_dict["open_lobbies"][irgendeine_variable]
+    onlineUsersList = users_dict["open_lobbies"][host_name]
 
     players = []
 
 
-
-    for element in users_dict["open_lobbies"][irgendeine_variable]:
+    for element in users_dict["open_lobbies"][host_name]:
         players.append(element.username)
 
-    return render_template('users.html', players = players, Host = irgendeine_variable)
+    return render_template('users.html', players = players, Host = host_name)
+
+#----------------------- SocketIO ----------------------------------------
+
+# @socketio.on('connect')
+# def handle_connect()
+#     name = session.get('name')
+#     online_users.append(name)
+#     emit('user_update', online_users, broadcast=True)
+#
+#
+# @socketio.on('disconnect')
+# def handle_disconnect()
+#     name = session.get('name')
+#     if name in online_users
+#         online_users.remove(name)
+#     emit('user_update', online_users, broadcast=True)
+
+#----------------------------------------------------------------------------
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
