@@ -125,11 +125,10 @@ def random_session():
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
-@app.route('/game_template/<host_name>', methods=['GET', 'POST'])
+@app.route('/game_template', methods=['GET', 'POST'])
 def game():
-
     if request.method == 'POST':
-        pass
+
 
     return render_template('game_template.html')
 
