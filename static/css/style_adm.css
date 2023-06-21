@@ -20,6 +20,7 @@ body{
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: 2;
     }
     .side {
         position: absolute;
@@ -29,16 +30,24 @@ body{
         background-color: rgba(0, 0, 0, 0.68);
         border: 1px solid black;
 
+        z-index: 2;
     }
 
 .administration_tab {
     position: fixed;
     height: 100%;
     width: 100%;
-
     display: flex;
     justify-content: center;
     align-items: center;
     border-collapse: collapse;
-    outline: 1px solid #f00
+    overflow: auto;
+
+    z-index: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    z-index: 3;
 }
