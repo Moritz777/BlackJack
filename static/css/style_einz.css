@@ -1,0 +1,60 @@
+body{
+    margin: 0;
+}
+    .background_image {
+        height: 100vh;
+        width: 100%;
+        object-fit: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+        /*Rechteckigerschwarzer Hintergrund*/
+    .square {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .side {
+        position: absolute;
+        width: 40%;
+        height: 50%;
+        border-radius: 5%;
+        background-color: rgba(0, 0, 0, 0.68);
+        border: 1px solid black;
+    }
+
+    .headline_container {
+        position: fixed;
+        top: 30%;
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        color: white;
+    }
+    .formular_container {
+        position: absolute;
+        top: 45%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+        column-rule-width: 200px;
+    }
+    .back-container {
+        position: fixed;
+        padding: 3px;
+        top: 70%;
+        left: 41.5%;
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
