@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_socketio import emit
 import db_connection
@@ -39,7 +39,7 @@ def login():
                     return redirect('/admin')
                 session['username'] = username
                 users_dict[username] = {}
-                session['username'] = username
+                # session['username'] = username
                 return redirect('/startPage')
             return redirect('/registrierung')
 
@@ -173,25 +173,34 @@ def personal_lobby(host_name):
 def handle_connect():
     # Verbindungsereignis behandeln
     username = session.get('username')
-    host_name = request.referrer.split('//')[-1].split('/')[-1]
+    host_name = request.referrer.split('/')[-1]
     users_dict["open_lobbies"][host_name].append(users_dict[username].username)
-    player_list = users_dict['open_lobbies'][host_name]
-    users_list = []
-    for element in player_list:
-        users_list.append(element)
+    users_list = users_dict['open_lobbies'][host_name]
+    # users_list = []
+    # for element in player_list:
+    #     users_list.append(element)
 
-    emit('user_update', users_list, broadcast=True)
+    join_room(host_name)
+    print(username, " connected to Lobby: ", host_name)
+    print(users_dict["open_lobbies"])
+    emit('user_update', users_list, room=host_name)
 
 @socketio.on('disconnect')
 def handle_disconnect():
     # Trennungsereignis behandeln
     username = session.get('username')
-    hostname = request.referrer.split('//')[-1].split('/')[-1]
+    host_name = request.referrer.split('/')[-1]
 
-    lobbies_test[hostname].remove(username)
-    users_list = lobbies_test[hostname]
+    users_dict["open_lobbies"][host_name].remove(username)
+    users_list = users_dict["open_lobbies"][host_name]
 
-    emit('user_update', users_list, broadcast=True)
+    if username == host_name:
+        del users_dict["open_lobbies"][host_name]
+
+    leave_room(host_name)
+    print(username, " disconnected from Lobby: ", host_name)
+    print(users_dict["open_lobbies"])
+    emit('user_update', users_list, room=host_name)
 
 
 if __name__ == "__main__":
