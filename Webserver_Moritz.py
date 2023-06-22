@@ -56,7 +56,21 @@ def admin():
     users_information = db_connection.get_all_players()
     if request.method == 'POST':
         username = request.form.get('searchInput')
-        if request.form['btn']=='Entblocken':
+
+        for element in users_information:
+            if request.form['btn'] == f"{element[0]} blocken":
+                db_connection.update_block_status(element[0], 'True')
+                users_information = db_connection.get_all_players()
+                error_message = element[0] + ' wurde geblockt.'
+                return render_template('admin.html', users_information=users_information, error_message=error_message)
+
+            if request.form['btn'] == f"{element[0]} entblocken":
+                db_connection.update_block_status(element[0], 'False')
+                users_information = db_connection.get_all_players()
+                error_message = element[0] + ' wurde entblockt.'
+                return render_template('admin.html', users_information=users_information, error_message=error_message)
+
+        if request.form['btn']=='entblocken':
             db_connection.update_block_status(username, 'False')
             users_information = db_connection.get_all_players()
             error_message = username + ' wurde entblockt.'
