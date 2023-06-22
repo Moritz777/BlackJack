@@ -97,9 +97,9 @@
     <button id="start_button" onclick="runProgram()">
         Start game
     </button>
-    <button id="start_button" onclick="hideElements()">
-        hide test
-    </button>
+{#    <button id="start_button" onclick="hideElements()">#}
+{#        hide test#}
+{#    </button>#}
     <p id="player_turn_box"></p>
     <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
@@ -476,6 +476,7 @@
                 startButton.style.display = "none";
             }
             function runProgram(){
+                hideElements()
                 startButtonDisappear()
                 shuffleDeck()
                 createDeckCard()
@@ -486,6 +487,16 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
+
+            const startseite1 = document.getElementById("startseite")
+            const startGame1 = document.getElementById("start_game")
+
+            startGame1.addEventListener('click', function(){
+                startseite1.style.left = '10%'
+                startseite1.style.top = '10%'
+            })
+
+
         </script>
 
 <div id="Sbox" class="square">
@@ -506,12 +517,12 @@
 {#    {% endfor %}#}
     <br>
     <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">
+{#        <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">#}
     </form>
 </div>
 <div class="back-container">
     <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
+        <input id="startseite" type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
     </form>
 </div>
 
