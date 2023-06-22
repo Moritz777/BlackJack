@@ -45,16 +45,16 @@
     </style>
 </head>
 <body>
-    <button id="hit_button" onclick="" disabled>
+    <button id="hit_button" onclick="CardThrowPlayer1()" disabled>
         Hit
     </button>
-    <button id="stand_button" onclick="NextPlayer()">
+    <button id="stand_button" onclick="NextPlayer()" disabled>
         Stand
     </button>
     <button id="start_button" onclick="runProgram()">
         Start game
     </button>
-    <p id="player_turn"></p>
+    <p id="player_turn_box"></p>
     <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
     </form>-->
@@ -92,35 +92,38 @@
             const totalPlayers = 7
             var currentPlayer = 1
 
+            var hitButton = document.getElementById("hit_button");
+            var standButton = document.getElementById("stand_button");
+
             function NextPlayer() {
+                currentPlayer++;
+
+                var nextFunctionName = "CardThrowPlayer" + currentPlayer;
+                // Increment the currentPlayer
+
                 // Check if currentPlayer exceeds the total number of players
-                var playerTurnElement = document.getElementById("player_turn");
-                var hitButton = document.getElementById("hit_button");
+                var playerTurnElement = document.getElementById("player_turn_box");
+
                 if (currentPlayer > totalPlayers) {
                     playerTurnElement.textContent = "Round is Over";
-                    var standButton = document.getElementById("stand_button");
                     standButton.disabled = true;
                     hitButton.disabled = true;
-                }
 
-                // Get the name of the next player function
-                var nextFunctionName = "CardThrowPlayer" + currentPlayer;
+                    return
+                }
 
                 // Display the current player's turn
                 playerTurnElement.textContent = "Player " + currentPlayer + " Turn";
-
-                // Increment the currentPlayer
-                currentPlayer++;
 
                 // Update the onclick attribute of the hit button with the new function call
 
                 hitButton.setAttribute("onclick", nextFunctionName + "()");
 
-                // Enable the hit button after the first time NextPlayer is clicked
-                if (isFirstTime) {
-                    hitButton.disabled = false;
-                    isFirstTime = false;
-                }
+            }
+
+            function enableButton(){
+                standButton.disabled = false;
+                hitButton.disabled = false;
             }
             function getRandomCard() {
                 // Randomly select a rank and suit
@@ -277,7 +280,7 @@
                     provadisCardCopy.style.top = '12.5%';
                     provadisCardCopy.style.left = parseFloat('50.25%') + cardOffset + '%';
 
-                }, 1000);
+                }, delay);
             }
             function CardThrowPlayer1() {
                 const randomCard = getRandomCard();
@@ -293,7 +296,7 @@
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowPlayer2() {
@@ -310,7 +313,7 @@
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowPlayer3() {
@@ -323,7 +326,7 @@
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
                     provadisCardCopy.style.left = parseFloat('70%') + cardOffset + '%';
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowPlayer4() {
@@ -336,7 +339,7 @@
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
                     provadisCardCopy.style.left = parseFloat('45%') + cardOffset + '%';
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowPlayer5() {
@@ -349,7 +352,7 @@
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
                     provadisCardCopy.style.left = parseFloat('18%') + cardOffset + '%';
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowPlayer6() {
@@ -365,7 +368,7 @@
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowPlayer7() {
@@ -381,7 +384,7 @@
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
-                }, 1000); // Delay before translation in milliseconds
+                }, delay); // Delay before translation in milliseconds
             }
 
             function CardThrowRandomFix(){
@@ -390,7 +393,7 @@
             }
 
 
-            const delay = 500; // Delay between each action
+            const delay = 100; // Delay between each action
             function dealCardsfirstRound(playerCount) {
                 const players = Array.from({ length: playerCount }, (_, i) => `Player${i + 1}`);
 
@@ -419,16 +422,22 @@
             }
 
             function showFirstPlayer(){
-                var playerTurnElement = document.getElementById("player_turn");
+                var playerTurnElement = document.getElementById("player_turn_box");
                 playerTurnElement.textContent = "Player " + currentPlayer + " Turn";
             }
+            function startButtonDisappear(){
+                var startButton = document.getElementById("start_button");
+                startButton.style.display = "none";
+            }
             function runProgram(){
+                startButtonDisappear()
                 shuffleDeck()
                 createDeckCard()
                 resetCard()
                 dealCardsfirstRound(totalPlayers)
                 setTimeout(function () {
                     showFirstPlayer()
+                    enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
 
             }
