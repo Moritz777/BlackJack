@@ -202,6 +202,11 @@ def handle_disconnect():
     print(users_dict["open_lobbies"])
     emit('user_update', users_list, room=host_name)
 
+@socketio.on('sayHiToEveryone')
+def say_hi_to_everyone():
+    print("hi to everyone")
+    phrase = "Hi to everyone!"
+    emit('getHiFromPython', phrase, broadcast=True)
 
 if __name__ == "__main__":
     socketio.run(app, allow_unsafe_werkzeug="True", host="0.0.0.0", port="81", debug="True")

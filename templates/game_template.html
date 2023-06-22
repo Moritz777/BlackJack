@@ -78,7 +78,26 @@
     <button id="start_button" onclick="runProgram()">
         Start game
     </button>
+    <button id="start_button" onclick="sayHi()">
+    Test Erik
+    </button>
     <p id="player_turn_box"></p>
+    <p id="erik_test_box"></p>
+    <p id="erik_test_box2"></p>
+
+    <script>
+        function sayHi() {
+            var erikTestBox = document.getElementById("erik_test_box");
+            erikTestBox.textContent = "Hi";
+            socket.emit('sayHiToEveryone');
+        }
+        socket.on('getHiFromPython', function(phrase) {
+          {#console.log('Aktion empfangen:', phrase);#}
+            var erikTestBox2 = document.getElementById("erik_test_box2");
+            erikTestBox2.textContent = phrase;
+        });
+    </script>
+
     <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
     </form>-->
