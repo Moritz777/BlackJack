@@ -33,6 +33,7 @@
     <img id="provadis-card" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite.png" alt="Provadis Card">
 
     <h1>HI WAS GEHT</h1>
+    <button onclick="throwPlayerCard1ForAll()">Throw Card for All</button>
 
     {#SOCKET-TEST#}
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
@@ -40,147 +41,155 @@
     // Verbindung zum WebSocket-Server herstellen
     var socket = io();
 
-    // Verbindungsereignis behandeln
-    socket.on('connect', function() {
-        console.log('Connected');
+    function throwPlayerCard1ForAll() {
+      // Sende eine Aktion an den Server, um throwPlayerCard1 für alle Spieler auszuführen
+      socket.emit('throwPlayerCard1ForAll');
+    }
+
+    // Ereignis, um die Aktion von anderen Spielern zu empfangen
+    socket.on('playerAction', function(data) {
+      console.log('Aktion empfangen:', data);
+      for (var i = 0; i < data.length; i++) {
+        CardThrowPlayer1(data[i]); // Rufe die Funktion mit der Karte aus der Aktion auf
+      }
     });
 
-    // Trennungsereignis behandeln
-    socket.on('disconnect', function() {
-        console.log('Disconnected');
-    });
     </script>
     {#SOCKET-TEST#}
     <script>
-        function fetchData() {
-            fetch('/game_template')
-                .then(response => response.json())
-                .then(data => {
-                    // Use the received data to trigger animations or update the DOM
-                    const { x, y } = data;
-                    // Perform animations or other operations using x and y values
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-        console.log({{data1}});
-        console.log({{data2}});
-        console.log({{data3}});
-        function createProvadisCard(){
-            var provadisCard = document.getElementById('provadis-card');
-            var provadisCardCopy = new Image();
-            provadisCardCopy.src = provadisCard.src;
-            provadisCardCopy.alt = provadisCard.alt;
+    function fetchData() {
+        fetch('/game_template')
+            .then(response => response.json())
+            .then(data => {
+                // Use the received data to trigger animations or update the DOM
+                const { x, y } = data;
+                // Perform animations or other operations using x and y values
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    console.log({{data1}});
+    console.log({{data2}});
+    console.log({{data3}});
+    function createProvadisCard(){
+        var provadisCard = document.getElementById('provadis-card');
+        var provadisCardCopy = new Image();
+        provadisCardCopy.src = provadisCard.src;
+        provadisCardCopy.alt = provadisCard.alt;
 
-            provadisCardCopy.style.position = 'absolute';
-            provadisCardCopy.style.top = '10.5%'; /* Adjust top and left values to position the duplicate image */
-            provadisCardCopy.style.left = '42.75%';
-            provadisCardCopy.style.zIndex = '1'; /* Set a higher z-index to place it on top of the fullscreen image */
+        provadisCardCopy.style.position = 'absolute';
+        provadisCardCopy.style.top = '10.5%'; /* Adjust top and left values to position the duplicate image */
+        provadisCardCopy.style.left = '42.75%';
+        provadisCardCopy.style.zIndex = '1'; /* Set a higher z-index to place it on top of the fullscreen image */
 
-            document.body.appendChild(provadisCardCopy);
-            return  provadisCardCopy
-        }
+        document.body.appendChild(provadisCardCopy);
+        return  provadisCardCopy
+    }
 
-        function CardThrowCroupier(){
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
+    function CardThrowCroupier(){
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '12.5%';
+            provadisCardCopy.style.left = '53.25%';
+        }, 1000); // Delay before translation in milliseconds
+    }
+    function CardThrowPlayer1(karte) {
+        var cardValueElement = document.getElementById('cardValue');
+        cardValueElement.textContent = 'Karte: ' + karte;
+
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '10.75%';
+            provadisCardCopy.style.left = '85.75%';
             setTimeout(function() {
-                provadisCardCopy.style.top = '12.5%';
-                provadisCardCopy.style.left = '53.25%';
-            }, 1000); // Delay before translation in milliseconds
-        }
-        function CardThrowPlayer1() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
-            setTimeout(function() {
-                provadisCardCopy.style.top = '10.75%';
-                provadisCardCopy.style.left = '85.75%';
-                setTimeout(function() {
-                    provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
-                }, 10); // Delay before applying rotation in milliseconds
-            }, 1000); // Delay before translation in milliseconds
-        }
+                provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
+            }, 10); // Delay before applying rotation in milliseconds
+        }, 1000); // Delay before translation in milliseconds
+    }
 
-        function CardThrowPlayer2() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
+    function CardThrowPlayer2() {
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '48%';
+            provadisCardCopy.style.left = '85.75%';
             setTimeout(function() {
-                provadisCardCopy.style.top = '48%';
-                provadisCardCopy.style.left = '85.75%';
-                setTimeout(function() {
-                    provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
-                }, 10); // Delay before applying rotation in milliseconds
-            }, 1000); // Delay before translation in milliseconds
-        }
+                provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
+            }, 10); // Delay before applying rotation in milliseconds
+        }, 1000); // Delay before translation in milliseconds
+    }
 
-        function CardThrowPlayer3() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
+    function CardThrowPlayer3() {
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '82.75%';
+            provadisCardCopy.style.left = '73%';
+        }, 1000); // Delay before translation in milliseconds
+    }
+
+    function CardThrowPlayer4() {
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '82.75%';
+            provadisCardCopy.style.left = '48%';
+        }, 1000); // Delay before translation in milliseconds
+    }
+
+    function CardThrowPlayer5() {
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '82.75%';
+            provadisCardCopy.style.left = '21%';
+        }, 1000); // Delay before translation in milliseconds
+    }
+
+    function CardThrowPlayer6() {
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '48%';
+            provadisCardCopy.style.left = '9.25%';
             setTimeout(function() {
-                provadisCardCopy.style.top = '82.75%';
-                provadisCardCopy.style.left = '73%';
-            }, 1000); // Delay before translation in milliseconds
-        }
+                provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
+            }, 10); // Delay before applying rotation in milliseconds
+        }, 1000); // Delay before translation in milliseconds
+    }
 
-        function CardThrowPlayer4() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
+    function CardThrowPlayer7() {
+        var provadisCardCopy = createProvadisCard()
+        provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
+        provadisCardCopy.style.top = '12.5%'; // New position for top
+        provadisCardCopy.style.left = '41.75%'; // New position for left
+        setTimeout(function() {
+            provadisCardCopy.style.top = '10.75%';
+            provadisCardCopy.style.left = '9.25%';
             setTimeout(function() {
-                provadisCardCopy.style.top = '82.75%';
-                provadisCardCopy.style.left = '48%';
-            }, 1000); // Delay before translation in milliseconds
-        }
+                provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
+            }, 10); // Delay before applying rotation in milliseconds
+        }, 1000); // Delay before translation in milliseconds
+    }
 
-        function CardThrowPlayer5() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
-            setTimeout(function() {
-                provadisCardCopy.style.top = '82.75%';
-                provadisCardCopy.style.left = '21%';
-            }, 1000); // Delay before translation in milliseconds
-        }
-
-        function CardThrowPlayer6() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
-            setTimeout(function() {
-                provadisCardCopy.style.top = '48%';
-                provadisCardCopy.style.left = '9.25%';
-                setTimeout(function() {
-                    provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
-                }, 10); // Delay before applying rotation in milliseconds
-            }, 1000); // Delay before translation in milliseconds
-        }
-
-        function CardThrowPlayer7() {
-            var provadisCardCopy = createProvadisCard()
-            provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
-            provadisCardCopy.style.top = '12.5%'; // New position for top
-            provadisCardCopy.style.left = '41.75%'; // New position for left
-            setTimeout(function() {
-                provadisCardCopy.style.top = '10.75%';
-                provadisCardCopy.style.left = '9.25%';
-                setTimeout(function() {
-                    provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
-                }, 10); // Delay before applying rotation in milliseconds
-            }, 1000); // Delay before translation in milliseconds
-        }
-
+    function auskommentiert() {
         CardThrowCroupier();
         setTimeout(function() {
             CardThrowPlayer1();
@@ -203,6 +212,8 @@
         setTimeout(function() {
             CardThrowPlayer7();
         }, 3500);
+    }
+
 
     </script>
 

@@ -143,7 +143,7 @@ def personal_lobby(hostname):
     return render_template('users.html', current_players=lobbies_test[hostname], hostname=hostname)
 
 
-@socketio.on('connect')
+@socketio.on('connect', namespace="/users")
 def handle_connect():
     # Verbindungsereignis behandeln
     username = session.get('username')
@@ -174,6 +174,13 @@ def handle_disconnect():
         return
     users_list = lobbies_test[hostname]
     emit('user_update', users_list, broadcast=True)
+
+@socketio.on('throwPlayerCard1ForAll')
+def handle_throwPlayerCard1ForAll():
+    karten = [['herz', 4], ['pik', 7], ['kreuz', 2]]
+    karte = karten[0]
+    print("Knopf wurde gedrückt, hier die Karten: ", karten)
+    emit('playerAction', karten, broadcast=True)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='81', debug=True)
