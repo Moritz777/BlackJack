@@ -48,12 +48,13 @@
     <button id="hit_button" onclick="" disabled>
         Hit
     </button>
-    <button id="stand_button" >
+    <button id="stand_button" onclick="NextPlayer()">
         Stand
     </button>
-    <button id="cylce_button" onclick="NextPlayer()">
-        Nächster Spieler
+    <button id="start_button" onclick="runProgram()">
+        Start game
     </button>
+    <p id="player_turn"></p>
     <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
     </form>-->
@@ -90,27 +91,29 @@
             var isFirstTime = true;
             const totalPlayers = 7
             var currentPlayer = 1
-            function NextPlayer() {
-                if (!isFirstTime) {
-                    // Call the current player function
-                    var currentFunctionName = "CardThrowPlayer" + currentPlayer;
-                    window[currentFunctionName]();
-                }
-                console.log("Player " + currentPlayer + " Turn")
 
+            function NextPlayer() {
                 // Check if currentPlayer exceeds the total number of players
+                var playerTurnElement = document.getElementById("player_turn");
+                var hitButton = document.getElementById("hit_button");
                 if (currentPlayer > totalPlayers) {
-                    console.log("Round End")
+                    playerTurnElement.textContent = "Round is Over";
+                    var standButton = document.getElementById("stand_button");
+                    standButton.disabled = true;
+                    hitButton.disabled = true;
                 }
 
                 // Get the name of the next player function
                 var nextFunctionName = "CardThrowPlayer" + currentPlayer;
 
+                // Display the current player's turn
+                playerTurnElement.textContent = "Player " + currentPlayer + " Turn";
+
                 // Increment the currentPlayer
                 currentPlayer++;
 
                 // Update the onclick attribute of the hit button with the new function call
-                var hitButton = document.getElementById("hit_button");
+
                 hitButton.setAttribute("onclick", nextFunctionName + "()");
 
                 // Enable the hit button after the first time NextPlayer is clicked
@@ -393,18 +396,18 @@
 
                 players.forEach((player, index) => {
                     setTimeout(function () {
-                        const currentPlayer = window[`CardThrow${player}`];
-                        currentPlayer();
+                        const currentPlayer = window[`CardThrow${player}`]
+                        currentPlayer()
                         CardThrowRandomFix()
                         if (player === `Player${players.length}`) {
                             setTimeout(function () {
-                                CardThrowCroupier();
+                                CardThrowCroupier()
 
                                 setTimeout(function () {
                                     players.forEach((player, index) => {
                                         setTimeout(function () {
-                                            const currentPlayer = window[`CardThrow${player}`];
-                                            currentPlayer();
+                                            const currentPlayer = window[`CardThrow${player}`]
+                                            currentPlayer()
                                             CardThrowRandomFix()
                                         }, index * delay);
                                     });
@@ -415,14 +418,21 @@
                 });
             }
 
+            function showFirstPlayer(){
+                var playerTurnElement = document.getElementById("player_turn");
+                playerTurnElement.textContent = "Player " + currentPlayer + " Turn";
+            }
             function runProgram(){
                 shuffleDeck()
                 createDeckCard()
                 resetCard()
-                dealCardsfirstRound(totalPlayers);
+                dealCardsfirstRound(totalPlayers)
+                setTimeout(function () {
+                    showFirstPlayer()
+                }, totalPlayers * 2 * delay + delay * 4);
 
             }
-            runProgram();
+
 
         </script>
 
