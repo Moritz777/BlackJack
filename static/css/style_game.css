@@ -1,7 +1,7 @@
 body {
     margin: 0;
 }
-/*index.html*/
+
     .background_image {
         height: 100vh;
         width: 100%;
@@ -10,28 +10,94 @@ body {
         justify-content: center;
         align-items: center;
     }
+
+        /*Rechteckigerschwarzer Hintergrund*/
+    .square {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+		z-index: -1;
+    }
+    .side {
+        position: absolute;
+		top: 5%;
+        width: 40%;
+        height: 50%;
+        border-radius: 5%;
+        background-color: rgba(0, 0, 0, 0.68);
+        border: 1px solid black;
+		
+		z-index: -1;
+    }
+
+
     .headline_container {
         position: fixed;
         top: 30%;
         width: 100%;
         text-align: center;
-        font-size: 24px;
+        font-size: 20px;
         color: white;
     }
+
     .formular_container {
-        position: absolute;
-        top: 45%;
+        position: fixed;
+        top: 40%;
         width: 100%;
         text-align: center;
         font-size: 18px;
         color: white;
-
     }
-    .back-container {
-      position: fixed;
+	
+	.hello_in_lobby {
+		position: fixed;
+        top: 30%;
+        width: 100%;
+        text-align: center;
+        font-size: 28px;
+        color: white;
+	}
+	
+	.there_player_lobby {
+		position: fixed;
+        top: 37%;
+        width: 100%;
+        text-align: center;
+        font-size: 22px;
+        color: white;
+	}
+	
+	.list_player {
+		position: fixed;
+        top: 42%;
+        width: 100%;
+        text-align: center;
+        font-size: 21px;
+        color: white;
+	}
+	.btn_start {
+		position: fixed;
         padding: 3px;
-        top: 70%;
-        left: 41.5%;
+        top: 69%;
+        left: 62.75%;
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+	}
+	
+	.btn_backtostart {
+        position: fixed;
+        padding: 3px;
+        top: 69%;
+        left: 31%;
         font-size: 20px;
 
         display: flex;

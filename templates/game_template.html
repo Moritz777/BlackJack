@@ -6,7 +6,6 @@
     <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
     <title>BlackJack03</title>
 
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_box.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_game.css')}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -61,40 +60,54 @@
             top: 0;
             left: 0;
             object-fit: cover;
-            z-index: -1;
+            z-index: -2;
         }
         #provadis-card{
             position: absolute;
             top: 12.5%;
             left: 41.75%;
+
+            z-index: -1;
         }
         .card{
             position: absolute;
             top: 12.5%;
             left: 41.75%;
+
+            z-index: -1;
         }
         #card-image {
             width: 100%;
             height: 100%;
             object-fit: contain;
+
+            z-index: -1;
         }
         .deck {
             position: relative;
             top: -35px;
             width: 100px;
             height: 140px;
+
+            z-index: -1;
         }
 
     </style>
 </head>
 <body>
+
+    <form action="/users/{{Host}}" method="POST" name="user">
+            <button id="startseite" type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
+                Zurück zur Startseite
+            </button>
+    </form>
     <button id="hit_button" onclick="CardThrowPlayer1()" disabled>
         Hit
     </button>
     <button id="stand_button" onclick="NextPlayer()" disabled>
         Stand
     </button>
-    <button id="start_button" onclick="runProgram()">
+    <button id="start_button" onclick="runProgram()" class="btn_start">
         Start game
     </button>
 {#    <button id="start_button" onclick="hideElements()">#}
@@ -475,8 +488,21 @@
                 var startButton = document.getElementById("start_button");
                 startButton.style.display = "none";
             }
+
+
+            function posButtons() {
+                  var btn_Startseite = document.getElementById('startseite');
+<!--                  var btn_Startgame = document.getElementById('start_button');-->
+
+                  btn_Startseite.style.position = 'fixed';
+                  btn_Startseite.style.top = '95%';
+                  btn_Startseite.style.left = '0.5%';
+            }
+
+
             function runProgram(){
                 hideElements()
+                posButtons()
                 startButtonDisappear()
                 shuffleDeck()
                 createDeckCard()
@@ -487,15 +513,6 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
-
-            const startseite1 = document.getElementById("startseite")
-            const startGame1 = document.getElementById("start_game")
-
-            startGame1.addEventListener('click', function(){
-                startseite1.style.left = '10%'
-                startseite1.style.top = '10%'
-            })
-
 
         </script>
 
@@ -509,7 +526,7 @@
 
 <div class="formular_container">
     <h2 id="listTitle" class="there_player_lobby">In dieser Lobby befinden sich folgende Spieler:</h2>
-    <ul id="lobbies-list"></ul>
+    <ul id="lobbies-list" class="list_player"></ul>
 {#    {% for element in players %}#}
 {#        <li class="player_list">#}
 {#            {{ element }}#}
@@ -520,10 +537,8 @@
 {#        <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">#}
     </form>
 </div>
+
 <div class="back-container">
-    <form action="/users/{{Host}}" method="POST" name="user">
-        <input id="startseite" type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
-    </form>
 </div>
 
 </body>
