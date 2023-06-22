@@ -1,52 +1,56 @@
-import random
 from datetime import date, datetime
-
-import socketio
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_socketio import emit
-
 import db_connection
 import game_logic
 from Tools import hash_password
-from db_connection import get_credit
 from player_class import Player
 from user_class import User
-from Control import control
 
-players = []
+
 app = Flask(__name__)
-control = control()
-player = None
 app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
-lobbies = {}
-users_dict={}
-users_dict["open_lobbies"] = {}
 
 
-# app.secret_key = 'your_secret_key'  # Set a secret key for flashing messages
-
+users_dict={"open_lobbies":{}}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
+    if 'username' not in session:
+            return redirect('/login')
 
+
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
         username = request.form.get('username')
+        print(session.get('username'))
         hashed_password = hash_password(request.form.get('password'))
         if db_connection.check_login(username, hashed_password):
-            if db_connection.check_blocked(username):
-                error_message = "Das Konto wurde gesperrt"
-                return render_template('index.html', error_message=error_message)
-            if db_connection.check_admin(username):
-                return redirect('/admin')
-            session['username'] = username
-            users_dict[username] = {}
-            print(users_dict)
-            session['username']=username
-            return redirect('/startPage')
+            if username not in list(users_dict.keys()):
+                if db_connection.check_blocked(username):
+                    error_message = "Das Konto wurde gesperrt"
+                    return render_template('index.html', error_message=error_message)
+                if db_connection.check_admin(username):
+                    return redirect('/admin')
+                session['username'] = username
+                users_dict[username] = {}
+                print(users_dict)
+                session['username'] = username
+                print(list(users_dict.keys()))
+                return redirect('/startPage')
+
+            print("schon eingeloggt")
+            return redirect('/registrierung')
+
+
         else:
             error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
             return render_template('index.html', error_message=error_message)
@@ -164,12 +168,13 @@ def lobbies():
 
 @app.route('/users/<host_name>',methods=['POST', 'GET'])
 def personal_lobby(host_name):
-
+    print(users_dict)
 
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            return redirect(f'/game_template/{host_name}')
+            abc = input("gebe etwas ein")
+            return render_template(f'/game_template/{host_name}')
 
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
@@ -185,13 +190,13 @@ def personal_lobby(host_name):
 
     return render_template('users.html', players = players, Host = host_name)
 
+
 #----------------------- SocketIO ----------------------------------------
 
-# @socketio.on('connect')
-# def handle_connect()
-#     name = session.get('name')
-#     online_users.append(name)
-#     emit('user_update', online_users, broadcast=True)
+@socketio.on('connect')
+def handle_connect():
+    username = session.get('username')
+    emit('connect', username=username, broadcast="True")
 #
 #
 # @socketio.on('disconnect')
@@ -205,4 +210,4 @@ def personal_lobby(host_name):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='81', debug=True)
+    socketio.run(app, allow_unsafe_werkzeug="True", host="0.0.0.0", port="81", debug="True")
