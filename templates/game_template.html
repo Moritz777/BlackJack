@@ -101,18 +101,15 @@
                 Zurück zur Startseite
             </button>
     </form>
-    <button id="hit_button" onclick="CardThrowPlayer1()" disabled>
+    <button id="hit_button" onclick="CardThrowPlayer1()" class="btn_hit" disabled>
         Hit
     </button>
-    <button id="stand_button" onclick="NextPlayer()" disabled>
+    <button id="stand_button" onclick="NextPlayer()" class="btn_stand" disabled>
         Stand
     </button>
     <button id="start_button" onclick="runProgram()" class="btn_start">
         Start game
     </button>
-{#    <button id="start_button" onclick="hideElements()">#}
-{#        hide test#}
-{#    </button>#}
     <p id="player_turn_box"></p>
     <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
@@ -164,7 +161,7 @@
                 var playerTurnElement = document.getElementById("player_turn_box");
 
                 if (currentPlayer > totalPlayers) {
-                    playerTurnElement.textContent = "Round is Over";
+                    playerTurnElement.textContent = "Round is Over";		
                     standButton.disabled = true;
                     hitButton.disabled = true;
                     CardThrowCroupier()
@@ -491,18 +488,25 @@
 
 
             function posButtons() {
-                  var btn_Startseite = document.getElementById('startseite');
-<!--                  var btn_Startgame = document.getElementById('start_button');-->
+					var btn_Startseite = document.getElementById('startseite');
 
-                  btn_Startseite.style.position = 'fixed';
-                  btn_Startseite.style.top = '95%';
-                  btn_Startseite.style.left = '0.5%';
+					btn_Startseite.style.position = 'fixed';
+					btn_Startseite.style.top = '95%';
+					btn_Startseite.style.left = '0.5%';
             }
-
+			
+			function posHitStand() {
+				var btnHit = document.getElementById('hit_button');
+				var btnStand = document.getElementById('stand_button');
+				
+				btnHit.style.zIndex = '3';
+				btnStand.style.zIndex = '3';
+			}
 
             function runProgram(){
-                hideElements()
-                posButtons()
+				posHitStand()
+				hideElements()
+				posButtons()
                 startButtonDisappear()
                 shuffleDeck()
                 createDeckCard()
@@ -513,7 +517,7 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
-
+	
         </script>
 
 <div id="Sbox" class="square">
