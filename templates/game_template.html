@@ -109,7 +109,9 @@
                     playerTurnElement.textContent = "Round is Over";
                     standButton.disabled = true;
                     hitButton.disabled = true;
-                    CardThrowCroupier()
+                    let card_2 = CardThrowCroupier()
+                    CroupierTo17(card_2)
+                    CroupierTo17()
                     return
                 }
 
@@ -140,6 +142,54 @@
                 };
 
                 return card;
+            }
+            let ace_Counter = 0
+            function getCardValue(card) {
+                const rank = card.rank;
+                // Assign a value to each rank
+                if (rank === "Ace") {
+                    ace_Counter++
+                    return 11; // Return 11 for Ace
+                } else if (rank === "King" || rank === "Queen" || rank === "Jack") {
+                    return 10; // Return 10 for King, Queen, and Jack
+                } else if (rank === "Ten") {
+                    return 10;
+                } else if (rank === "Nine") {
+                    return 9;
+                } else if (rank === "Eight") {
+                    return 8;
+                } else if (rank === "Seven") {
+                    return 7;
+                } else if (rank === "Six") {
+                    return 6;
+                } else if (rank === "Five") {
+                    return 5;
+                } else if (rank === "Four") {
+                    return 4;
+                } else if (rank === "Three") {
+                    return 3;
+                } else if (rank === "Two") {
+                    return 2;
+                }
+            }
+
+            const CroupierCounter =  []
+            let cardSum = 0;
+            function CroupierTo17(card_var) {
+                let cardValue = getCardValue(card_var)
+                cardSum+=cardValue
+                CroupierCounter.push(card_var)
+                if (CroupierCounter.length > 1){
+                    while (cardSum < 17) {
+                        const card_1 = CardThrowCroupier();
+                        let cardValue = getCardValue(card_1);
+                        cardSum += cardValue;
+                        if(cardSum > 21 && ace_Counter !== 0){
+                            ace_Counter--
+                            cardSum-=10
+                        }
+                    }
+                }
             }
 
             const cardImages = {
@@ -240,7 +290,14 @@
             }
 
             x = 312
-            var cardOffset = 0;
+            var cardOffsetCroupier = 0
+            var cardOffset1 = 0
+            var cardOffset2 = 0
+            var cardOffset3 = 0
+            var cardOffset4 = 0
+            var cardOffset5 = 0
+            var cardOffset6 = 0
+            var cardOffset7 = 0
             function createProvadisCard(){
                 var provadisCard = document.getElementById('card-image');
                 var provadisCardCopy = new Image();
@@ -279,9 +336,11 @@
                 provadisCardCopy.style.left = '41.75%';
                 setTimeout(function() {
                     provadisCardCopy.style.top = '12.5%';
-                    provadisCardCopy.style.left = parseFloat('50.25%') + cardOffset + '%';
-
+                    provadisCardCopy.style.left = parseFloat('53.25%') + cardOffsetCroupier + '%';
+                    cardOffsetCroupier+=5.2
+                    //cardOffsetCroupier+=0.85
                 }, delay);
+                return randomCard
             }
             function CardThrowPlayer1() {
                 const randomCard = getRandomCard();
@@ -291,9 +350,9 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('8.75%') + cardOffset + '%';
+                    provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset1 + '%';
                     provadisCardCopy.style.left = '85.75%';
-                    cardOffset+=1.5;
+                    cardOffset1+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
@@ -308,9 +367,9 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
+                    provadisCardCopy.style.top = parseFloat('48%') + cardOffset2 + '%';
                     provadisCardCopy.style.left = '85.75%';
-                    cardOffset+=1.5;
+                    cardOffset2+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
@@ -326,7 +385,8 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('70%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('73%') + cardOffset3 + '%';
+                    cardOffset3+=0.85;
                 }, delay); // Delay before translation in milliseconds
             }
 
@@ -339,7 +399,8 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('45%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('48%') + cardOffset4 + '%';
+                    cardOffset4+=0.85;
                 }, delay); // Delay before translation in milliseconds
             }
 
@@ -352,7 +413,8 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('18%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('21%') + cardOffset5 + '%';
+                    cardOffset5+=0.85;
                 }, delay); // Delay before translation in milliseconds
             }
 
@@ -364,8 +426,9 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
-                    provadisCardCopy.style.left = '9.25%';
+                    provadisCardCopy.style.top = parseFloat('48%') + cardOffset6 + '%';
+                    provadisCardCopy.style.left = '9%';
+                    cardOffset6+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
@@ -380,8 +443,9 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset + '%';
-                    provadisCardCopy.style.left = '9.25%';
+                    provadisCardCopy.style.top = parseFloat('10.5%') + cardOffset7 + '%';
+                    provadisCardCopy.style.left = '9%';
+                    cardOffset7+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
@@ -405,8 +469,8 @@
                         CardThrowRandomFix()
                         if (player === `Player${players.length}`) {
                             setTimeout(function () {
-                                CardThrowCroupier()
-
+                                let card_1 = CardThrowCroupier()
+                                CroupierTo17(card_1)
                                 setTimeout(function () {
                                     players.forEach((player, index) => {
                                         setTimeout(function () {
@@ -441,6 +505,7 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
+
 
 
 
