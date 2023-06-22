@@ -58,7 +58,6 @@ class Deck:
 
     def shuffle(self):          # shuffle function will shuffle the whole deck
         random.shuffle(self.deck)
-        return 'shuffle'
 
     def deal(self):             # deal function will take one card from the deck
         single_card = self.deck.pop()
@@ -79,7 +78,6 @@ class Hand:
         self.value += values[card.rank]
         if card.rank == 'Ace':
             self.aces += 1
-        return 'draw'
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
@@ -426,27 +424,31 @@ def main_test(player_list):
     """
     global playing
     player_count = len(player_list)
-    list_players = []
-    list_bets = []
+    dict_player_bets = {}
     list_player_hands = []
 
-    # filling a list with Player0 to max (Player7)
+    # filling a dictionary with Player0 to max (Player7) and their corresponding bet
     for player in range(0, player_count):
-        list_players.append('Player{}'.format(player+1))
-    print(list_players)
-
-    # Set up the Player's chips and prompt the Player for their bet
-    for player in range(0, player_count):
-        list_bets.append(take_player_bet().bet)
-    print(list_bets)
+        dict_player_bets.update({'Player{}'.format(player+1): take_player_bet().bet})
 
     # Create & shuffle the deck
     deck = shuffle_deck()
 
-    # Deal the first card to each player
+    # Deal two cards to each player
     for player in range(0, player_count):
-        list_player_hands.append(deal_player_cards(deck))
-    print(list_player_hands)
+        test = deal_player_cards(deck)
+        list_player_hands.append(test[0])
+        # list_player_hands.append(test[0].cards[0].rank)
+        # list_player_hands.append(test[0].cards[0].suit)
+
+    # Deal one card to the dealer
+    dealer_hand = deal_dealer_card(deck)
+
+    # show all the cards for each player and check if they have blackjack
+    for player in range(0, player_count):
+        show_cards(list_player_hands[player], dealer_hand[0])
+        check_blackjack(list_player_hands[player])
+        player_playing(deck, list_player_hands[player], i_player, dealer_hand)
 
 
 if __name__ == '__main__':
