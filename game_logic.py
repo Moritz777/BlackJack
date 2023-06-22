@@ -448,7 +448,7 @@ def main_test(player_list):
     for player in range(0, player_count):
         show_cards(list_player_hands[player], dealer_hand[0])
         check_blackjack(list_player_hands[player])
-        player_playing(deck, list_player_hands[player], i_player, dealer_hand)
+        # player_playing(deck, list_player_hands[player], i_player, dealer_hand)
 
 
 if __name__ == '__main__':
