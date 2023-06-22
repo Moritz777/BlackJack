@@ -3,82 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Online Users</title>
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>#}
-{#    <script type="text/javascript">#}
-{#        var socket = io();#}
-{##}
-{#        socket.on('user_update', function(players) {#}
-{#            var userList = document.getElementById('user-list');#}
-{#            userList.innerHTML = '';#}
-{##}
-{#            players.forEach(function(user) {#}
-{#                var listItem = document.createElement('li');#}
-{#                listItem.textContent = user;#}
-{#                userList.appendChild(listItem);#}
-{#            });#}
-{#        });#}
-{#    </script>#}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.min.js"></script>
+    <script>
+    // Verbindung zum WebSocket-Server herstellen
+    var socket = io();
 
-    {#SOCKET-TEST#}
-<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
-<script>
-// Verbindung zum WebSocket-Server herstellen
-var socket = io();
+    // Ereignis 'user_update' empfangen und die Liste aktualisieren
+    socket.on('user_update', function(users_list) {
+    console.log('Aktualisierte Lobbies:', users_list);
 
-// Ereignis 'user_update' empfangen und die Liste aktualisieren
-socket.on('user_update', function(users_list) {
-console.log('Aktualisierte Lobbies:', users_list);
+    // Ungeordnete Liste leeren
+    const lobbiesList = document.getElementById('lobbies-list');
+    lobbiesList.innerHTML = '';
 
-// Ungeordnete Liste leeren
-const lobbiesList = document.getElementById('lobbies-list');
-lobbiesList.innerHTML = '';
+    // Spieler in die Liste einfügen
+    users_list.forEach(function(player) {
+      const listItem = document.createElement('li');
+      listItem.textContent = player;
+      lobbiesList.appendChild(listItem);
+    });
+    });
+    </script>
 
-// Spieler in die Liste einfügen
-users_list.forEach(function(player) {
-  const listItem = document.createElement('li');
-  listItem.textContent = player;
-  lobbiesList.appendChild(listItem);
-});
-});
-// Verbindungsereignis behandeln
-socket.on('connect', function() {
-    console.log('Connected');
-});
-
-// Trennungsereignis behandeln
-socket.on('disconnect', function() {
-    console.log('Disconnected');
-});
-</script>
-{#SOCKET-TEST#}
-
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_us.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_box.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </head>
 <body>
-<img class="background_image" src="/static/R.png">
+
+<div class="square">
+    <div class="side"></div>
+</div>
+
 <div class="headline_container">
-    <h1>Herzlich willkommen in der Lobby von {{ hostname }}</h1>
+    <h1 class="hello_in_lobby">Herzlich willkommen in der Lobby von {{ Host }}</h1>
 </div>
 
 <div class="formular_container">
-    <h2>In dieser Lobby befinden sich folgende Spieler:</h2>
-    <ul id="lobbies-list">
-      <!-- Die Spieler werden dynamisch durch JavaScript eingefügt -->
-    </ul>
-{#    {% for element in current_players %}#}
-{#        <li>#}
-{#            {{ element }}#}
-{#        </li>#}
-{#    {% endfor %}#}
+    <h2 class="there_player_lobby">In dieser Lobby befinden sich folgende Spieler:</h2>
+    <ul id="lobbies-list"></ul>
+    {% for element in players %}
+        <li class="player_list">
+            {{ element }}
+        </li>
+    {% endfor %}
     <br>
     <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Spiel starten" name="btn" >
+        <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">
     </form>
 </div>
 <div class="back-container">
     <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Zurück zur Startseite" name="btn" >
+        <input type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
     </form>
 </div>
+
+<img class="background_image" src="/static/R.png">
 </body>
 </html>

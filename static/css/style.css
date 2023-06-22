@@ -1,6 +1,7 @@
 body {
     margin: 0;
 }
+/*index.html*/
     .background_image {
         height: 100vh;
         width: 100%;
@@ -37,6 +38,8 @@ body {
         justify-content: center;
         align-items: center;
     }
+
+    /*Rechteckigerschwarzer Hintergrund*/
     .square {
         position: absolute;
         width: 100%;
@@ -54,7 +57,7 @@ body {
         background-color: rgba(0, 0, 0, 0.68);
         border: 1px solid black;
     }
-
+/*index.html*/
     .lbl_usname {
         position: fixed;
         top: 38%;
@@ -113,3 +116,48 @@ body {
         justify-content: center;
         align-items: center;
     }
+    /*startPage.html*/
+    .formular_container {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+    }
+    .btnran_game {
+        position: fixed;
+        cursor: pointer;
+        padding-inline: 0.5%;
+        top: 47%;
+        left: 43.9%;
+        display: flex;
+        justify-content: center;
+    }
+    .btnhost_game {
+        position: fixed;
+        padding-inline: 3.35%;
+        top: 52%;
+        left: 43.9%;
+        display: flex;
+        justify-content: center;
+    }
+    .btnjoin_game {
+        position: fixed;
+        padding-inline: 2.9%;
+        cursor: pointer;
+        top: 57%;
+        left: 43.9%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .back-container_startP{
+        position: fixed;
+        cursor: pointer;
+        top: 70%;
+        left: 48.2%;
+        display: flex;
+        justify-content: center;
+    }
+

@@ -1,0 +1,53 @@
+.hello_in_lobby {
+        position: fixed;
+        top: 30%;
+        width: 100%;
+        font-size: 220%;
+        text-align: center;
+        color: white;
+        border-radius: 5%;
+        border: rgba(0, 0, 0, 0.50);
+        background: rgba(0, 0, 0, 0.50);
+}
+    .headline_container {
+
+    }
+
+.there_player_lobby {
+        position: fixed;
+        top: 35%;
+        width: 100%;
+        font-size: 120%;
+        text-align: center;
+        color: white;
+}
+.player_list {
+    list-style-type: ">";
+}
+    .formular_container {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+    }
+    .back-container {
+      position: fixed;
+        padding: 3px;
+        top: 70%;
+        width: 100%;
+
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn_startgame {
+        cursor: pointer;
+    }
+    .btn_backtostart {
+        cursor: pointer;
+    }
