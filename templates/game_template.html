@@ -46,7 +46,7 @@
     </style>
 </head>
 <body>
-    <button id="hit_button" onclick="CardThrowPlayer1()" disabled>
+    <button id="hit_button" onclick="throwCountCombo1()" disabled>
         Hit
     </button>
     <button id="stand_button" onclick="NextPlayer()" disabled>
@@ -96,10 +96,40 @@
             var hitButton = document.getElementById("hit_button");
             var standButton = document.getElementById("stand_button");
 
+            function throwCountCombo1(){
+                let value_1 = CardThrowPlayer1()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint1(value_1)
+            }function throwCountCombo2(){
+                let value_1 = CardThrowPlayer2()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint2(value_1)
+            }function throwCountCombo3(){
+                let value_1 = CardThrowPlayer3()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint3(value_1)
+            }function throwCountCombo4(){
+                let value_1 = CardThrowPlayer4()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint4(value_1)
+            }function throwCountCombo5(){
+                let value_1 = CardThrowPlayer5()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint5(value_1)
+            }function throwCountCombo6(){
+                let value_1 = CardThrowPlayer6()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint6(value_1)
+            }function throwCountCombo7(){
+                let value_1 = CardThrowPlayer7()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint7(value_1)
+            }
+
             function NextPlayer() {
                 currentPlayer++;
 
-                var nextFunctionName = "CardThrowPlayer" + currentPlayer;
+                var nextFunctionName = "throwCountCombo" + currentPlayer;
                 // Increment the currentPlayer
 
                 // Check if currentPlayer exceeds the total number of players
@@ -175,6 +205,13 @@
 
             const CroupierCounter =  []
             let cardSum = 0;
+            let handValuePlayer1 = 0;
+            let handValuePlayer2 = 0;
+            let handValuePlayer3 = 0;
+            let handValuePlayer4 = 0;
+            let handValuePlayer5 = 0;
+            let handValuePlayer6 = 0;
+            let handValuePlayer7 = 0;
             function CroupierTo17(card_var) {
                 let cardValue = getCardValue(card_var)
                 cardSum+=cardValue
@@ -190,6 +227,49 @@
                         }
                     }
                 }
+                return cardSum
+            }
+            function countPlayerPoint1(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer1 += cardValue
+                console.log("Spieler 1 hat Punkte:" + handValuePlayer1)
+                return handValuePlayer1
+            }
+            function countPlayerPoint2(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer2 += cardValue
+                console.log("Spieler 2 hat Punkte:" + handValuePlayer2)
+                return handValuePlayer2
+            }
+            function countPlayerPoint3(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer3 += cardValue
+                console.log("Spieler 3 hat Punkte:" + handValuePlayer3)
+                return handValuePlayer3
+            }
+            function countPlayerPoint4(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer4 += cardValue
+                console.log("Spieler 4 hat Punkte:" + handValuePlayer4)
+                return handValuePlayer4
+            }
+            function countPlayerPoint5(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer5 += cardValue
+                console.log("Spieler 5 hat Punkte:" + handValuePlayer5)
+                return handValuePlayer5
+            }
+            function countPlayerPoint6(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer6 += cardValue
+                console.log("Spieler 6 hat Punkte:" + handValuePlayer6)
+                return handValuePlayer6
+            }
+            function countPlayerPoint7(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer7 += cardValue
+                console.log("Spieler 7 hat Punkte:" + handValuePlayer7)
+                return handValuePlayer7
             }
 
             const cardImages = {
@@ -342,6 +422,15 @@
                 }, delay);
                 return randomCard
             }
+
+            const button1 = document.getElementById('button1');
+            const button2 = document.getElementById('button2');
+
+            button2.addEventListener('click', function() {
+                button1.style.left = '10%';
+                button1.style.top = '20%';
+            });
+
             function CardThrowPlayer1() {
                 const randomCard = getRandomCard();
                 setCard(randomCard);
@@ -357,6 +446,7 @@
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer2() {
@@ -374,6 +464,7 @@
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer3() {
@@ -388,6 +479,7 @@
                     provadisCardCopy.style.left = parseFloat('73%') + cardOffset3 + '%';
                     cardOffset3+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer4() {
@@ -402,6 +494,7 @@
                     provadisCardCopy.style.left = parseFloat('48%') + cardOffset4 + '%';
                     cardOffset4+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer5() {
@@ -416,6 +509,7 @@
                     provadisCardCopy.style.left = parseFloat('21%') + cardOffset5 + '%';
                     cardOffset5+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer6() {
@@ -433,6 +527,7 @@
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer7() {
@@ -450,6 +545,7 @@
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowRandomFix(){
@@ -461,11 +557,15 @@
             const delay = 100; // Delay between each action
             function dealCardsfirstRound(playerCount) {
                 const players = Array.from({ length: playerCount }, (_, i) => `Player${i + 1}`);
-
+                let x=1
+                let y=1
                 players.forEach((player, index) => {
                     setTimeout(function () {
                         const currentPlayer = window[`CardThrow${player}`]
-                        currentPlayer()
+                        const currentPlayerPoints = window[`countPlayerPoint${x}`]
+                        x++
+                        let points = currentPlayer()
+                        currentPlayerPoints(points)
                         CardThrowRandomFix()
                         if (player === `Player${players.length}`) {
                             setTimeout(function () {
@@ -475,7 +575,10 @@
                                     players.forEach((player, index) => {
                                         setTimeout(function () {
                                             const currentPlayer = window[`CardThrow${player}`]
-                                            currentPlayer()
+                                            const currentPlayerPoints = window[`countPlayerPoint${y}`]
+                                            y++
+                                            let points = currentPlayer()
+                                            currentPlayerPoints(points)
                                             CardThrowRandomFix()
                                         }, index * delay);
                                     });
@@ -494,6 +597,28 @@
                 var startButton = document.getElementById("start_button");
                 startButton.style.display = "none";
             }
+            function checkPlayerDealer() {
+                let dealerPoints = CroupierTo17();
+                let p1points = throwCountCombo1();
+                let p2points = throwCountCombo2();
+                let p3points = throwCountCombo3();
+                let p4points = throwCountCombo4();
+                let p5points = throwCountCombo5();
+                let p6points = throwCountCombo6();
+                let p7points = throwCountCombo7();
+
+                for (let i = 1; i <= totalPlayers; i++) {
+                    let playerPoints = window[`p${i}points`]; // Access the player points using square brackets
+
+                    if (dealerPoints > playerPoints) {
+                        console.log("Dealer gewinnt");
+                    } else if (dealerPoints < playerPoints) {
+                        console.log(`Spieler ${i} gewinnt`); // Display the player number
+                    } else {
+                        console.log("Break! Keiner gewinnt");
+                    }
+                }
+            }
             function runProgram(){
                 startButtonDisappear()
                 shuffleDeck()
@@ -505,9 +630,14 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
-
-
-
+            countPlayerPoint1()
+            countPlayerPoint2()
+            countPlayerPoint3()
+            countPlayerPoint4()
+            countPlayerPoint5()
+            countPlayerPoint6()
+            countPlayerPoint7()
+            checkPlayerDealer()
 
         </script>
 
