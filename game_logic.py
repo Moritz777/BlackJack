@@ -58,7 +58,6 @@ class Deck:
 
     def shuffle(self):          # shuffle function will shuffle the whole deck
         random.shuffle(self.deck)
-        return 'shuffle'
 
     def deal(self):             # deal function will take one card from the deck
         single_card = self.deck.pop()
@@ -79,7 +78,6 @@ class Hand:
         self.value += values[card.rank]
         if card.rank == 'Ace':
             self.aces += 1
-        return 'draw', card.suit, card.rank
 
     def adjust_for_ace(self):
         while self.value > 21 and self.aces:
@@ -238,6 +236,12 @@ def greet_player():
               Der Dealer zieht Karten bis er 17 erreicht. Asse zählen als 1 oder 11.')
 
 
+def take_player_bet():
+    player_chips = Chips()
+    take_bet(player_chips)
+    return player_chips
+
+
 def shuffle_deck():
     deck = Deck()
     deck.shuffle()
@@ -258,12 +262,6 @@ def deal_dealer_card(deck):
     dealer_hand.add_card(deck.deal())
     i_dealer = 0
     return dealer_hand, i_dealer
-
-
-def take_player_bet():
-    player_chips = Chips()
-    take_bet(player_chips)
-    return player_chips
 
 
 def check_blackjack(player_hand):
@@ -308,62 +306,47 @@ def dealer_playing(deck, dealer_hand, i_dealer):
         print('Der Dealer hat gezogen:', dealer_hand.cards[i_dealer])
 
 
-def winning_scenarios(blackjack, won, player_chips, dealer_hand, player_hand):
+def winning_scenarios(blackjack, player_chips, dealer_hand, player_hand):
     # Run different winning scenarios
 
     # check if the player has blackjack
-    if blackjack is True and won is False:
+    if blackjack is True:
         player_wins_blackjack(player_chips)
-        won = True
 
     # check if the dealer (and player) has blackjack
     elif dealer_hand.value == 21 and len(dealer_hand.cards) == 2:
         if blackjack is True:
             print('Dealer und Spieler haben Blackjack!')
             push()
-            won = True
         else:
             dealer_wins_blackjack(player_chips)
-            won = True
 
-    elif player_hand.value > 21 and dealer_hand.value > 21 and won is False:
+    elif player_hand.value > 21 and dealer_hand.value > 21:
         both_bust()
-        won = True
 
-    elif player_hand.value > 21 and won is False:
+    elif player_hand.value > 21:
         player_busts(player_chips)
-        won = True
 
-    elif dealer_hand.value > 21 and won is False:
+    elif dealer_hand.value > 21:
         dealer_busts(player_chips)
-        won = True
 
-    elif dealer_hand.value > player_hand.value and won is False:
+    elif dealer_hand.value > player_hand.value:
         dealer_wins(player_chips)
-        won = True
 
-    elif dealer_hand.value < player_hand.value and won is False:
+    elif dealer_hand.value < player_hand.value:
         player_wins(player_chips)
-        won = True
 
     # check if the player has tripple seven
-    elif player_hand.value == 21 and won is False:
+    elif player_hand.value == 21:
         i_seven = 0
         for card in range(0, len(player_hand.cards)):
             if player_hand.cards[card].rank == 'Seven':
                 i_seven += 1
         if i_seven == 3:
             player_wins_tripple_seven(player_chips)
-            won = True
-
-    elif won is False:
-        push()
-
-    elif won is True:
-        print('Irgendwo ist ein Fehler aufgetreten.')
 
     else:
-        print('Es gibt wohl einen Fehler.')
+        push()
 
 
 def game_ending(player_chips):
@@ -391,7 +374,6 @@ def main():
     while True:
 
         global playing
-        won = False
 
         # greeting the player
         greet_player()
@@ -424,7 +406,7 @@ def main():
         show_cards(player_hand, dealer_hand)
 
         # Run different winning scenarios
-        winning_scenarios(blackjack, won, player_chips, dealer_hand, player_hand)
+        winning_scenarios(blackjack, player_chips, dealer_hand, player_hand)
 
         # tell the player about his bets
         game_ending(player_chips)
@@ -437,29 +419,38 @@ def main():
 
 
 def main_test(player_list):
+    """
+    trying to implement multiple players
+    """
+    global playing
     player_count = len(player_list)
+    dict_player_bets = {}
+    list_player_hands = []
+
+    # filling a dictionary with Player0 to max (Player7) and their corresponding bet
+    for player in range(0, player_count):
+        dict_player_bets.update({'Player{}'.format(player+1): take_player_bet().bet})
+
+    # Create & shuffle the deck
     deck = shuffle_deck()
 
+    # Deal two cards to each player
     for player in range(0, player_count):
-        deal_player_cards(deck)
+        test = deal_player_cards(deck)
+        list_player_hands.append(test[0])
+        # list_player_hands.append(test[0].cards[0].rank)
+        # list_player_hands.append(test[0].cards[0].suit)
 
+    # Deal one card to the dealer
+    dealer_hand = deal_dealer_card(deck)
 
-def main_eymen():
-    while True:
-        # Create & shuffle the deck
-        deck = shuffle_deck()
-
-        # deal two cards to the player and adjust for ace
-        player_hand = Hand()
-        player_hand.add_card(deck.deal())
-        print(player_hand.cards[0])
-        player_hand.add_card(deck.deal())
-        print(player_hand.cards[1])
-        player_hand.adjust_for_ace()
-
-        input('Halt Stop')
-        return player_hand.cards
+    # show all the cards for each player and check if they have blackjack
+    for player in range(0, player_count):
+        show_cards(list_player_hands[player], dealer_hand[0])
+        check_blackjack(list_player_hands[player])
+        # player_playing(deck, list_player_hands[player], i_player, dealer_hand)
 
 
 if __name__ == '__main__':
-    main()
+    players_list = ['Eymen', 'Svente', 'Schorsch', 'Bennet', 'Erik', 'Moritz', 'Janine']
+    main_test(players_list)
