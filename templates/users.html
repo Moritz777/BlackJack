@@ -43,11 +43,11 @@
 <div class="formular_container">
     <h2 class="there_player_lobby">In dieser Lobby befinden sich folgende Spieler:</h2>
     <ul id="lobbies-list"></ul>
-    {% for element in players %}
-        <li class="player_list">
-            {{ element }}
-        </li>
-    {% endfor %}
+{#    {% for element in players %}#}
+{#        <li class="player_list">#}
+{#            {{ element }}#}
+{#        </li>#}
+{#    {% endfor %}#}
     <br>
     <form action="/users/{{Host}}" method="POST" name="user">
         <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">

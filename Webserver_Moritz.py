@@ -160,11 +160,11 @@ def personal_lobby(host_name):
     if request.method == 'POST':
 
         if request.form['btn'] == 'Spiel starten':
-            return render_template(f'/game_template/{host_name}')
+            return render_template('game_template.html')
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
-    return render_template('users.html', Host = host_name)
+    return render_template('game_template.html', Host = host_name)
 
 
 #----------------------- SocketIO ----------------------------------------
