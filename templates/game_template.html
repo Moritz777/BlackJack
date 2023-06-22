@@ -42,23 +42,21 @@
             height: 140px;
         }
 
-        .card {
-            position: absolute;
-            top: 12.5%;
-            left: 41.75%;
-        }
     </style>
 </head>
 <body>
-    <button id="hit_button" onclick="CardThrowPlayer2()">
+    <button id="hit_button" onclick="" disabled>
         Hit
     </button>
     <button id="stand_button" >
         Stand
     </button>
-    <form action ="/game_template" method="POST" name="login">
+    <button id="cylce_button" onclick="NextPlayer()">
+        Nächster Spieler
+    </button>
+    <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
-    </form>
+    </form>-->
     <div class="deck">
         <div class="card" style="top: 83%; left: 800.75%;">
             <img src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Card 1">
@@ -76,7 +74,7 @@
     <div id="card" class="card">
         <img id="card-image" src="/static/Black_Jack_Grafiken/Karten/Karten Rückseite/provadis Rueckseite 2.png" alt="Card">
     </div>
-    {% if check %}
+
         <script>
             const suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs'];
             const ranks = ['Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace'];
@@ -89,7 +87,53 @@
                     deck.push(card);
                 }
             }
-            console.log(deck);
+            var isFirstTime = true;
+            const totalPlayers = 7
+            var currentPlayer = 1
+            function NextPlayer() {
+                if (!isFirstTime) {
+                    // Call the current player function
+                    var currentFunctionName = "CardThrowPlayer" + currentPlayer;
+                    window[currentFunctionName]();
+                }
+                console.log("Player " + currentPlayer + " Turn")
+
+                // Check if currentPlayer exceeds the total number of players
+                if (currentPlayer > totalPlayers) {
+                    console.log("Round End")
+                }
+
+                // Get the name of the next player function
+                var nextFunctionName = "CardThrowPlayer" + currentPlayer;
+
+                // Increment the currentPlayer
+                currentPlayer++;
+
+                // Update the onclick attribute of the hit button with the new function call
+                var hitButton = document.getElementById("hit_button");
+                hitButton.setAttribute("onclick", nextFunctionName + "()");
+
+                // Enable the hit button after the first time NextPlayer is clicked
+                if (isFirstTime) {
+                    hitButton.disabled = false;
+                    isFirstTime = false;
+                }
+            }
+            function getRandomCard() {
+                // Randomly select a rank and suit
+                const randomRankIndex = Math.floor(Math.random() * ranks.length);
+                const randomSuitIndex = Math.floor(Math.random() * suits.length);
+                const randomRank = ranks[randomRankIndex];
+                const randomSuit = suits[randomSuitIndex];
+
+                // Create the card object with the randomly selected rank and suit
+                const card = {
+                    rank: randomRank,
+                    suit: randomSuit
+                };
+
+                return card;
+            }
 
             const cardImages = {
                 "AceHearts": "/static/Black_Jack_Grafiken/Karten/Herz/Herz_Ass.png",
@@ -166,27 +210,12 @@
                     }, delay);
                 });
             }
-            fetch('/game_template')
-                .then(response => response.json())
-                .then(card => {
-                    // Process the retrieved card object
-                    console.log(card.rank);
-                    console.log(card.suit);
-                    console.log(card.image);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
             class Card {
                 constructor(suit, rank) {
                     this.suit = suit;
                     this.rank = rank;
                 }
             }
-            const cardHeart = new Card('Hearts', 'Queen');
-            const cardClub = new Card('Clubs', 'King');
-            const cardDiamond = new Card('Diamonds', 'Jack');
-            const cardSpade = new Card('Spades', 'Ace');
 
             function setCard(card) {
                 // Display card image
@@ -235,7 +264,8 @@
             }
 
             function CardThrowCroupier() {
-                setCard(cardClub);
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard();
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease';
                 provadisCardCopy.style.top = '12.5%';
@@ -247,7 +277,8 @@
                 }, 1000);
             }
             function CardThrowPlayer1() {
-                setCard(cardHeart);
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -263,7 +294,8 @@
             }
 
             function CardThrowPlayer2() {
-                setCard(cardDiamond);
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -279,6 +311,8 @@
             }
 
             function CardThrowPlayer3() {
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -290,6 +324,8 @@
             }
 
             function CardThrowPlayer4() {
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -301,6 +337,8 @@
             }
 
             function CardThrowPlayer5() {
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -312,6 +350,8 @@
             }
 
             function CardThrowPlayer6() {
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -326,6 +366,8 @@
             }
 
             function CardThrowPlayer7() {
+                const randomCard = getRandomCard();
+                setCard(randomCard);
                 var provadisCardCopy = createProvadisCard()
                 provadisCardCopy.style.transition = 'top 1s, left 1s, transform 1s ease'; // Apply transition for smooth animation
                 provadisCardCopy.style.top = '12.5%'; // New position for top
@@ -339,6 +381,11 @@
                 }, 1000); // Delay before translation in milliseconds
             }
 
+            function CardThrowRandomFix(){
+                const randomCard = getRandomCard();
+                setCard(randomCard);
+            }
+
 
             const delay = 500; // Delay between each action
             function dealCardsfirstRound(playerCount) {
@@ -348,7 +395,7 @@
                     setTimeout(function () {
                         const currentPlayer = window[`CardThrow${player}`];
                         currentPlayer();
-
+                        CardThrowRandomFix()
                         if (player === `Player${players.length}`) {
                             setTimeout(function () {
                                 CardThrowCroupier();
@@ -358,6 +405,7 @@
                                         setTimeout(function () {
                                             const currentPlayer = window[`CardThrow${player}`];
                                             currentPlayer();
+                                            CardThrowRandomFix()
                                         }, index * delay);
                                     });
                                 }, delay);
@@ -371,11 +419,13 @@
                 shuffleDeck()
                 createDeckCard()
                 resetCard()
-                dealCardsfirstRound(3);
+                dealCardsfirstRound(totalPlayers);
+
             }
             runProgram();
 
         </script>
-    {% endif %}
+
+
 </body>
 </html>
