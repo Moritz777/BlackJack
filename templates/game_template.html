@@ -451,7 +451,7 @@ html, body {
             }
 
 
-            const delay = 100; // Delay between each action
+            const delay = 500; // Delay between each action
             function dealCardsfirstRound(playerCount) {
                 const players = Array.from({ length: playerCount }, (_, i) => `Player${i + 1}`);
 
@@ -511,13 +511,16 @@ html, body {
 				posButtons()
                 startButtonDisappear()
                 shuffleDeck()
-                createDeckCard()
+                setTimeout(function() {
+                    createDeckCard()
                 resetCard()
                 dealCardsfirstRound(totalPlayers)
                 setTimeout(function () {
                     showFirstPlayer()
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
+                }, delay *2);
+
             }
 	
         </script>
