@@ -453,4 +453,4 @@ def main_test(player_list):
 
 if __name__ == '__main__':
     players_list = ['Eymen', 'Svente', 'Schorsch', 'Bennet', 'Erik', 'Moritz', 'Janine']
-    main_test(players_list)
+    main()
