@@ -6,10 +6,28 @@
     <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
     <title>BlackJack03</title>
 
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_game.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.min.js"></script>
     <script>
     // Verbindung zum WebSocket-Server herstellen
+
     var socket = io();
+
+    function hideElements() {
+        var sBox = document.getElementById("Sbox");
+        var helloLobby = document.getElementById("helloLobby");
+        var listTitle = document.getElementById("listTitle");
+        var lobbiesList = document.getElementById("lobbies-list")
+        sBox.style.display = "none";
+        helloLobby.style.display = "none";
+        listTitle.style.display = "none";
+        lobbiesList.style.display = "none";
+
+    }
 
     // Ereignis 'user_update' empfangen und die Liste aktualisieren
     socket.on('user_update', function(users_list) {
@@ -42,43 +60,75 @@
             top: 0;
             left: 0;
             object-fit: cover;
-            z-index: -1;
+            z-index: -2;
         }
         #provadis-card{
             position: absolute;
             top: 12.5%;
             left: 41.75%;
+
+            z-index: -1;
         }
         .card{
             position: absolute;
             top: 12.5%;
             left: 41.75%;
+
+            z-index: -1;
         }
         #card-image {
             width: 100%;
             height: 100%;
             object-fit: contain;
+
+            z-index: -1;
         }
         .deck {
             position: relative;
             top: -35px;
             width: 100px;
             height: 140px;
+
+            z-index: -1;
         }
 
     </style>
 </head>
 <body>
-    <button id="hit_button" onclick="CardThrowPlayer1()" disabled>
+
+    <form action="/users/{{Host}}" method="POST" name="user">
+            <button id="startseite" type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
+                Zurück zur Startseite
+            </button>
+    </form>
+
+    <button id="hit_button" onclick="throwCountCombo1()" class="btn_hit" disabled>
         Hit
     </button>
-    <button id="stand_button" onclick="NextPlayer()" disabled>
+    <button id="stand_button" onclick="NextPlayer()" class="btn_stand" disabled>
         Stand
     </button>
-    <button id="start_button" onclick="runProgram()">
+    <button id="start_button" onclick="sayHi()" class="btn_start">
         Start game
     </button>
-    <p id="player_turn_box"></p>
+    <h1 id="player_turn_box" class="player_anzeige"></h1>
+    <p id="erik_test_box"></p>
+    <p id="erik_test_box2"></p>
+
+    <script>
+        function sayHi() {
+            {#var erikTestBox = document.getElementById("erik_test_box");#}
+            {#erikTestBox.textContent = "Hi";#}
+            socket.emit('startGameForEveryone');
+        }
+        socket.on('startSuccessFromPython', function(fiktiveKarten) {
+          {#console.log('Aktion empfangen:', phrase);#}
+          {#  var erikTestBox2 = document.getElementById("erik_test_box2");#}
+          {#  erikTestBox2.textContent = phrase;#}
+            runProgram()
+        });
+    </script>
+
     <!--<form action ="/game_template" method="POST" name="login">
         <input type="submit" value="Anmelden">
     </form>-->
@@ -119,10 +169,40 @@
             var hitButton = document.getElementById("hit_button");
             var standButton = document.getElementById("stand_button");
 
+            function throwCountCombo1(){
+                let value_1 = CardThrowPlayer1()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint1(value_1)
+            }function throwCountCombo2(){
+                let value_1 = CardThrowPlayer2()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint2(value_1)
+            }function throwCountCombo3(){
+                let value_1 = CardThrowPlayer3()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint3(value_1)
+            }function throwCountCombo4(){
+                let value_1 = CardThrowPlayer4()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint4(value_1)
+            }function throwCountCombo5(){
+                let value_1 = CardThrowPlayer5()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint5(value_1)
+            }function throwCountCombo6(){
+                let value_1 = CardThrowPlayer6()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint6(value_1)
+            }function throwCountCombo7(){
+                let value_1 = CardThrowPlayer7()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint7(value_1)
+            }
+
             function NextPlayer() {
                 currentPlayer++;
 
-                var nextFunctionName = "CardThrowPlayer" + currentPlayer;
+                var nextFunctionName = "throwCountCombo" + currentPlayer;
                 // Increment the currentPlayer
 
                 // Check if currentPlayer exceeds the total number of players
@@ -132,7 +212,9 @@
                     playerTurnElement.textContent = "Round is Over";
                     standButton.disabled = true;
                     hitButton.disabled = true;
-                    CardThrowCroupier()
+                    let card_2 = CardThrowCroupier()
+                    CroupierTo17(card_2)
+                    CroupierTo17()
                     return
                 }
 
@@ -163,6 +245,104 @@
                 };
 
                 return card;
+            }
+            let ace_Counter = 0
+            function getCardValue(card) {
+                const rank = card.rank;
+                // Assign a value to each rank
+                if (rank === "Ace") {
+                    ace_Counter++
+                    return 11; // Return 11 for Ace
+                } else if (rank === "King" || rank === "Queen" || rank === "Jack") {
+                    return 10; // Return 10 for King, Queen, and Jack
+                } else if (rank === "Ten") {
+                    return 10;
+                } else if (rank === "Nine") {
+                    return 9;
+                } else if (rank === "Eight") {
+                    return 8;
+                } else if (rank === "Seven") {
+                    return 7;
+                } else if (rank === "Six") {
+                    return 6;
+                } else if (rank === "Five") {
+                    return 5;
+                } else if (rank === "Four") {
+                    return 4;
+                } else if (rank === "Three") {
+                    return 3;
+                } else if (rank === "Two") {
+                    return 2;
+                }
+            }
+
+            const CroupierCounter =  []
+            let cardSum = 0;
+            let handValuePlayer1 = 0;
+            let handValuePlayer2 = 0;
+            let handValuePlayer3 = 0;
+            let handValuePlayer4 = 0;
+            let handValuePlayer5 = 0;
+            let handValuePlayer6 = 0;
+            let handValuePlayer7 = 0;
+            function CroupierTo17(card_var) {
+                let cardValue = getCardValue(card_var)
+                cardSum+=cardValue
+                CroupierCounter.push(card_var)
+                if (CroupierCounter.length > 1){
+                    while (cardSum < 17) {
+                        const card_1 = CardThrowCroupier();
+                        let cardValue = getCardValue(card_1);
+                        cardSum += cardValue;
+                        if(cardSum > 21 && ace_Counter !== 0){
+                            ace_Counter--
+                            cardSum-=10
+                        }
+                    }
+                }
+                return cardSum
+            }
+            function countPlayerPoint1(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer1 += cardValue
+                console.log("Spieler 1 hat Punkte:" + handValuePlayer1)
+                return handValuePlayer1
+            }
+            function countPlayerPoint2(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer2 += cardValue
+                console.log("Spieler 2 hat Punkte:" + handValuePlayer2)
+                return handValuePlayer2
+            }
+            function countPlayerPoint3(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer3 += cardValue
+                console.log("Spieler 3 hat Punkte:" + handValuePlayer3)
+                return handValuePlayer3
+            }
+            function countPlayerPoint4(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer4 += cardValue
+                console.log("Spieler 4 hat Punkte:" + handValuePlayer4)
+                return handValuePlayer4
+            }
+            function countPlayerPoint5(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer5 += cardValue
+                console.log("Spieler 5 hat Punkte:" + handValuePlayer5)
+                return handValuePlayer5
+            }
+            function countPlayerPoint6(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer6 += cardValue
+                console.log("Spieler 6 hat Punkte:" + handValuePlayer6)
+                return handValuePlayer6
+            }
+            function countPlayerPoint7(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer7 += cardValue
+                console.log("Spieler 7 hat Punkte:" + handValuePlayer7)
+                return handValuePlayer7
             }
 
             const cardImages = {
@@ -263,7 +443,14 @@
             }
 
             x = 312
-            var cardOffset = 0;
+            var cardOffsetCroupier = 0
+            var cardOffset1 = 0
+            var cardOffset2 = 0
+            var cardOffset3 = 0
+            var cardOffset4 = 0
+            var cardOffset5 = 0
+            var cardOffset6 = 0
+            var cardOffset7 = 0
             function createProvadisCard(){
                 var provadisCard = document.getElementById('card-image');
                 var provadisCardCopy = new Image();
@@ -302,10 +489,13 @@
                 provadisCardCopy.style.left = '41.75%';
                 setTimeout(function() {
                     provadisCardCopy.style.top = '12.5%';
-                    provadisCardCopy.style.left = parseFloat('50.25%') + cardOffset + '%';
-
+                    provadisCardCopy.style.left = parseFloat('53.25%') + cardOffsetCroupier + '%';
+                    cardOffsetCroupier+=5.2
+                    //cardOffsetCroupier+=0.85
                 }, delay);
+                return randomCard
             }
+
             function CardThrowPlayer1() {
                 const randomCard = getRandomCard();
                 setCard(randomCard);
@@ -314,13 +504,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('8.75%') + cardOffset + '%';
+                    provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset1 + '%';
                     provadisCardCopy.style.left = '85.75%';
-                    cardOffset+=1.5;
+                    cardOffset1+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer2() {
@@ -331,13 +522,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
+                    provadisCardCopy.style.top = parseFloat('48%') + cardOffset2 + '%';
                     provadisCardCopy.style.left = '85.75%';
-                    cardOffset+=1.5;
+                    cardOffset2+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer3() {
@@ -349,8 +541,10 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('70%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('73%') + cardOffset3 + '%';
+                    cardOffset3+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer4() {
@@ -362,8 +556,10 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('45%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('48%') + cardOffset4 + '%';
+                    cardOffset4+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer5() {
@@ -375,8 +571,10 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('18%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('21%') + cardOffset5 + '%';
+                    cardOffset5+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer6() {
@@ -387,12 +585,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
-                    provadisCardCopy.style.left = '9.25%';
+                    provadisCardCopy.style.top = parseFloat('48%') + cardOffset6 + '%';
+                    provadisCardCopy.style.left = '9%';
+                    cardOffset6+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer7() {
@@ -403,12 +603,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset + '%';
-                    provadisCardCopy.style.left = '9.25%';
+                    provadisCardCopy.style.top = parseFloat('10.5%') + cardOffset7 + '%';
+                    provadisCardCopy.style.left = '9%';
+                    cardOffset7+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowRandomFix(){
@@ -420,21 +622,28 @@
             const delay = 100; // Delay between each action
             function dealCardsfirstRound(playerCount) {
                 const players = Array.from({ length: playerCount }, (_, i) => `Player${i + 1}`);
-
+                let x=1
+                let y=1
                 players.forEach((player, index) => {
                     setTimeout(function () {
                         const currentPlayer = window[`CardThrow${player}`]
-                        currentPlayer()
+                        const currentPlayerPoints = window[`countPlayerPoint${x}`]
+                        x++
+                        let points = currentPlayer()
+                        currentPlayerPoints(points)
                         CardThrowRandomFix()
                         if (player === `Player${players.length}`) {
                             setTimeout(function () {
-                                CardThrowCroupier()
-
+                                let card_1 = CardThrowCroupier()
+                                CroupierTo17(card_1)
                                 setTimeout(function () {
                                     players.forEach((player, index) => {
                                         setTimeout(function () {
                                             const currentPlayer = window[`CardThrow${player}`]
-                                            currentPlayer()
+                                            const currentPlayerPoints = window[`countPlayerPoint${y}`]
+                                            y++
+                                            let points = currentPlayer()
+                                            currentPlayerPoints(points)
                                             CardThrowRandomFix()
                                         }, index * delay);
                                     });
@@ -453,7 +662,50 @@
                 var startButton = document.getElementById("start_button");
                 startButton.style.display = "none";
             }
+
+
+            function posButtons() {
+					var btn_Startseite = document.getElementById('startseite');
+
+					btn_Startseite.style.position = 'fixed';
+					btn_Startseite.style.top = '95%';
+					btn_Startseite.style.left = '0.5%';
+            }
+
+			function posHitStand() {
+				var btnHit = document.getElementById('hit_button');
+				var btnStand = document.getElementById('stand_button');
+
+				btnHit.style.zIndex = '3';
+				btnStand.style.zIndex = '3';
+			}
+
+            function checkPlayerDealer() {
+                let dealerPoints = CroupierTo17();
+                let p1points = throwCountCombo1();
+                let p2points = throwCountCombo2();
+                let p3points = throwCountCombo3();
+                let p4points = throwCountCombo4();
+                let p5points = throwCountCombo5();
+                let p6points = throwCountCombo6();
+                let p7points = throwCountCombo7();
+
+                for (let i = 1; i <= totalPlayers; i++) {
+                    let playerPoints = window[`p${i}points`]; // Access the player points using square brackets
+
+                    if (dealerPoints > playerPoints) {
+                        console.log("Dealer gewinnt");
+                    } else if (dealerPoints < playerPoints) {
+                        console.log(`Spieler ${i} gewinnt`); // Display the player number
+                    } else {
+                        console.log("Break! Keiner gewinnt");
+                    }
+                }
+            }
             function runProgram(){
+				posHitStand()
+				hideElements()
+				posButtons()
                 startButtonDisappear()
                 shuffleDeck()
                 createDeckCard()
@@ -464,19 +716,28 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
+            countPlayerPoint1()
+            countPlayerPoint2()
+            countPlayerPoint3()
+            countPlayerPoint4()
+            countPlayerPoint5()
+            countPlayerPoint6()
+            countPlayerPoint7()
+            checkPlayerDealer()
+
         </script>
 
-<div class="square">
+<div id="Sbox" class="square">
     <div class="side"></div>
 </div>
 
 <div class="headline_container">
-    <h1 class="hello_in_lobby">Herzlich willkommen in der Lobby von {{ Host }}</h1>
+    <h1 id="helloLobby" class="hello_in_lobby">Herzlich willkommen in der Lobby von {{ Host }}</h1>
 </div>
 
 <div class="formular_container">
-    <h2 class="there_player_lobby">In dieser Lobby befinden sich folgende Spieler:</h2>
-    <ul id="lobbies-list"></ul>
+    <h2 id="listTitle" class="there_player_lobby">In dieser Lobby befinden sich folgende Spieler:</h2>
+    <ul id="lobbies-list" class="list_player"></ul>
 {#    {% for element in players %}#}
 {#        <li class="player_list">#}
 {#            {{ element }}#}
@@ -484,13 +745,11 @@
 {#    {% endfor %}#}
     <br>
     <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">
+{#        <input type="submit" value="Spiel starten" name="btn" class="btn_startgame">#}
     </form>
 </div>
+
 <div class="back-container">
-    <form action="/users/{{Host}}" method="POST" name="user">
-        <input type="submit" value="Zurück zur Startseite" name="btn" class="btn_backtostart">
-    </form>
 </div>
 
 </body>

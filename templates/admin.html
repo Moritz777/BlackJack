@@ -56,6 +56,7 @@
                     <th>Nachname</th>
                     <th>Geburtstag</th>
                     <th>Blocked</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +68,17 @@
                     <td>{{ user[3] }}</td>
                     <td>{{ user[4] }}</td>
                     <td>{{ user[5] }}</td>
+
+                    <td>
+                        <form action="/admin" method="POST" style="display: inline;">
+                        <input type="submit" name="btn" value="{{user[0]}} blocken" class="btn_join">
+                        </form>
+                    </td>
+                    <td>
+                          <form action="/admin" method="POST" style="display: inline;">
+                        <input type="submit" name="btn" value="{{user[0]}} entblocken" class="btn_join">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
