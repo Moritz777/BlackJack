@@ -15,6 +15,8 @@
     <script>
     // Verbindung zum WebSocket-Server herstellen
 
+    var socket = io();
+
     function hideElements() {
         var sBox = document.getElementById("Sbox");
         var helloLobby = document.getElementById("helloLobby");
@@ -26,8 +28,6 @@
         lobbiesList.style.display = "none";
 
     }
-
-    var socket = io();
 
     // Ereignis 'user_update' empfangen und die Liste aktualisieren
     socket.on('user_update', function(users_list) {
@@ -121,12 +121,13 @@
         function sayHi() {
             var erikTestBox = document.getElementById("erik_test_box");
             erikTestBox.textContent = "Hi";
-            socket.emit('sayHiToEveryone');
+            socket.emit('startGameForEveryone');
         }
-        socket.on('getHiFromPython', function(phrase) {
+        socket.on('startSuccessFromPython', function(fiktiveKarten) {
           {#console.log('Aktion empfangen:', phrase);#}
-            var erikTestBox2 = document.getElementById("erik_test_box2");
-            erikTestBox2.textContent = phrase;
+          {#  var erikTestBox2 = document.getElementById("erik_test_box2");#}
+          {#  erikTestBox2.textContent = phrase;#}
+            runProgram()
         });
     </script>
 
