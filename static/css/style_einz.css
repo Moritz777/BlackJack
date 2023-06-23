@@ -47,9 +47,21 @@ body{
     }
     .back-container {
         position: fixed;
-        padding: 3px;
-        top: 70%;
+
+        top: 80%;
         left: 41.5%;
+        font-size: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .zu_login {
+         position: fixed;
+
+        top: 75%;
+        left: 46%;
         font-size: 20px;
 
         display: flex;

@@ -102,26 +102,23 @@
             </button>
     </form>
 
-    <button id="hit_button" onclick="throwCountCombo1()" disabled>
+    <button id="hit_button" onclick="throwCountCombo1()" class="btn_hit" disabled>
         Hit
     </button>
     <button id="stand_button" onclick="NextPlayer()" class="btn_stand" disabled>
         Stand
     </button>
-    <button id="start_button" onclick="runProgram()" class="btn_start">
+    <button id="start_button" onclick="sayHi()" class="btn_start">
         Start game
     </button>
-    <button id="start_button" onclick="sayHi()">
-    Test Erik
-    </button>
-    <p id="player_turn_box"></p>
+    <h1 id="player_turn_box" class="player_anzeige"></h1>
     <p id="erik_test_box"></p>
     <p id="erik_test_box2"></p>
 
     <script>
         function sayHi() {
-            var erikTestBox = document.getElementById("erik_test_box");
-            erikTestBox.textContent = "Hi";
+            {#var erikTestBox = document.getElementById("erik_test_box");#}
+            {#erikTestBox.textContent = "Hi";#}
             socket.emit('startGameForEveryone');
         }
         socket.on('startSuccessFromPython', function(fiktiveKarten) {

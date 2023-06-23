@@ -1,8 +1,6 @@
-from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_socketio import emit
+from datetime import datetime
+from flask_socketio import SocketIO, join_room, leave_room, emit
+from flask import Flask, render_template, request, redirect, flash, session
 import db_connection
 from Tools import hash_password
 from player_class import Player
@@ -14,13 +12,13 @@ app.secret_key = 'sventegetscookie'
 socketio = SocketIO(app)
 
 
-users_dict={"open_lobbies":{}}
+users_dict = {"open_lobbies": {}}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     if 'username' not in session:
-            return redirect('/login')
+        return redirect('/login')
 
     return render_template('index.html')
 
@@ -43,12 +41,10 @@ def login():
                 return redirect('/startPage')
             return redirect('/registrierung')
 
+        error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
+        return render_template('index.html', error_message=error_message)
 
-        else:
-            error_message = "Benutzername oder Passwort falsch"  # Fehlermeldung
-            return render_template('index.html', error_message=error_message)
-    else:
-        return render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -134,37 +130,28 @@ def random_session():
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
-@app.route('/game_template/<host_name>', methods=['GET', 'POST'])
-def game():
-
-    if request.method == 'POST':
-        pass
-
-    return render_template('game_template.html')
-
-
-@app.route('/users', methods=['POST', 'GET'])
-def users():
-    username = session.get('username')
-
-    if request.method == 'POST':
-        return redirect('/startPage')
-
-    return render_template('users.html', username=username)
+# @app.route('/users', methods=['POST', 'GET'])
+# def users():
+#     username = session.get('username')
+#
+#     if request.method == 'POST':
+#         return redirect('/startPage')
+#
+#     return render_template('users.html', username=username)
 
 
 @app.route('/lobby_list', methods=['POST', 'GET'])
 def lobbies():
 
-    username = session.get('username')
-    lobbies=users_dict["open_lobbies"].keys()
-    lobbies=list(lobbies)
+    lobbies = users_dict["open_lobbies"].keys()
+    lobbies = list(lobbies)
 
     if request.method == 'POST':
 
         for element in lobbies:
             if request.form['btn'] == f"{element} beitreten":
                 return redirect(f'/users/{element}')
+
     return render_template('lobby_list.html', lobbies=lobbies)
 
 
@@ -178,7 +165,7 @@ def personal_lobby(host_name):
         if request.form['btn'] == 'Zurück zur Startseite':
             return redirect('/startPage')
 
-    return render_template('game_template.html', Host = host_name)
+    return render_template('game_template.html', Host=host_name)
 
 
 #----------------------- SocketIO ----------------------------------------
@@ -190,9 +177,6 @@ def handle_connect():
     host_name = request.referrer.split('/')[-1]
     users_dict["open_lobbies"][host_name].append(users_dict[username].username)
     users_list = users_dict['open_lobbies'][host_name]
-    # users_list = []
-    # for element in player_list:
-    #     users_list.append(element)
 
     join_room(host_name)
     print(username, " connected to Lobby: ", host_name)
@@ -219,8 +203,9 @@ def handle_disconnect():
 @socketio.on('startGameForEveryone')
 def emit_game_start():
     print("hi to everyone")
+    host_name = request.referrer.split('/')[-1]
     fiktive_karten = ["Herz", 4] # Hier könnten Karten übergeben werden
-    emit('startSuccessFromPython', fiktive_karten, broadcast=True)
+    emit('startSuccessFromPython', fiktive_karten, room=host_name)
 
 if __name__ == "__main__":
     socketio.run(app, allow_unsafe_werkzeug="True", host="0.0.0.0", port="81", debug="True")

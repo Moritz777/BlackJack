@@ -132,3 +132,7 @@ body {
         justify-content: center;
         align-items: center;
 	}
+
+    .player_anzeige {
+        color: white;
+    }
