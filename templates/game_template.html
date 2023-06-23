@@ -101,7 +101,8 @@
                 Zurück zur Startseite
             </button>
     </form>
-    <button id="hit_button" onclick="CardThrowPlayer1()" class="btn_hit" disabled>
+
+    <button id="hit_button" onclick="throwCountCombo1()" disabled>
         Hit
     </button>
     <button id="stand_button" onclick="NextPlayer()" class="btn_stand" disabled>
@@ -171,20 +172,52 @@
             var hitButton = document.getElementById("hit_button");
             var standButton = document.getElementById("stand_button");
 
+            function throwCountCombo1(){
+                let value_1 = CardThrowPlayer1()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint1(value_1)
+            }function throwCountCombo2(){
+                let value_1 = CardThrowPlayer2()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint2(value_1)
+            }function throwCountCombo3(){
+                let value_1 = CardThrowPlayer3()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint3(value_1)
+            }function throwCountCombo4(){
+                let value_1 = CardThrowPlayer4()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint4(value_1)
+            }function throwCountCombo5(){
+                let value_1 = CardThrowPlayer5()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint5(value_1)
+            }function throwCountCombo6(){
+                let value_1 = CardThrowPlayer6()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint6(value_1)
+            }function throwCountCombo7(){
+                let value_1 = CardThrowPlayer7()
+                console.log("Hit! du hast" + value_1)
+                return countPlayerPoint7(value_1)
+            }
+
             function NextPlayer() {
                 currentPlayer++;
 
-                var nextFunctionName = "CardThrowPlayer" + currentPlayer;
+                var nextFunctionName = "throwCountCombo" + currentPlayer;
                 // Increment the currentPlayer
 
                 // Check if currentPlayer exceeds the total number of players
                 var playerTurnElement = document.getElementById("player_turn_box");
 
                 if (currentPlayer > totalPlayers) {
-                    playerTurnElement.textContent = "Round is Over";		
+                    playerTurnElement.textContent = "Round is Over";
                     standButton.disabled = true;
                     hitButton.disabled = true;
-                    CardThrowCroupier()
+                    let card_2 = CardThrowCroupier()
+                    CroupierTo17(card_2)
+                    CroupierTo17()
                     return
                 }
 
@@ -215,6 +248,104 @@
                 };
 
                 return card;
+            }
+            let ace_Counter = 0
+            function getCardValue(card) {
+                const rank = card.rank;
+                // Assign a value to each rank
+                if (rank === "Ace") {
+                    ace_Counter++
+                    return 11; // Return 11 for Ace
+                } else if (rank === "King" || rank === "Queen" || rank === "Jack") {
+                    return 10; // Return 10 for King, Queen, and Jack
+                } else if (rank === "Ten") {
+                    return 10;
+                } else if (rank === "Nine") {
+                    return 9;
+                } else if (rank === "Eight") {
+                    return 8;
+                } else if (rank === "Seven") {
+                    return 7;
+                } else if (rank === "Six") {
+                    return 6;
+                } else if (rank === "Five") {
+                    return 5;
+                } else if (rank === "Four") {
+                    return 4;
+                } else if (rank === "Three") {
+                    return 3;
+                } else if (rank === "Two") {
+                    return 2;
+                }
+            }
+
+            const CroupierCounter =  []
+            let cardSum = 0;
+            let handValuePlayer1 = 0;
+            let handValuePlayer2 = 0;
+            let handValuePlayer3 = 0;
+            let handValuePlayer4 = 0;
+            let handValuePlayer5 = 0;
+            let handValuePlayer6 = 0;
+            let handValuePlayer7 = 0;
+            function CroupierTo17(card_var) {
+                let cardValue = getCardValue(card_var)
+                cardSum+=cardValue
+                CroupierCounter.push(card_var)
+                if (CroupierCounter.length > 1){
+                    while (cardSum < 17) {
+                        const card_1 = CardThrowCroupier();
+                        let cardValue = getCardValue(card_1);
+                        cardSum += cardValue;
+                        if(cardSum > 21 && ace_Counter !== 0){
+                            ace_Counter--
+                            cardSum-=10
+                        }
+                    }
+                }
+                return cardSum
+            }
+            function countPlayerPoint1(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer1 += cardValue
+                console.log("Spieler 1 hat Punkte:" + handValuePlayer1)
+                return handValuePlayer1
+            }
+            function countPlayerPoint2(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer2 += cardValue
+                console.log("Spieler 2 hat Punkte:" + handValuePlayer2)
+                return handValuePlayer2
+            }
+            function countPlayerPoint3(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer3 += cardValue
+                console.log("Spieler 3 hat Punkte:" + handValuePlayer3)
+                return handValuePlayer3
+            }
+            function countPlayerPoint4(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer4 += cardValue
+                console.log("Spieler 4 hat Punkte:" + handValuePlayer4)
+                return handValuePlayer4
+            }
+            function countPlayerPoint5(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer5 += cardValue
+                console.log("Spieler 5 hat Punkte:" + handValuePlayer5)
+                return handValuePlayer5
+            }
+            function countPlayerPoint6(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer6 += cardValue
+                console.log("Spieler 6 hat Punkte:" + handValuePlayer6)
+                return handValuePlayer6
+            }
+            function countPlayerPoint7(card_player){
+                let cardValue = getCardValue(card_player);
+                handValuePlayer7 += cardValue
+                console.log("Spieler 7 hat Punkte:" + handValuePlayer7)
+                return handValuePlayer7
             }
 
             const cardImages = {
@@ -315,7 +446,14 @@
             }
 
             x = 312
-            var cardOffset = 0;
+            var cardOffsetCroupier = 0
+            var cardOffset1 = 0
+            var cardOffset2 = 0
+            var cardOffset3 = 0
+            var cardOffset4 = 0
+            var cardOffset5 = 0
+            var cardOffset6 = 0
+            var cardOffset7 = 0
             function createProvadisCard(){
                 var provadisCard = document.getElementById('card-image');
                 var provadisCardCopy = new Image();
@@ -354,10 +492,13 @@
                 provadisCardCopy.style.left = '41.75%';
                 setTimeout(function() {
                     provadisCardCopy.style.top = '12.5%';
-                    provadisCardCopy.style.left = parseFloat('50.25%') + cardOffset + '%';
-
+                    provadisCardCopy.style.left = parseFloat('53.25%') + cardOffsetCroupier + '%';
+                    cardOffsetCroupier+=5.2
+                    //cardOffsetCroupier+=0.85
                 }, delay);
+                return randomCard
             }
+
             function CardThrowPlayer1() {
                 const randomCard = getRandomCard();
                 setCard(randomCard);
@@ -366,13 +507,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('8.75%') + cardOffset + '%';
+                    provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset1 + '%';
                     provadisCardCopy.style.left = '85.75%';
-                    cardOffset+=1.5;
+                    cardOffset1+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer2() {
@@ -383,13 +525,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
+                    provadisCardCopy.style.top = parseFloat('48%') + cardOffset2 + '%';
                     provadisCardCopy.style.left = '85.75%';
-                    cardOffset+=1.5;
+                    cardOffset2+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(-90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer3() {
@@ -401,8 +544,10 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('70%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('73%') + cardOffset3 + '%';
+                    cardOffset3+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer4() {
@@ -414,8 +559,10 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('45%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('48%') + cardOffset4 + '%';
+                    cardOffset4+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer5() {
@@ -427,8 +574,10 @@
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
                     provadisCardCopy.style.top = '82.75%';
-                    provadisCardCopy.style.left = parseFloat('18%') + cardOffset + '%';
+                    provadisCardCopy.style.left = parseFloat('21%') + cardOffset5 + '%';
+                    cardOffset5+=0.85;
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer6() {
@@ -439,12 +588,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('42%') + cardOffset + '%';
-                    provadisCardCopy.style.left = '9.25%';
+                    provadisCardCopy.style.top = parseFloat('48%') + cardOffset6 + '%';
+                    provadisCardCopy.style.left = '9%';
+                    cardOffset6+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowPlayer7() {
@@ -455,12 +606,14 @@
                 provadisCardCopy.style.top = '12.5%'; // New position for top
                 provadisCardCopy.style.left = '41.75%'; // New position for left
                 setTimeout(function() {
-                    provadisCardCopy.style.top = parseFloat('10.75%') + cardOffset + '%';
-                    provadisCardCopy.style.left = '9.25%';
+                    provadisCardCopy.style.top = parseFloat('10.5%') + cardOffset7 + '%';
+                    provadisCardCopy.style.left = '9%';
+                    cardOffset7+=1.8;
                     setTimeout(function() {
                         provadisCardCopy.style.transform = 'rotate(90deg)'; // Apply rotation after translation
                     }, 10); // Delay before applying rotation in milliseconds
                 }, delay); // Delay before translation in milliseconds
+                return randomCard
             }
 
             function CardThrowRandomFix(){
@@ -472,21 +625,28 @@
             const delay = 100; // Delay between each action
             function dealCardsfirstRound(playerCount) {
                 const players = Array.from({ length: playerCount }, (_, i) => `Player${i + 1}`);
-
+                let x=1
+                let y=1
                 players.forEach((player, index) => {
                     setTimeout(function () {
                         const currentPlayer = window[`CardThrow${player}`]
-                        currentPlayer()
+                        const currentPlayerPoints = window[`countPlayerPoint${x}`]
+                        x++
+                        let points = currentPlayer()
+                        currentPlayerPoints(points)
                         CardThrowRandomFix()
                         if (player === `Player${players.length}`) {
                             setTimeout(function () {
-                                CardThrowCroupier()
-
+                                let card_1 = CardThrowCroupier()
+                                CroupierTo17(card_1)
                                 setTimeout(function () {
                                     players.forEach((player, index) => {
                                         setTimeout(function () {
                                             const currentPlayer = window[`CardThrow${player}`]
-                                            currentPlayer()
+                                            const currentPlayerPoints = window[`countPlayerPoint${y}`]
+                                            y++
+                                            let points = currentPlayer()
+                                            currentPlayerPoints(points)
                                             CardThrowRandomFix()
                                         }, index * delay);
                                     });
@@ -514,15 +674,37 @@
 					btn_Startseite.style.top = '95%';
 					btn_Startseite.style.left = '0.5%';
             }
-			
+
 			function posHitStand() {
 				var btnHit = document.getElementById('hit_button');
 				var btnStand = document.getElementById('stand_button');
-				
+
 				btnHit.style.zIndex = '3';
 				btnStand.style.zIndex = '3';
 			}
 
+            function checkPlayerDealer() {
+                let dealerPoints = CroupierTo17();
+                let p1points = throwCountCombo1();
+                let p2points = throwCountCombo2();
+                let p3points = throwCountCombo3();
+                let p4points = throwCountCombo4();
+                let p5points = throwCountCombo5();
+                let p6points = throwCountCombo6();
+                let p7points = throwCountCombo7();
+
+                for (let i = 1; i <= totalPlayers; i++) {
+                    let playerPoints = window[`p${i}points`]; // Access the player points using square brackets
+
+                    if (dealerPoints > playerPoints) {
+                        console.log("Dealer gewinnt");
+                    } else if (dealerPoints < playerPoints) {
+                        console.log(`Spieler ${i} gewinnt`); // Display the player number
+                    } else {
+                        console.log("Break! Keiner gewinnt");
+                    }
+                }
+            }
             function runProgram(){
 				posHitStand()
 				hideElements()
@@ -537,7 +719,15 @@
                     enableButton()
                 }, totalPlayers * 2 * delay + delay * 4);
             }
-	
+            countPlayerPoint1()
+            countPlayerPoint2()
+            countPlayerPoint3()
+            countPlayerPoint4()
+            countPlayerPoint5()
+            countPlayerPoint6()
+            countPlayerPoint7()
+            checkPlayerDealer()
+
         </script>
 
 <div id="Sbox" class="square">
