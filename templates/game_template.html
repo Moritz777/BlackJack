@@ -7,12 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewpoint" content="width=devide-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style_game.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/game_template.css')}}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.min.js"></script>
     <script src="{{url_for('static', filename='js/game_template.js')}}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/game_template.css')}}}">
 
 
     <script>
@@ -50,50 +49,50 @@
     </script>
 
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-        #background-img{
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            top: 0;
-            left: 0;
-            object-fit: cover;
-            z-index: -2;
-        }
-        #provadis-card{
-            position: absolute;
-            top: 12.5%;
-            left: 41.75%;
+html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+    #background-img{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        z-index: -2;
+    }
+    #provadis-card{
+        position: absolute;
+        top: 12.5%;
+        left: 41.75%;
 
-            z-index: -1;
-        }
-        .card{
-            position: absolute;
-            top: 12.5%;
-            left: 41.75%;
+        z-index: -1;
+    }
+    .card{
+        position: absolute;
+        top: 12.5%;
+        left: 41.75%;
 
-            z-index: -1;
-        }
-        #card-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        z-index: -1;
+    }
+    #card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
 
-            z-index: -1;
-        }
-        .deck {
-            position: relative;
-            top: -35px;
-            width: 100px;
-            height: 140px;
+        z-index: -1;
+    }
+    .deck {
+        position: relative;
+        top: -35px;
+        width: 100px;
+        height: 140px;
 
-            z-index: -1;
-        }
+        z-index: -1;
+    }
 
     </style>
 </head>
