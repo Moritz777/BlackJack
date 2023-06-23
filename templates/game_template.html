@@ -423,14 +423,6 @@
                 return randomCard
             }
 
-            const button1 = document.getElementById('button1');
-            const button2 = document.getElementById('button2');
-
-            button2.addEventListener('click', function() {
-                button1.style.left = '10%';
-                button1.style.top = '20%';
-            });
-
             function CardThrowPlayer1() {
                 const randomCard = getRandomCard();
                 setCard(randomCard);
