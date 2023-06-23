@@ -130,16 +130,6 @@ def random_session():
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
 
-# @app.route('/users', methods=['POST', 'GET'])
-# def users():
-#     username = session.get('username')
-#
-#     if request.method == 'POST':
-#         return redirect('/startPage')
-#
-#     return render_template('users.html', username=username)
-
-
 @app.route('/lobby_list', methods=['POST', 'GET'])
 def lobbies():
 
