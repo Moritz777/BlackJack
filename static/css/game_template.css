@@ -177,3 +177,7 @@ html, body {
 
         z-index: -1;
     }
+
+    .player_anzeige {
+        color: white;
+    }

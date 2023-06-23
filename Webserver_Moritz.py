@@ -129,6 +129,10 @@ def random_session():
 
     return render_template('startPage.html', username=username, credit=users_dict[username].credit)
 
+@app.route('/game_template', methods=['POST','GET'])
+def game():
+    return render_template('game_template.html')
+
 
 @app.route('/lobby_list', methods=['POST', 'GET'])
 def lobbies():
