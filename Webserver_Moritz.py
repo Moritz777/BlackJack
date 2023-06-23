@@ -87,11 +87,12 @@ def admin():
 def registrierung():
 
     if request.method == 'POST':
-
+        if request.form["btn"] == "Back":
+            return redirect('/')
         username = request.form.get('username')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
-        birthday = request.form.get('birthdaytime')
+        birthday = request.form.get('birthday')
         today = datetime.now()
         birthday_object = datetime.fromisoformat(birthday)
         age = (today.year - birthday_object.year)
@@ -106,11 +107,13 @@ def registrierung():
             return render_template('registrierung.html', error_message="Der Username ist bereits vergeben")
         else:
             birthday_formatted = birthday_object.strftime('%Y-%m-%d')
+            print(birthday_formatted)
             new_user = User(username, hashed_password, first_name, last_name, birthday_formatted)
             flash("Registrierung erfolgreich, bitte melden Sie sich an")
             return redirect("/")
 
     return render_template('registrierung.html')
+
 
 
 @app.route('/startPage', methods=['GET', 'POST'])
